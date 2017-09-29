@@ -1,57 +1,98 @@
 package models;
 
-import jdk.jshell.spi.ExecutionControl;
-
-public class SimpleSnakeBodyPart implements ISnakeBodyPart {
-
-    private SimpleSnakeBodyPart _previousBodyPart = null;
-    private SimpleSnakeBodyPart _nextBodyPart = null;
-    private Direction _direction;
+class SimpleSnakeBodyPart extends SnakeBodyPart implements ICreature {
+    
+    private boolean _isHead;
+    
     private boolean _isDead;
-
-    public SimpleSnakeBodyPart(Direction startDirection){
-        _direction = startDirection;
+    
+    private Direction _direction;
+    
+    private SnakeBodyPart _nextBodyPart;
+    private SnakeBodyPart _preceedingBodyPart;
+    
+    public SimpleSnakeBodyPart(boolean isHead, Direction direction)
+    {
+        _isDead = false;
+        _isHead = isHead;
+        _direction = direction;
     }
-
-    @Override
-    public boolean isHead() {
-        return _previousBodyPart == null;
-    }
-
-    @Override
-    public ISnakeBodyPart getNextBodyPart() {
-        return _nextBodyPart;
-    }
-
-    @Override
-    public void attachNew(ISnakeBodyPart bodyPart) {
-        if (_nextBodyPart != null)
-            _nextBodyPart.attachNew(bodyPart);
-        if (!(bodyPart instanceof SimpleSnakeBodyPart))
-            throw new UnsupportedOperationException();
-        _nextBodyPart = (SimpleSnakeBodyPart)bodyPart;
-        bodyPart.attachToPrevious(this);
-
-    }
-
-    @Override
-    public void attachToPrevious(ISnakeBodyPart bodyPart) {
-
-    }
-
+    
     @Override
     public Direction getNextMove(GameField field) {
-        return _direction;
-        //TODO: Add change of direction depending on user input / previousBodyPart direction
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean isDead() {
-        return _isDead;
+        return false;
+    }
+
+    private void deathProcedure(){
+        _isDead = true;
+        deattachNextBodyPart();
+        _preceedingBodyPart.deattachNextBodyPart();
     }
 
     @Override
     public void interactWith(ICreature otherCreature) {
+        deathProcedure();
+    }
 
+    @Override
+    public boolean isHead() {
+        return _isHead;
+    }
+
+
+
+    @Override
+    public Direction getDirection() {
+        if(_isDead){
+            return Direction.None;
+        }
+        return _direction;
+    }
+
+    @Override
+    public SnakeBodyPart getNextBodyPart() {
+        return _nextBodyPart;
+    }
+
+    @Override
+    public SnakeBodyPart getPrecedingBodyPart() {
+        return _preceedingBodyPart;
+    }
+
+    @Override
+    public void attachNew(SnakeBodyPart bodyPart) {
+        if (_nextBodyPart != null) {
+            _nextBodyPart.attachNew(bodyPart);
+        } else {
+            _nextBodyPart = bodyPart;
+            bodyPart.attachToPreceding(this);
+        }
+    }
+
+    @Override
+    protected void attachToPreceding(SnakeBodyPart bodyPart) {
+        if(_isHead){
+            throw new UnsupportedOperationException();
+        }
+        _preceedingBodyPart = bodyPart;
+    }
+
+    @Override
+    protected void deattachFromPrecedingBodyPart() {
+        _preceedingBodyPart = null;
+    }
+
+    @Override
+    public void deattachNextBodyPart() {
+        if (_nextBodyPart == null) {
+            return;
+        }
+        _nextBodyPart.deattachFromPrecedingBodyPart();
+        _nextBodyPart = null;
     }
 }
