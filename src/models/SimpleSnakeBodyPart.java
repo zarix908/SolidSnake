@@ -1,57 +1,26 @@
 package models;
 
-import jdk.jshell.spi.ExecutionControl;
+class SimpleSnakeBodyPart extends SnakeBodyPart implements ICreature {
 
-public class SimpleSnakeBodyPart implements ISnakeBodyPart {
-
-    private SimpleSnakeBodyPart _previousBodyPart = null;
-    private SimpleSnakeBodyPart _nextBodyPart = null;
-    private Direction _direction;
-    private boolean _isDead;
-
-    public SimpleSnakeBodyPart(Direction startDirection){
-        _direction = startDirection;
+    public SimpleSnakeBodyPart(boolean isHead, Direction direction, Point location, Snake snake) {
+        super(isHead, direction, location, snake);
     }
-
-    @Override
-    public boolean isHead() {
-        return _previousBodyPart == null;
-    }
-
-    @Override
-    public ISnakeBodyPart getNextBodyPart() {
-        return _nextBodyPart;
-    }
-
-    @Override
-    public void attachNew(ISnakeBodyPart bodyPart) {
-        if (_nextBodyPart != null)
-            _nextBodyPart.attachNew(bodyPart);
-        if (!(bodyPart instanceof SimpleSnakeBodyPart))
-            throw new UnsupportedOperationException();
-        _nextBodyPart = (SimpleSnakeBodyPart)bodyPart;
-        bodyPart.attachToPrevious(this);
-
-    }
-
-    @Override
-    public void attachToPrevious(ISnakeBodyPart bodyPart) {
-
-    }
-
+    
     @Override
     public Direction getNextMove(GameField field) {
-        return _direction;
-        //TODO: Add change of direction depending on user input / previousBodyPart direction
+        throw new UnsupportedOperationException();
     }
 
-    @Override
-    public boolean isDead() {
-        return _isDead;
+    private void deathProcedure(){
+        _isDead = true;
+        _direction = Direction.None;
+        deattachNextBodyPart();
+        _precedingBodyPart.deattachNextBodyPart();
     }
 
     @Override
     public void interactWith(ICreature otherCreature) {
-
+        deathProcedure();
+        throw new UnsupportedOperationException();
     }
 }
