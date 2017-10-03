@@ -68,6 +68,8 @@ abstract class SnakeBodyPart {
     }
 
     private void deattachFromPrecedingBodyPart() {
+        _isDead = true;
         _precedingBodyPart = null;
+        deattachNextBodyPart();
     }
 }

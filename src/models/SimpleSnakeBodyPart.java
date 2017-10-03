@@ -7,20 +7,21 @@ class SimpleSnakeBodyPart extends SnakeBodyPart implements ICreature {
     }
     
     @Override
-    public Direction getNextMove(GameField field) {
+    public Direction getNextMove(Game field) {
         throw new UnsupportedOperationException();
     }
 
-    private void deathProcedure(){
-        _isDead = true;
-        _direction = Direction.None;
-        deattachNextBodyPart();
-        _precedingBodyPart.deattachNextBodyPart();
-    }
+
 
     @Override
     public void interactWith(ICreature otherCreature) {
-        deathProcedure();
+        _isDead = true;
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void cleanUp() {
+
+
     }
 }
