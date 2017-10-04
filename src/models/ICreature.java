@@ -5,4 +5,5 @@ public interface ICreature {
     boolean isDead();
     void interactWith(ICreature otherCreature);
     void cleanUp();
+    Point getLocation();
 }
