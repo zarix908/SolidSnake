@@ -31,6 +31,6 @@ public class Point {
     }
 
     public boolean isInBounds(int width, int height){
-        return _x > 0 && _y > 0 && _x < width && _y < height;
+        return _x >= 0 && _y >= 0 && _x < width && _y < height;
     }
 }

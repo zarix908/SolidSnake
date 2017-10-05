@@ -6,4 +6,6 @@ public interface ICreature {
     void interactWith(ICreature otherCreature);
     void cleanUp();
     Point getLocation();
+    Direction getDirection();
+    CreatureType getCreatureType();
 }

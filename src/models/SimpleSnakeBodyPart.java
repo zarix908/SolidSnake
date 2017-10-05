@@ -3,6 +3,7 @@ package models;
 class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
 
     private final SnakeBodyPartSkeleton _skeleton;
+    private static final CreatureType CREATURE_TYPE = CreatureType.SimpleSnake;
 
     public SimpleSnakeBodyPart(boolean isHead, Direction direction, Point location, Snake snake) {
         _skeleton = new SnakeBodyPartSkeleton(isHead, direction, location, snake);
@@ -15,7 +16,7 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
 
     @Override
     public boolean isDead() {
-        return false;
+        return _skeleton.isDead();
     }
 
     @Override
@@ -39,6 +40,11 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
     @Override
     public Point getLocation() {
         return _skeleton.getLocation();
+    }
+
+    @Override
+    public CreatureType getCreatureType() {
+        return CREATURE_TYPE;
     }
 
     @Override

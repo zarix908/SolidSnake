@@ -2,9 +2,8 @@ package visualisation;
 
 import models.Direction;
 import models.ICreature;
+import models.ISnakeBodyPart;
 import models.Point;
-import visualisation.TextureType;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,12 +17,29 @@ public class GameFrame{
         _textureInfoMap = new HashMap<>();
     }
 
+    private Map<Point, TextureInfo> convertICreatureToTextureInfo(Map<Point, ICreature> creatures){
+        Map<Point, TextureInfo> textures = new HashMap<>();
+        for (Point location : creatures.keySet()) {
+            ICreature creature = creatures.get(location);
+            ISnakeBodyPart snakeBodyPart = creature instanceof ISnakeBodyPart
+                    ? ((ISnakeBodyPart) creature)
+                    : null;
+            boolean isHead = snakeBodyPart == null || snakeBodyPart.isHead();
+            TextureInfo texture = new TextureInfo(
+                    CreatureToTextureConverter.converters.get(creature.getCreatureType())
+                            .apply(isHead),
+                    creature.getDirection(), location);
+            textures.put(location, texture);
+        }
+        return textures;
+    }
+
     class TextureInfo{
         private TextureType _type;
         private Direction _direction;
         private Point _location;
 
-        public TextureInfo(TextureType type,
+        TextureInfo(TextureType type,
                            Direction direction,
                            Point location) {
             _type = type;

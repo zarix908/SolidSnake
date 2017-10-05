@@ -1,5 +1,6 @@
 package visualisation;
 
 public enum TextureType {
-    SimpleBodyPart
+    SimpleSnakeBodyPart,
+    SimpleSnakeHead
 }
