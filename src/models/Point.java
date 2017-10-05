@@ -18,4 +18,19 @@ public class Point {
     public int getY(){
         return _y;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Point otherPoint = obj instanceof Point ? ((Point) obj) : null;
+        return otherPoint != null && _x == otherPoint._x && _y == otherPoint._y;
+    }
+
+    @Override
+    public int hashCode() {
+        return _x * 6291469 + _y;
+    }
+
+    public boolean isInBounds(int width, int height){
+        return _x >= 0 && _y >= 0 && _x < width && _y < height;
+    }
 }

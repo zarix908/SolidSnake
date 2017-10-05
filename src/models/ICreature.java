@@ -1,8 +1,11 @@
 package models;
 
 public interface ICreature {
-    Direction getNextMove(Game field); //TODO: any other args?
+    Direction getNextMove(ICreature[][] field); //TODO: any other args?
     boolean isDead();
     void interactWith(ICreature otherCreature);
     void cleanUp();
+    Point getLocation();
+    Direction getDirection();
+    CreatureType getCreatureType();
 }
