@@ -14,7 +14,7 @@ public class GameFrame{
                      Map<Point, ICreature> creatures){
         _width = width;
         _height = height;
-        _textureInfoMap = new HashMap<>();
+        _textureInfoMap = convertICreatureToTextureInfo(creatures);
     }
 
     private Map<Point, TextureInfo> convertICreatureToTextureInfo(Map<Point, ICreature> creatures){

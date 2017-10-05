@@ -58,7 +58,7 @@ public class Game {
                     SnakeBodyPartSkeleton asBodyPart = creature instanceof SnakeBodyPartSkeleton ? ((SnakeBodyPartSkeleton) creature) : null;
                     if (asBodyPart == null || !asBodyPart.isHead())
                         continue;
-                    creature.getNextMove(this); //TODO: pass only field
+                    creature.getNextMove(_field); //TODO: pass only field
                     Point location = creature.getLocation();
                     collisions.computeIfAbsent(location, k -> new ArrayList<>());
                     collisions.get(location).add(creature);

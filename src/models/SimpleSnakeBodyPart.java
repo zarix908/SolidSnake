@@ -10,7 +10,7 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
     }
     
     @Override
-    public Direction getNextMove(Game field) {
+    public Direction getNextMove(ICreature[][] field) {
         throw new UnsupportedOperationException();
     }
 
@@ -27,14 +27,15 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
 
     @Override
     public void interactWith(ICreature otherCreature) {
-        _skeleton.setIsDead(true);
+        //_skeleton.setIsDead(true);
+        //TODO: implement
         throw new UnsupportedOperationException();
     }
 
     @Override
     public void cleanUp() {
-
-
+        throw new UnsupportedOperationException();
+        //TODO: implement
     }
 
     @Override
