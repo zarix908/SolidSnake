@@ -1,5 +1,7 @@
 package models;
 
+import visualisation.GameFrame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,12 +14,44 @@ public class Game {
 
     GameFrame makeTurn(Direction playerDirection){
         Map<Point, ArrayList<ICreature>> collisions = makeMoves(playerDirection);
-
+        Map<Point, ICreature> survivedCreatures = resolveCollisions(collisions);
+        //TODO: do smth with the map
+        return new GameFrame(_field.length, _field[0].length, survivedCreatures);
     }
 
-    private Map makeMoves(Direction playerDirection){
+    private Map<Point, ICreature> resolveCollisions(Map<Point, ArrayList<ICreature>> collisions){
+        Map<Point, ICreature> resolved = new HashMap<>();
+        for (Point location: collisions.keySet()) {
+            ArrayList<ICreature> collidingCreatures = collisions.get(location);
+            int length = collidingCreatures.size();
+            for (int i = 0; i < length - 1; i++) {
+                for (int j = i; j < length; j++) {
+                    collidingCreatures.get(i).interactWith(collidingCreatures.get(j));
+                    collidingCreatures.get(j).interactWith(collidingCreatures.get(i));
+                }
+            }
+            ICreature csurvivedCreature = null;
+            for (ICreature creature : collidingCreatures) {
+                if(creature.isDead()){
+                    continue;
+                }
+                if (csurvivedCreature != null) {
+                    throw new IllegalStateException("Anotha one!" +
+                            " Two creatures collided and still alive");
+                }
+                csurvivedCreature = creature;
+            }
+            if (csurvivedCreature == null) {
+                continue;
+            }
+            resolved.put(location, csurvivedCreature);
+        }
+        return resolved;
+    }
+
+    private Map<Point, ArrayList<ICreature>> makeMoves(Direction playerDirection){
         Map<Point, ArrayList<ICreature>> collisions =
-                new HashMap<Point, ArrayList<ICreature>>();
+                new HashMap<>();
         for (ICreature[] row : _field){
             for (ICreature creature : row){
                 if (creature != null) {
@@ -26,9 +60,7 @@ public class Game {
                         continue;
                     creature.getNextMove(this); //TODO: pass only field
                     Point location = creature.getLocation();
-                    if (collisions.get(location) == null) {
-                        collisions.put(location, new ArrayList());
-                    }
+                    collisions.computeIfAbsent(location, k -> new ArrayList<>());
                     collisions.get(location).add(creature);
                 }
             }

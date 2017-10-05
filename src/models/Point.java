@@ -29,4 +29,8 @@ public class Point {
     public int hashCode() {
         return _x * 6291469 + _y;
     }
+
+    public boolean isInBounds(int width, int height){
+        return _x > 0 && _y > 0 && _x < width && _y < height;
+    }
 }
