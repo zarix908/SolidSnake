@@ -1,6 +1,6 @@
 package models;
 
-public interface ISnakeBodyPart {
+public interface ISnakeBodyPart extends ICreature {
     boolean isDead();
 
     boolean isHead();
@@ -8,6 +8,8 @@ public interface ISnakeBodyPart {
     Point getLocation();
 
     Direction getDirection();
+
+    void setDirection(Direction newDirection);
 
     Snake getSnake();
 

@@ -5,16 +5,19 @@ import models.ICreature;
 import models.ISnakeBodyPart;
 import models.Point;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameFrame {
 
     public GameFrame(int width,
                      int height,
-                     Map<Point, ICreature> creatures){
+                     Map<Point, ICreature> creatures,
+                     int[] scores){
         _width = width;
         _height = height;
         _textureInfoMap = convertICreatureToTextureInfo(creatures);
+        _scores = scores;
     }
 
     private Map<Point, TextureInfo> convertICreatureToTextureInfo(Map<Point, ICreature> creatures){
@@ -34,6 +37,8 @@ public class GameFrame {
         }
         return textures;
     }
+
+
 
     class TextureInfo{
         private TextureType _type;
@@ -62,25 +67,26 @@ public class GameFrame {
         }
     }
 
-    private int _width;
+    private final int _width;
     public int getWidth() {
         return _width;
     }
 
-    private int _height;
+    private final int _height;
     public int getHeight() {
         return _height;
     }
 
-    private Map<Point, TextureInfo> _textureInfoMap;
+    private final Map<Point, TextureInfo> _textureInfoMap;
 
     Map<Point, TextureInfo> getTexturesInfo(){
         return _textureInfoMap;
     }
 
-    /*
-    * GameFrame -> enumerate through (name, direction, location)
-    *
-    *
-    * */
+    private final int[] _scores;
+
+    public int[] getScores() {
+        return _scores;
+    }
+
 }
