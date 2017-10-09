@@ -1,7 +1,7 @@
 package models;
 
 class SnakeBodyPartSkeleton implements ISnakeBodyPart {
-    public SnakeBodyPartSkeleton(boolean isHead, Direction direction, Point location, Snake snake) {
+    SnakeBodyPartSkeleton(boolean isHead, Direction direction, Point location, Snake snake) {
         _isDead = false;
         _isHead = isHead;
         _direction = direction;
@@ -9,16 +9,47 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
         _snake = snake;
     }
 
+    @Override
+    public void makeMove(ICreature[][] field) {
+        if(_precedingBodyPart.isDead())
+            _isDead = true;
+        switch (_direction){
+            case Up:
+                _location = new Point(_location.getX(), _location.getY() - 1);
+                break;
+            case Down:
+                _location = new Point(_location.getX(), _location.getY() + 1);
+                break;
+            case Left:
+                _location = new Point(_location.getX() - 1, _location.getY());
+                break;
+            case Right:
+                _location = new Point(_location.getX() + 1, _location.getY());
+                break;
+            default:
+                throw new UnsupportedOperationException("Snake must go somewhere!");
+        }
+        _direction = _precedingBodyPart.getDirection();
+    }
 
     private boolean _isDead;
-
     @Override
     public boolean isDead(){
         return _isDead;
     }
 
-    public void setIsDead(boolean isDead){
-        _isDead = isDead;
+    @Override
+    public void interactWith(ICreature otherCreature) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void cleanUp() {
+
+    }
+
+    void setIsDead(){
+        _isDead = true;
     }
 
 
@@ -49,7 +80,14 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
         return _direction;
     }
 
+    @Override
+    public CreatureType getCreatureType() {
+        return null;
+    }
+
     public void setDirection(Direction direction) {
+        if(!_isHead)
+            return;
         _direction = direction;
     }
 
@@ -69,11 +107,6 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
         return _nextBodyPart;
     }
 
-    public void setNextBodyPart(ISnakeBodyPart nextBodyPart) {
-        _nextBodyPart = nextBodyPart;
-    }
-
-
     private ISnakeBodyPart _precedingBodyPart = null;
 
     @Override
@@ -81,9 +114,6 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
         return _precedingBodyPart;
     }
 
-    public void setPrecedingBodyPart(ISnakeBodyPart precedingBodyPart) {
-        _precedingBodyPart = precedingBodyPart;
-    }
 
     @Override
     public void attachNewBodyPart(ISnakeBodyPart bodyPart){
@@ -116,6 +146,5 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
     private void deattachFromPrecedingBodyPart() {
         _isDead = true;
         _precedingBodyPart = null;
-        deattachNextBodyPart();
     }
 }

@@ -1,7 +1,7 @@
 package models;
 
 public interface ICreature {
-    Direction getNextMove(ICreature[][] field); //TODO: any other args?
+    void makeMove(ICreature[][] field); //TODO: any other args?
     boolean isDead();
     void interactWith(ICreature otherCreature);
     void cleanUp();

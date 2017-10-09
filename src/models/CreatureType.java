@@ -1,5 +1,6 @@
 package models;
 
 public enum CreatureType {
-    SimpleSnake
+    SimpleSnake,
+    Apple
 }
