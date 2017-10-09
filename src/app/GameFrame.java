@@ -1,4 +1,4 @@
-package visualisation;
+package app;
 
 import models.Direction;
 import models.ICreature;
@@ -7,7 +7,7 @@ import models.Point;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameFrame{
+public class GameFrame {
 
     public GameFrame(int width,
                      int height,
@@ -26,9 +26,10 @@ public class GameFrame{
                     : null;
             boolean isHead = snakeBodyPart == null || snakeBodyPart.isHead();
             TextureInfo texture = new TextureInfo(
-                    CreatureToTextureConverter.converters.get(creature.getCreatureType())
+                    CreatureToTextureConverter.converters
+                            .get(creature.getCreatureType())
                             .apply(isHead),
-                    creature.getDirection(), location);
+                    creature.getDirection());
             textures.put(location, texture);
         }
         return textures;
@@ -40,25 +41,33 @@ public class GameFrame{
         private Point _location;
 
         TextureInfo(TextureType type,
-                           Direction direction,
-                           Point location) {
+                    Direction direction){
+                    //Point location)
             _type = type;
             _direction = direction;
-            if(!location.isInBounds(_width, _height)){
-                throw new IndexOutOfBoundsException(
-                        "It's not index, but let's pretend it's a good type for exception here");
-            }
-            _location = location;
+
+            // Is it necessary?
+//            if(!location.isInBounds(_width, _height)){
+//                throw new IndexOutOfBoundsException(
+//                        "It's not index, but let's pretend it's a good type for exception here");
+//            }
+//            _location = location;
+        }
+
+        TextureType getType() {
+            return _type;
+        }
+        Direction getDirection() {
+            return _direction;
         }
     }
-    private int _width;
 
+    private int _width;
     public int getWidth() {
         return _width;
     }
 
     private int _height;
-
     public int getHeight() {
         return _height;
     }

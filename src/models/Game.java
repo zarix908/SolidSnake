@@ -1,6 +1,6 @@
 package models;
 
-import visualisation.GameFrame;
+import app.GameFrame;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ public class Game {
         _field = new ICreature[width][height];
     }
 
-    GameFrame makeTurn(Direction playerDirection){
+    public GameFrame makeTurn(Direction playerDirection){
         Map<Point, ArrayList<ICreature>> collisions = makeMoves(playerDirection);
         Map<Point, ICreature> survivedCreatures = resolveCollisions(collisions);
         //TODO: do smth with the map
