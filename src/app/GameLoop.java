@@ -71,7 +71,9 @@ public class GameLoop implements Runnable {
             float time = System.currentTimeMillis();
             _keyIsPressed = false;
 
-            _frame = _game.makeTurn(_direction);
+            //NOTICE: game class now supports multiple snakes (for possible future multiplayer)
+            Direction[] directions = {_direction};
+            _frame = _game.makeTurn(directions);
             Painter.paint(_frame, _gc);
 
             //TODO: check if snake is dead, as for know consider that gameframe is null

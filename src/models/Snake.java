@@ -1,17 +1,43 @@
 package models;
 
-public abstract class Snake {
-    //TODO: death of snake and etc.
-    protected SnakeBodyPartSkeleton head;
+class Snake {
+    public Snake(ISnakeBodyPart head, Direction startingDirection) {
+        this.head = head;
+        head.setDirection(startingDirection);
+        _score = 0;
+    }
 
-    public SnakeBodyPartSkeleton getHead() {
+    private ISnakeBodyPart head;
+
+    ISnakeBodyPart getHead() {
         return head;
     }
 
-    //TODO: public abstract void move(KeyStroke keyStroke);
-
-    protected void attachNewBodyPart(SnakeBodyPartSkeleton bodyPart){
-        head.attachNewBodyPart(bodyPart);
-        //TODO: bodyPart.setSnake(this)?????
+    boolean isDead(){
+        return head.isDead();
     }
+
+    private int _score;
+
+    public Direction getCurrentDirection() {
+        return head.getDirection();
+    }
+
+    void setCurrentDirection(Direction newDirection) {
+        head.setDirection(newDirection);
+    }
+
+    void attachNewBodyPart(ISnakeBodyPart bodyPart){
+        head.attachNewBodyPart(bodyPart);
+    }
+
+    int getScore() {
+        return _score;
+    }
+
+    void incrementScore(int value) {
+        _score += value;
+    }
+
+
 }

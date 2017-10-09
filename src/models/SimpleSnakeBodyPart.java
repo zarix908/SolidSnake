@@ -10,8 +10,8 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
     }
     
     @Override
-    public Direction getNextMove(ICreature[][] field) {
-        throw new UnsupportedOperationException();
+    public void makeMove(ICreature[][] field) {
+        _skeleton.makeMove(field);
     }
 
     @Override
@@ -27,15 +27,24 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
 
     @Override
     public void interactWith(ICreature otherCreature) {
-        //_skeleton.setIsDead(true);
-        //TODO: implement
-        throw new UnsupportedOperationException();
+        if (otherCreature instanceof Apple){
+            _skeleton.getSnake().incrementScore(10);
+        }
+        else if (otherCreature instanceof SimpleSnakeBodyPart) {
+            _skeleton.setIsDead();
+        }
+        else {
+            throw new UnsupportedOperationException();
+        }
     }
 
     @Override
     public void cleanUp() {
-        throw new UnsupportedOperationException();
-        //TODO: implement
+        if(!_skeleton.isDead()){
+            throw new UnsupportedOperationException("You can't dump the body before killing it!");
+        }
+        _skeleton.deattachNextBodyPart();
+        _skeleton.getPrecedingBodyPart().getPrecedingBodyPart();
     }
 
     @Override
@@ -51,6 +60,11 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
     @Override
     public Direction getDirection() {
         return _skeleton.getDirection();
+    }
+
+    @Override
+    public void setDirection(Direction newDirection) {
+        _skeleton.setDirection(newDirection);
     }
 
     @Override
