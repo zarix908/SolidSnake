@@ -1,4 +1,4 @@
-package visualisation;
+package app;
 
 import models.CreatureType;
 
@@ -9,8 +9,7 @@ import java.util.function.Function;
 public final class CreatureToTextureConverter {
     public static final Map<CreatureType, Function<Boolean, TextureType>> converters = new HashMap<>(){
     {
-      put(CreatureType.SimpleSnake,
-              b -> b ? TextureType.SimpleSnakeBodyPart : TextureType.SimpleSnakeHead);
+        put(CreatureType.SimpleSnake, b -> b ? TextureType.SimpleSnakeBodyPart : TextureType.SimpleSnakeHead);
     }
     };
 }
