@@ -1,8 +1,10 @@
 package models;
 
-class Mushroom implements Creature {
+class Wall implements Creature {
 
-    Mushroom(Point location){
+    private final Point _location;
+
+    Wall(Point location){
         _location = location;
     }
 
@@ -10,27 +12,19 @@ class Mushroom implements Creature {
     public void makeMove(Creature[][] field) {
     }
 
-    private boolean _isDead = false;
     @Override
     public boolean isDead() {
-        return _isDead;
+        return false;
     }
 
     @Override
     public void interactWith(Creature otherCreature) {
-        if (otherCreature instanceof SnakeBodyPart)
-            _isDead = true;
-        else{
-            throw new UnsupportedOperationException("This mushroom doesn't know how to behave in these " +
-                    "circumstances WutFace");
-        }
     }
 
     @Override
     public void cleanUp() {
     }
 
-    private Point _location;
     @Override
     public Point getLocation() {
         return _location;
@@ -43,6 +37,6 @@ class Mushroom implements Creature {
 
     @Override
     public CreatureType getCreatureType() {
-        return CreatureType.Mushroom;
+        return CreatureType.Wall;
     }
 }

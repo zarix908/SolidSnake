@@ -6,16 +6,16 @@ class Snake {
         _score = 0;
     }
 
-    private ISnakeBodyPart head;
+    private SnakeBodyPart head;
 
-    ISnakeBodyPart getHead() {
+    SnakeBodyPart getHead() {
         return head;
     }
 
-    ISnakeBodyPart getTail(){
-        ISnakeBodyPart bodyPart = head;
+    SnakeBodyPart getTail(){
+        SnakeBodyPart bodyPart = head;
         while (true){
-            ISnakeBodyPart temporaryBodyPart = bodyPart.getNextBodyPart();
+            SnakeBodyPart temporaryBodyPart = bodyPart.getNextBodyPart();
             if(temporaryBodyPart == null)
                 break;
             bodyPart = temporaryBodyPart;

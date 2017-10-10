@@ -1,6 +1,6 @@
 package models;
 
-class SnakeBodyPartSkeleton implements ISnakeBodyPart {
+class SnakeBodyPartSkeleton implements SnakeBodyPart {
     SnakeBodyPartSkeleton(boolean isHead, Direction direction, Point location, Snake snake) {
         _isDead = false;
         _isHead = isHead;
@@ -10,11 +10,11 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
     }
 
     @Override
-    public void makeMove(ICreature[][] field) {
+    public void makeMove(Creature[][] field) {
         if(_precedingBodyPart.isDead())
             _isDead = true;
         //TODO: relocate this into usable from all places structure
-        //Maybe lcation = next.location would be better
+        //Maybe location = next.location would be better
         switch (_direction){
             case Up:
                 _location = new Point(_location.getX(), _location.getY() - 1);
@@ -43,7 +43,7 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
     }
 
     @Override
-    public void interactWith(ICreature otherCreature) {
+    public void interactWith(Creature otherCreature) {
         throw new UnsupportedOperationException();
     }
 
@@ -110,23 +110,23 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
     }
 
 
-    private ISnakeBodyPart _nextBodyPart = null;
+    private SnakeBodyPart _nextBodyPart = null;
 
     @Override
-    public ISnakeBodyPart getNextBodyPart(){
+    public SnakeBodyPart getNextBodyPart(){
         return _nextBodyPart;
     }
 
-    private ISnakeBodyPart _precedingBodyPart = null;
+    private SnakeBodyPart _precedingBodyPart = null;
 
     @Override
-    public ISnakeBodyPart getPrecedingBodyPart(){
+    public SnakeBodyPart getPrecedingBodyPart(){
         return _precedingBodyPart;
     }
 
 
     @Override
-    public void attachNewBodyPart(ISnakeBodyPart bodyPart){
+    public void attachNewBodyPart(SnakeBodyPart bodyPart){
         if (_nextBodyPart != null) {
             _nextBodyPart.attachNewBodyPart(bodyPart);
         } else {
