@@ -26,6 +26,8 @@ public final class Settings {
         //Can't be done with current implementation
         _colorDict.put(TextureType.SimpleSnakeBodyPart, Color.LIGHTBLUE);
         _colorDict.put(TextureType.SimpleSnakeHead, Color.BLUE);
+        _colorDict.put(TextureType.Apple, Color.FORESTGREEN);
+        _colorDict.put(TextureType.Mushroom, Color.ORANGERED);
     }
 
     // Note: we can get this info from GameFrame class --> are these getters unnecessary?

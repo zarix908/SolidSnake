@@ -5,7 +5,7 @@ import models.Direction;
 import models.Game;
 import javafx.scene.canvas.GraphicsContext;
 
-public class GameLoop implements Runnable {
+public class OldGameLoop implements Runnable {
     private final Game _game;
     private final GraphicsContext _gc;
 
@@ -19,7 +19,7 @@ public class GameLoop implements Runnable {
     private GameFrame _frame;
 
 
-    public GameLoop(final Game game, final  GraphicsContext gc){
+    public OldGameLoop(final Game game, final  GraphicsContext gc){
         _game = game;
         _gc = gc;
 
@@ -79,7 +79,7 @@ public class GameLoop implements Runnable {
             //TODO: check if snake is dead, as for know consider that gameframe is null
             if (_frame == null) {
                 pause();
-                Painter.paintResetMessage(_gc);
+//                Painter.paintResetMessage(_gc);
                 break;
             }
 

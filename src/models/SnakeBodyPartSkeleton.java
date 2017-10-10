@@ -1,5 +1,8 @@
 package models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 class SnakeBodyPartSkeleton implements SnakeBodyPart {
     SnakeBodyPartSkeleton(boolean isHead, Direction direction, Point location, Snake snake) {
         _isDead = false;
@@ -90,15 +93,26 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
         return _direction;
     }
 
-    @Override
-    public CreatureType getCreatureType() {
-        return null;
-    }
-
     public void setDirection(Direction direction) {
         if(!_isHead)
             return;
-        _direction = direction;
+        if(direction != ILLEGAL_TURN.get(direction) || direction != Direction.None){
+            _direction = direction;
+        }
+    }
+
+    private static final Map<Direction, Direction> ILLEGAL_TURN = new HashMap<>(){
+        {
+            put(Direction.Up, Direction.Down);
+            put(Direction.Down, Direction.Up);
+            put(Direction.Left, Direction.Right);
+            put(Direction.Right, Direction.Left);
+        }
+    };
+
+    @Override
+    public CreatureType getCreatureType() {
+        return null;
     }
 
 
