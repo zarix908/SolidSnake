@@ -1,18 +1,17 @@
 package app;
 
 import models.Direction;
-import models.ICreature;
-import models.ISnakeBodyPart;
+import models.Creature;
+import models.SnakeBodyPart;
 import models.Point;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GameFrame {
 
     public GameFrame(int width,
                      int height,
-                     Map<Point, ICreature> creatures,
+                     Map<Point, Creature> creatures,
                      int[] scores){
         _width = width;
         _height = height;
@@ -20,12 +19,12 @@ public class GameFrame {
         _scores = scores;
     }
 
-    private Map<Point, TextureInfo> convertICreatureToTextureInfo(Map<Point, ICreature> creatures){
+    private Map<Point, TextureInfo> convertICreatureToTextureInfo(Map<Point, Creature> creatures){
         Map<Point, TextureInfo> textures = new HashMap<>();
         for (Point location : creatures.keySet()) {
-            ICreature creature = creatures.get(location);
-            ISnakeBodyPart snakeBodyPart = creature instanceof ISnakeBodyPart
-                    ? ((ISnakeBodyPart) creature)
+            Creature creature = creatures.get(location);
+            SnakeBodyPart snakeBodyPart = creature instanceof SnakeBodyPart
+                    ? ((SnakeBodyPart) creature)
                     : null;
             boolean isHead = snakeBodyPart == null || snakeBodyPart.isHead();
             TextureInfo texture = new TextureInfo(

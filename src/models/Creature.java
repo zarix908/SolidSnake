@@ -1,9 +1,9 @@
 package models;
 
-public interface ICreature {
-    void makeMove(ICreature[][] field); //TODO: any other args?
+public interface Creature {
+    void makeMove(Creature[][] field); //TODO: any other args?
     boolean isDead();
-    void interactWith(ICreature otherCreature);
+    void interactWith(Creature otherCreature);
     void cleanUp();
     Point getLocation();
     Direction getDirection();
