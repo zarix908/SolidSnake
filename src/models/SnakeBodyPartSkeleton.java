@@ -13,6 +13,8 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
     public void makeMove(ICreature[][] field) {
         if(_precedingBodyPart.isDead())
             _isDead = true;
+        //TODO: relocate this into usable from all places structure
+        //Maybe lcation = next.location would be better
         switch (_direction){
             case Up:
                 _location = new Point(_location.getX(), _location.getY() - 1);
@@ -25,6 +27,8 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
                 break;
             case Right:
                 _location = new Point(_location.getX() + 1, _location.getY());
+                break;
+            case None:
                 break;
             default:
                 throw new UnsupportedOperationException("Snake must go somewhere!");
@@ -45,7 +49,13 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
 
     @Override
     public void cleanUp() {
-
+        if(!_isDead){
+            throw new UnsupportedOperationException("You can't dump the body before killing it!");
+        }
+        deattachNextBodyPart();
+        if (_precedingBodyPart != null) {
+            _precedingBodyPart.deattachNextBodyPart();
+        }
     }
 
     void setIsDead(){
@@ -147,4 +157,5 @@ class SnakeBodyPartSkeleton implements ISnakeBodyPart {
         _isDead = true;
         _precedingBodyPart = null;
     }
+
 }

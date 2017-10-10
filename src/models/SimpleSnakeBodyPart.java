@@ -3,7 +3,7 @@ package models;
 class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
 
     private final SnakeBodyPartSkeleton _skeleton;
-    private static final CreatureType CREATURE_TYPE = CreatureType.SimpleSnake;
+    private static final CreatureType CREATURE_TYPE = CreatureType.SimpleSnakeBodyPart;
 
     public SimpleSnakeBodyPart(boolean isHead, Direction direction, Point location, Snake snake) {
         _skeleton = new SnakeBodyPartSkeleton(isHead, direction, location, snake);
@@ -29,22 +29,38 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
     public void interactWith(ICreature otherCreature) {
         if (otherCreature instanceof Apple){
             _skeleton.getSnake().incrementScore(10);
+            ISnakeBodyPart tail = getSnake().getTail();
+            _skeleton.attachNewBodyPart(new SimpleSnakeBodyPart(
+                    false,
+                    Direction.None,
+                    tail.getLocation(),
+                    _skeleton.getSnake()));
+        }
+        else if (otherCreature instanceof Mushroom){
+            _skeleton.getSnake().incrementScore(20);
+            ISnakeBodyPart tail = getSnake().getTail();
+            _skeleton.attachNewBodyPart(new TailDiscardBodyPart(
+                    Direction.None,
+                    tail.getLocation(),
+                    _skeleton.getSnake()));
         }
         else if (otherCreature instanceof SimpleSnakeBodyPart) {
             _skeleton.setIsDead();
         }
+        else if (otherCreature instanceof  TailDiscardBodyPart){
+        }
         else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
+                        " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
+                        "(This (%s) doesn't know hot to interact with (%s))",
+                    this.toString(),
+                    otherCreature.toString()));
         }
     }
 
     @Override
     public void cleanUp() {
-        if(!_skeleton.isDead()){
-            throw new UnsupportedOperationException("You can't dump the body before killing it!");
-        }
-        _skeleton.deattachNextBodyPart();
-        _skeleton.getPrecedingBodyPart().getPrecedingBodyPart();
+        _skeleton.cleanUp();
     }
 
     @Override
@@ -90,5 +106,14 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
     @Override
     public void deattachNextBodyPart() {
         _skeleton.deattachNextBodyPart();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s at (%d, %d) with %s",
+                CREATURE_TYPE.toString(),
+                _skeleton.getLocation().getX(),
+                _skeleton.getLocation().getY(),
+                _skeleton.getDirection().toString());
     }
 }
