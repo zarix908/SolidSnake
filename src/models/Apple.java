@@ -1,13 +1,13 @@
 package models;
 
-class Apple implements ICreature {
+class Apple implements Creature {
 
     Apple(Point location){
         _location = location;
     }
 
     @Override
-    public void makeMove(ICreature[][] field) {
+    public void makeMove(Creature[][] field) {
     }
 
     private boolean _isDead = false;
@@ -17,8 +17,8 @@ class Apple implements ICreature {
     }
 
     @Override
-    public void interactWith(ICreature otherCreature) {
-        if (otherCreature instanceof ISnakeBodyPart)
+    public void interactWith(Creature otherCreature) {
+        if (otherCreature instanceof SnakeBodyPart)
             _isDead = true;
         else{
             throw new UnsupportedOperationException("This apple doesn't know how to behave in these " +

@@ -1,6 +1,6 @@
 package models;
 
-class TailDiscardBodyPart implements ISnakeBodyPart {
+class TailDiscardBodyPart implements SnakeBodyPart {
 
     private static final CreatureType CREATURE_TYPE = CreatureType.TailDiscardBodyPart;
 
@@ -11,7 +11,7 @@ class TailDiscardBodyPart implements ISnakeBodyPart {
     }
 
     @Override
-    public void makeMove(ICreature[][] field) {
+    public void makeMove(Creature[][] field) {
         _skeleton.makeMove(field);
     }
 
@@ -21,7 +21,7 @@ class TailDiscardBodyPart implements ISnakeBodyPart {
     }
 
     @Override
-    public void interactWith(ICreature otherCreature) {
+    public void interactWith(Creature otherCreature) {
 
     }
 
@@ -61,17 +61,17 @@ class TailDiscardBodyPart implements ISnakeBodyPart {
     }
 
     @Override
-    public ISnakeBodyPart getNextBodyPart() {
+    public SnakeBodyPart getNextBodyPart() {
         return _skeleton.getNextBodyPart();
     }
 
     @Override
-    public ISnakeBodyPart getPrecedingBodyPart() {
+    public SnakeBodyPart getPrecedingBodyPart() {
         return _skeleton.getPrecedingBodyPart();
     }
 
     @Override
-    public void attachNewBodyPart(ISnakeBodyPart bodyPart) {
+    public void attachNewBodyPart(SnakeBodyPart bodyPart) {
         _skeleton.attachNewBodyPart(bodyPart);
     }
 

@@ -1,6 +1,6 @@
 package models;
 
-class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
+class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
 
     private final SnakeBodyPartSkeleton _skeleton;
     private static final CreatureType CREATURE_TYPE = CreatureType.SimpleSnakeBodyPart;
@@ -10,7 +10,7 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
     }
     
     @Override
-    public void makeMove(ICreature[][] field) {
+    public void makeMove(Creature[][] field) {
         _skeleton.makeMove(field);
     }
 
@@ -26,10 +26,10 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
 
 
     @Override
-    public void interactWith(ICreature otherCreature) {
+    public void interactWith(Creature otherCreature) {
         if (otherCreature instanceof Apple){
             _skeleton.getSnake().incrementScore(10);
-            ISnakeBodyPart tail = getSnake().getTail();
+            SnakeBodyPart tail = getSnake().getTail();
             _skeleton.attachNewBodyPart(new SimpleSnakeBodyPart(
                     false,
                     Direction.None,
@@ -38,7 +38,7 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
         }
         else if (otherCreature instanceof Mushroom){
             _skeleton.getSnake().incrementScore(20);
-            ISnakeBodyPart tail = getSnake().getTail();
+            SnakeBodyPart tail = getSnake().getTail();
             _skeleton.attachNewBodyPart(new TailDiscardBodyPart(
                     Direction.None,
                     tail.getLocation(),
@@ -89,17 +89,17 @@ class SimpleSnakeBodyPart implements ICreature, ISnakeBodyPart {
     }
 
     @Override
-    public ISnakeBodyPart getNextBodyPart() {
+    public SnakeBodyPart getNextBodyPart() {
         return _skeleton.getNextBodyPart();
     }
 
     @Override
-    public ISnakeBodyPart getPrecedingBodyPart() {
+    public SnakeBodyPart getPrecedingBodyPart() {
         return _skeleton.getPrecedingBodyPart();
     }
 
     @Override
-    public void attachNewBodyPart(ISnakeBodyPart bodyPart) {
+    public void attachNewBodyPart(SnakeBodyPart bodyPart) {
         _skeleton.attachNewBodyPart(bodyPart);
     }
 
