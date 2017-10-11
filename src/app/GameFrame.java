@@ -42,7 +42,6 @@ public class GameFrame {
     class TextureInfo{
         private TextureType _type;
         private Direction _direction;
-        private Point _location;
 
         TextureInfo(TextureType type,
                     Direction direction){

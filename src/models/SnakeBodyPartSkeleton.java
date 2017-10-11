@@ -14,8 +14,10 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
 
     @Override
     public void makeMove(Creature[][] field) {
-        if(_precedingBodyPart.isDead())
+        if(_precedingBodyPart != null && _precedingBodyPart.isDead()){
             _isDead = true;
+            return;
+        }
         //TODO: relocate this into usable from all places structure
         //Maybe location = next.location would be better
         switch (_direction){
@@ -36,7 +38,9 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
             default:
                 throw new UnsupportedOperationException("Snake must go somewhere!");
         }
-        _direction = _precedingBodyPart.getDirection();
+        if(!_isHead){
+            _direction = _precedingBodyPart.getDirection();
+        }
     }
 
     private boolean _isDead;

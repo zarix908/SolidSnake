@@ -82,7 +82,8 @@ public class App extends Application {
     private void reset() {
         _isPaused = false;
         _currDir = Direction.None;
-        _game = new Game(Settings.getCols(), Settings.getRows(), 1);
+        Settings set = new Settings();
+        _game = new Game(set.getCols(), set.getRows(), 1);
         _frame = _game.makeTurn(new Direction[]{_currDir});
 //        _loop = new OldGameLoop(_game, _context);
         Painter.paint(_frame, _context);

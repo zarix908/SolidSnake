@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 
 //TODO: It's a placeholder for settings configuration, something should be implemented in "models" in order to get everything working
 // Note: shitty implementation
-public final class Settings {
+public class Settings {
 
     private static int _size;
     private static int _cols;
@@ -16,7 +16,7 @@ public final class Settings {
 
     private static Map<TextureType, Color> _colorDict = new HashMap<TextureType, Color>();
 
-    private Settings(){
+    Settings(){
         _size = 10;
         _cols = 30;
         _rows = 30;
