@@ -1,8 +1,11 @@
 package models;
 
+<<<<<<< HEAD
 import java.util.HashMap;
 import java.util.Map;
 
+=======
+>>>>>>> master
 class SnakeBodyPartSkeleton implements SnakeBodyPart {
     SnakeBodyPartSkeleton(boolean isHead, Direction direction, Point location, Snake snake) {
         _isDead = false;
@@ -190,4 +193,5 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
         _isDead = true;
         _precedingBodyPart = null;
     }
+
 }

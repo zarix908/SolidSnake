@@ -131,6 +131,7 @@ public class Game {
         }
     }
 
+
     private Map<Point, Creature> resolveCollisions(Map<Point, List<Creature>> collisions){
         Map<Point, Creature> resolved = new HashMap<>();
         for (Point location: collisions.keySet()) {

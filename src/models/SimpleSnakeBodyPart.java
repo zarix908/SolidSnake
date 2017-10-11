@@ -87,6 +87,11 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
     }
 
     @Override
+    public void setDirection(Direction newDirection) {
+        _skeleton.setDirection(newDirection);
+    }
+
+    @Override
     public Snake getSnake() {
         return _skeleton.getSnake();
     }

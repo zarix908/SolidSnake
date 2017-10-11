@@ -11,7 +11,6 @@ class Snake {
         _score = 0;
         _lastBoost = null;
     }
-
     SnakeBodyPart getHead() {
         return head;
     }
@@ -25,7 +24,6 @@ class Snake {
         }
         return bodyPart;
     }
-
     boolean isDead(){
         return head.isDead();
     }
@@ -57,4 +55,13 @@ class Snake {
     void resetLastBoost(){
         _lastBoost = null;
     }
+    void incrementScore(int value) {
+        if (value < 0) {
+            throw new UnsupportedOperationException("How are you gonna win if you" +
+                    " are adding negative amount points to score?!");
+        }
+        _score += value;
+    }
+
+
 }
