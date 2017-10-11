@@ -37,16 +37,17 @@ class Mushroom implements Creature {
     }
 
     @Override
-<<<<<<< HEAD
     public Direction getCurrentDirection() {
-=======
-    public Direction getDirection() {
->>>>>>> master
         return Direction.None;
     }
 
     @Override
     public CreatureType getCreatureType() {
         return CreatureType.Mushroom;
+    }
+
+    @Override
+    public Direction getPreviousDirection() {
+        return Direction.None;
     }
 }

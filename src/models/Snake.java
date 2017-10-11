@@ -6,8 +6,8 @@ class Snake {
     private int _score;
     private CreatureType _lastBoost;
 
-    public Snake(Point location, Direction startingDirection) {
-        this.head = new SimpleSnakeBodyPart(true, startingDirection, location, this);
+    Snake(Point location, Direction startingDirection) {
+        this.head = new SnakeHead(startingDirection, location, this);
         _score = 0;
         _lastBoost = null;
     }
@@ -54,13 +54,6 @@ class Snake {
     }
     void resetLastBoost(){
         _lastBoost = null;
-    }
-    void incrementScore(int value) {
-        if (value < 0) {
-            throw new UnsupportedOperationException("How are you gonna win if you" +
-                    " are adding negative amount points to score?!");
-        }
-        _score += value;
     }
 
 

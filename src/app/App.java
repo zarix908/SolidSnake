@@ -60,7 +60,7 @@ public class App extends Application {
 
         reset();
 
-        AnimationTimerExt gameLoop = new AnimationTimerExt(400){
+        AnimationTimerExt gameLoop = new AnimationTimerExt(200){
 
             @Override
             public void handle() {

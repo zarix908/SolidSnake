@@ -39,4 +39,9 @@ class Wall implements Creature {
     public CreatureType getCreatureType() {
         return CreatureType.Wall;
     }
+
+    @Override
+    public Direction getPreviousDirection() {
+        return Direction.None;
+    }
 }

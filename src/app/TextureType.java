@@ -2,7 +2,7 @@ package app;
 
 public enum TextureType {
     SimpleSnakeBodyPart,
-    SimpleSnakeHead,
+    SnakeHead,
     TailDiscardSnakeBodyPart,
     Apple,
     Mushroom,

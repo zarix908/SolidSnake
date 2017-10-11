@@ -23,14 +23,9 @@ public class GameFrame {
         Map<Point, TextureInfo> textures = new HashMap<>();
         for (Point location : creatures.keySet()) {
             Creature creature = creatures.get(location);
-            SnakeBodyPart snakeBodyPart = creature instanceof SnakeBodyPart
-                    ? ((SnakeBodyPart) creature)
-                    : null;
-            boolean isHead = snakeBodyPart == null || snakeBodyPart.isHead();
             TextureInfo texture = new TextureInfo(
                     CreatureToTextureConverter.converters
-                            .get(creature.getCreatureType())
-                            .apply(isHead),
+                            .get(creature.getCreatureType()),
                     creature.getCurrentDirection());
             textures.put(location, texture);
         }
@@ -45,16 +40,8 @@ public class GameFrame {
 
         TextureInfo(TextureType type,
                     Direction direction){
-                    //Point location)
             _type = type;
             _direction = direction;
-
-            // Is it necessary?
-//            if(!location.isInBounds(_width, _height)){
-//                throw new IndexOutOfBoundsException(
-//                        "It's not index, but let's pretend it's a good type for exception here");
-//            }
-//            _location = location;
         }
 
         TextureType getType() {
@@ -83,7 +70,7 @@ public class GameFrame {
 
     private final int[] _scores;
 
-    public int[] getScores() {
+    int[] getScores() {
         return _scores;
     }
 

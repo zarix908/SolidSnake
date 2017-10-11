@@ -16,32 +16,22 @@ public class Game {
     public Game(int width, int height, int snakeCount){ //TODO: Load level from file? (NOT NEEDED FOR NOW)
         _field = new Creature[width][height];
         //TODO: generate borders
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if(i == 0 || i == width - 1 || j == 0 || j == height - 1) {
+                    _field[i][j] = new Wall(new Point(i, j));
+                }
+            }
+        }
         _snakes = new Snake[snakeCount];
         for (int i = 0; i < snakeCount; i++) {
-            Point randomPoint;
-            //TODO: WARNING: POTENTIAL INFINITE LOOP
-            while (true){
-                randomPoint = Point.generateRandomInBounds(0, width - 1,
-                        0, height - 1,
-                        1, 1);
-                if (_field[randomPoint.getX()][randomPoint.getY()] == null){
-                    break;
-                }
-            }
+            Point randomPoint = generateSafeRandomPoint(0, _field.length - 1,
+                    0, _field[0].length, 2, 2);
             _snakes[i] = new Snake(randomPoint, Direction.None);
-
             //TODO: Shitty code of food gen
-            Point randomPoint1;
-            while (true) {
-                randomPoint1 = Point.generateRandomInBounds(0, _field.length - 1,
-                        0, _field[0].length - 1,
-                        0, 0);
-                if (_field[randomPoint1.getX()][randomPoint1.getY()] == null) {
-                    break;
-                }
-            }
+            Point randomPoint1 = generateSafeRandomPoint(0, _field.length - 1,
+                    0, _field[0].length, 1, 1);
             _field[randomPoint1.getX()][randomPoint1.getY()] = new Apple(randomPoint1);
-            //TODO: Cyka blyat gotta generate field and random location for snakes
         }
     }
 
@@ -83,21 +73,12 @@ public class Game {
             if (lastBoost != null) {
                 switch (lastBoost) {
                     case Apple:
-
-                        //TODO: Make separate method for randomPoints with null in field
-                        Point randomPoint;
-                        while (true) {
-                            randomPoint = Point.generateRandomInBounds(0, _field.length - 1,
-                                    0, _field[0].length - 1,
-                                    0, 0);
-                            if (_field[randomPoint.getX()][randomPoint.getY()] == null) {
-                                break;
-                            }
-                        }
-
+                        Point randomPoint = generateSafeRandomPoint(0, _field.length - 1,
+                            0, _field[0].length, 1, 1);
                         _field[randomPoint.getX()][randomPoint.getY()] = new Apple(randomPoint);
                         break;
                     default:
+                        //TODO: Max, you forgot the String.format(...)
                         throw new IllegalStateException("WAT? (%s) is not a boost or shouldn't be generated when the same boost was eaten");
                 }
                 snake.resetLastBoost();
@@ -107,15 +88,8 @@ public class Game {
             //TODO: won't generate mushroom if score increased from 190 to 210 (but it should)
             //TODO: load scoreGap (it's 50 now) somewhere from settings
             if (snake.getScore()%50 == 0 && snake.getScore() != 0){
-                Point randomPoint;
-                while (true) {
-                    randomPoint = Point.generateRandomInBounds(0, _field.length - 1,
-                            0, _field[0].length - 1,
-                            0, 0);
-                    if (_field[randomPoint.getX()][randomPoint.getY()] == null) {
-                        break;
-                    }
-                }
+                Point randomPoint = generateSafeRandomPoint(0, _field.length - 1,
+                        0, _field[0].length, 1, 1);
                 _field[randomPoint.getX()][randomPoint.getY()] = new Mushroom(randomPoint);
             }
         }
@@ -198,5 +172,19 @@ public class Game {
             }
         }
         return collisions;
+    }
+
+    private Point generateSafeRandomPoint(int x1, int x2, int y1, int y2, int borderX, int borderY){
+        //TODO: WARNING: VERY BIG CHANCE OF GETTING INTO INFINITE LOOP
+        Point randomPoint;
+        while (true) {
+            randomPoint = Point.generateRandomInBounds(x1, x2,
+                    y1, y2,
+                    borderX, borderY);
+            if (_field[randomPoint.getX()][randomPoint.getY()] == null) {
+                break;
+            }
+        }
+        return randomPoint;
     }
 }

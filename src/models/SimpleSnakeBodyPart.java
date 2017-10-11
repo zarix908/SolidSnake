@@ -1,11 +1,11 @@
 package models;
 
-class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
+class SimpleSnakeBodyPart implements SnakeBodyPart {
 
     private final SnakeBodyPartSkeleton _skeleton;
     private static final CreatureType CREATURE_TYPE = CreatureType.SimpleSnakeBodyPart;
 
-    public SimpleSnakeBodyPart(boolean isHead, Direction direction, Point location, Snake snake) {
+    SimpleSnakeBodyPart(boolean isHead, Direction direction, Point location, Snake snake) {
         _skeleton = new SnakeBodyPartSkeleton(isHead, direction, location, snake);
     }
     
@@ -27,30 +27,8 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
 
     @Override
     public void interactWith(Creature otherCreature) {
-        if (otherCreature instanceof Apple){
-            _skeleton.getSnake().incrementScore(10);
-            _skeleton.getSnake().setLastBoost(CreatureType.Apple);
-            SnakeBodyPart tail = getSnake().getTail();
-            _skeleton.attachNewBodyPart(new SimpleSnakeBodyPart(
-                    false,
-                    Direction.None,
-                    tail.getLocation(),
-                    _skeleton.getSnake())
-            );
-        }
-        else if (otherCreature instanceof Mushroom){
-            _skeleton.getSnake().incrementScore(20);
-            SnakeBodyPart tail = getSnake().getTail();
-            _skeleton.attachNewBodyPart(new TailDiscardBodyPart(
-                    Direction.None,
-                    tail.getLocation(),
-                    _skeleton.getSnake())
-            );
-        }
-        else if (otherCreature instanceof SimpleSnakeBodyPart) {
+        if (otherCreature instanceof SnakeBodyPart) {
             _skeleton.setIsDead();
-        }
-        else if (otherCreature instanceof  TailDiscardBodyPart){
         }
         else {
             throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
@@ -86,10 +64,6 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
         _skeleton.setCurrentDirection(newDirection);
     }
 
-    @Override
-    public void setDirection(Direction newDirection) {
-        _skeleton.setDirection(newDirection);
-    }
 
     @Override
     public Snake getSnake() {

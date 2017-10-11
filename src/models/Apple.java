@@ -45,4 +45,9 @@ class Apple implements Creature {
     public CreatureType getCreatureType() {
         return CreatureType.Apple;
     }
+
+    @Override
+    public Direction getPreviousDirection() {
+        return Direction.None;
+    }
 }
