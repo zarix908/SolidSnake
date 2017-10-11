@@ -10,7 +10,6 @@ import models.Direction;
 import models.Game;
 
 public class App extends Application {
-    private OldGameLoop _loop;
     private Game _game;
     private GameFrame _frame;
     private GraphicsContext _context;
@@ -68,26 +67,21 @@ public class App extends Application {
                 if (!_isPaused) {
                     _frame = _game.makeTurn(new Direction[]{_currDir});
                     Painter.paint(_frame, _context);
-                    //_frame = _game.makeTurn(new Direction[]{Direction.Left});
                     if (_frame == null) {
                         _isPaused = true;
                     }
                 }
-                return;
             }
         };
         primaryStage.show();
         gameLoop.start();
     }
 
-
-
     private void reset() {
         _isPaused = false;
         _currDir = Direction.None;
         _game = new Game(Settings.getCols(), Settings.getRows(), 1);
         _frame = _game.makeTurn(new Direction[]{_currDir});
-//        _loop = new OldGameLoop(_game, _context);
         Painter.paint(_frame, _context);
     }
 }

@@ -29,6 +29,18 @@ public class Game {
                 }
             }
             _snakes[i] = new Snake(randomPoint, Direction.None);
+
+            //TODO: Shitty code of food gen
+            Point randomPoint1;
+            while (true) {
+                randomPoint1 = Point.generateRandomInBounds(0, _field.length - 1,
+                        0, _field[0].length - 1,
+                        0, 0);
+                if (_field[randomPoint1.getX()][randomPoint1.getY()] == null) {
+                    break;
+                }
+            }
+            _field[randomPoint1.getX()][randomPoint1.getY()] = new Apple(randomPoint1);
             //TODO: Cyka blyat gotta generate field and random location for snakes
         }
     }
@@ -55,22 +67,58 @@ public class Game {
         for (Point location : survivedCreatures.keySet()) {
             _field[location.getX()][location.getY()] = survivedCreatures.get(location);
         }
-        //TODO: generate food
-        Point randomPoint;
-        //TODO: WARNING: POTENTIAL INFINITE LOOP
-        while (true){
-            randomPoint = Point.generateRandomInBounds(0, _field.length - 1,
-                    0, _field[0].length - 1,
-                    0, 0);
-            if (_field[randomPoint.getX()][randomPoint.getY()] == null){
-                break;
+
+        double random = ThreadLocalRandom.current().nextDouble(0, 1);
+//        _field[randomPoint.getX()][randomPoint.getY()] = random >= 0.75
+//                ? new Mushroom(randomPoint)
+//                : new Apple(randomPoint);
+
+
+        // New food generation (may need refactoring, eg. separate method)
+        // lastBoost eaten is set during SimpleSnakeBodyPart.interactWith()
+        // it is needed for generating the same boost when previous was eaten
+        // Mushroom generates every 50 points
+        for (Snake snake : _snakes) {
+            CreatureType lastBoost = snake.getLastBoost();
+            if (lastBoost != null) {
+                switch (lastBoost) {
+                    case Apple:
+
+                        //TODO: Make separate method for randomPoints with null in field
+                        Point randomPoint;
+                        while (true) {
+                            randomPoint = Point.generateRandomInBounds(0, _field.length - 1,
+                                    0, _field[0].length - 1,
+                                    0, 0);
+                            if (_field[randomPoint.getX()][randomPoint.getY()] == null) {
+                                break;
+                            }
+                        }
+
+                        _field[randomPoint.getX()][randomPoint.getY()] = new Apple(randomPoint);
+                        break;
+                    default:
+                        throw new IllegalStateException("WAT? (%s) is not a boost or shouldn't be generated when the same boost was eaten");
+                }
+                snake.resetLastBoost();
+            }
+
+            // Generate mushroom:
+            //TODO: won't generate mushroom if score increased from 190 to 210 (but it should)
+            //TODO: load scoreGap (it's 50 now) somewhere from settings
+            if (snake.getScore()%50 == 0 && snake.getScore() != 0){
+                Point randomPoint;
+                while (true) {
+                    randomPoint = Point.generateRandomInBounds(0, _field.length - 1,
+                            0, _field[0].length - 1,
+                            0, 0);
+                    if (_field[randomPoint.getX()][randomPoint.getY()] == null) {
+                        break;
+                    }
+                }
+                _field[randomPoint.getX()][randomPoint.getY()] = new Mushroom(randomPoint);
             }
         }
-        double random = ThreadLocalRandom.current().nextDouble(0, 1);
-        _field[randomPoint.getX()][randomPoint.getY()] = random >= 0.75
-                ? new Mushroom(randomPoint)
-                : new Apple(randomPoint);
-
     }
 
     private void cleanUp() {

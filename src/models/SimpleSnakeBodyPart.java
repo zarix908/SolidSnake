@@ -29,12 +29,14 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
     public void interactWith(Creature otherCreature) {
         if (otherCreature instanceof Apple){
             _skeleton.getSnake().incrementScore(10);
+            _skeleton.getSnake().setLastBoost(CreatureType.Apple);
             SnakeBodyPart tail = getSnake().getTail();
             _skeleton.attachNewBodyPart(new SimpleSnakeBodyPart(
                     false,
                     Direction.None,
                     tail.getLocation(),
-                    _skeleton.getSnake()));
+                    _skeleton.getSnake())
+            );
         }
         else if (otherCreature instanceof Mushroom){
             _skeleton.getSnake().incrementScore(20);
@@ -42,7 +44,8 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
             _skeleton.attachNewBodyPart(new TailDiscardBodyPart(
                     Direction.None,
                     tail.getLocation(),
-                    _skeleton.getSnake()));
+                    _skeleton.getSnake())
+            );
         }
         else if (otherCreature instanceof SimpleSnakeBodyPart) {
             _skeleton.setIsDead();
