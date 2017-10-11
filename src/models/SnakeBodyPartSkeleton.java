@@ -7,7 +7,8 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
     SnakeBodyPartSkeleton(boolean isHead, Direction direction, Point location, Snake snake) {
         _isDead = false;
         _isHead = isHead;
-        _direction = direction;
+        _currentDirection = direction;
+        _previousDirection = Direction.None;
         _location = location;
         _snake = snake;
     }
@@ -20,7 +21,7 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
         }
         //TODO: relocate this into usable from all places structure
         //Maybe location = next.location would be better
-        switch (_direction){
+        switch (_currentDirection){
             case Up:
                 _location = new Point(_location.getX(), _location.getY() - 1);
                 break;
@@ -39,7 +40,8 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
                 throw new UnsupportedOperationException("Snake must go somewhere!");
         }
         if(!_isHead){
-            _direction = _precedingBodyPart.getDirection();
+            _previousDirection = _currentDirection;
+            _currentDirection = _precedingBodyPart.getPreviousDirection();
         }
     }
 
@@ -89,19 +91,26 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
         _location = location;
     }
 
-
-    private Direction _direction;
+    private Direction _previousDirection;
 
     @Override
-    public Direction getDirection(){
-        return _direction;
+    public Direction getPreviousDirection() {
+        return _previousDirection;
     }
 
-    public void setDirection(Direction direction) {
+    private Direction _currentDirection;
+
+    @Override
+    public Direction getCurrentDirection(){
+        return _currentDirection;
+    }
+
+    public void setCurrentDirection(Direction currentDirection) {
         if(!_isHead)
             return;
-        if(direction != ILLEGAL_TURN.get(direction) || direction != Direction.None){
-            _direction = direction;
+        if(currentDirection != ILLEGAL_TURN.get(_currentDirection) && currentDirection != Direction.None){
+            _previousDirection = currentDirection;
+            _currentDirection = currentDirection;
         }
     }
 
@@ -149,8 +158,9 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
             _nextBodyPart.attachNewBodyPart(bodyPart);
         } else {
             _nextBodyPart = bodyPart;
-            SnakeBodyPartSkeleton asSkeleton = (SnakeBodyPartSkeleton)bodyPart;
-            asSkeleton.attachToPrecedingBodyPart(this);
+            bodyPart.getSkeleton().attachToPrecedingBodyPart(this.getSkeleton());
+//            SnakeBodyPartSkeleton asSkeleton = (SnakeBodyPartSkeleton)bodyPart;
+//            asSkeleton.attachToPrecedingBodyPart(this);
         }
     }
 
@@ -166,14 +176,18 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
         if (_nextBodyPart == null) {
             return;
         }
-        SnakeBodyPartSkeleton asSkeleton = (SnakeBodyPartSkeleton)_nextBodyPart;
+        SnakeBodyPartSkeleton asSkeleton = _nextBodyPart.getSkeleton();
         asSkeleton.deattachFromPrecedingBodyPart();
         _nextBodyPart = null;
+    }
+
+    @Override
+    public SnakeBodyPartSkeleton getSkeleton() {
+        return this;
     }
 
     private void deattachFromPrecedingBodyPart() {
         _isDead = true;
         _precedingBodyPart = null;
     }
-
 }

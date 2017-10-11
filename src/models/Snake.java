@@ -30,11 +30,11 @@ class Snake {
     private int _score;
 
     public Direction getCurrentDirection() {
-        return head.getDirection();
+        return head.getCurrentDirection();
     }
 
     void setCurrentDirection(Direction newDirection) {
-        head.setDirection(newDirection);
+        head.setCurrentDirection(newDirection);
     }
 
     int getScore() {

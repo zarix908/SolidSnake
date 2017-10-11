@@ -39,8 +39,13 @@ public class Game {
         cleanUp();
         makeNewField(survivedCreatures);
         int[] scores = new int[_snakes.length];
+        boolean isThereAnySnakeAlive = true;
         for (int i = 0; i < _snakes.length; i++) {
             scores[i] = _snakes[i].getScore();
+            isThereAnySnakeAlive = isThereAnySnakeAlive && !_snakes[i].isDead();
+        }
+        if(!isThereAnySnakeAlive) {
+            return null;
         }
         return new GameFrame(_field.length, _field[0].length, survivedCreatures, scores);
     }
@@ -83,27 +88,29 @@ public class Game {
         for (Point location: collisions.keySet()) {
             List<Creature> collidingCreatures = collisions.get(location);
             int length = collidingCreatures.size();
+            if(length > 1)
+
             for (int i = 0; i < length - 1; i++) {
-                for (int j = i; j < length; j++) {
+                for (int j = i + 1; j < length; j++) {
                     collidingCreatures.get(i).interactWith(collidingCreatures.get(j));
                     collidingCreatures.get(j).interactWith(collidingCreatures.get(i));
                 }
             }
-            Creature csurvivedCreature = null;
+            Creature survivedCreature = null;
             for (Creature creature : collidingCreatures) {
                 if(creature.isDead()){
                     continue;
                 }
-                if (csurvivedCreature != null) {
+                if (survivedCreature != null) {
                     throw new IllegalStateException("Anotha one!" +
                             " Two creatures collided and still alive");
                 }
-                csurvivedCreature = creature;
+                survivedCreature = creature;
             }
-            if (csurvivedCreature == null) {
+            if (survivedCreature == null) {
                 continue;
             }
-            resolved.put(location, csurvivedCreature);
+            resolved.put(location, survivedCreature);
         }
         return resolved;
     }
@@ -114,8 +121,8 @@ public class Game {
         for (Creature[] row : _field){
             for (Creature creature : row){
                 if (creature != null) {
-                    SnakeBodyPartSkeleton asBodyPart = creature instanceof SnakeBodyPartSkeleton ? ((SnakeBodyPartSkeleton) creature) : null;
-                    if (asBodyPart == null)
+                    SnakeBodyPart asBodyPart = creature instanceof SnakeBodyPart ? ((SnakeBodyPart) creature) : null;
+                    if (asBodyPart != null)
                         continue;
                     creature.makeMove(_field);
                     Point location = creature.getLocation();

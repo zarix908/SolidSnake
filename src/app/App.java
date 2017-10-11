@@ -61,16 +61,19 @@ public class App extends Application {
 
         reset();
 
-        AnimationTimerExt gameLoop = new AnimationTimerExt(50){
+        AnimationTimerExt gameLoop = new AnimationTimerExt(400){
 
             @Override
             public void handle() {
-                if (!_isPaused) _frame = _game.makeTurn(new Direction[]{_currDir});
-
-                if (_frame == null)
-                    _isPaused = true;
-
-                Painter.paint(_frame, _context);
+                if (!_isPaused) {
+                    _frame = _game.makeTurn(new Direction[]{_currDir});
+                    Painter.paint(_frame, _context);
+                    //_frame = _game.makeTurn(new Direction[]{Direction.Left});
+                    if (_frame == null) {
+                        _isPaused = true;
+                    }
+                }
+                return;
             }
         };
         primaryStage.show();
@@ -82,8 +85,7 @@ public class App extends Application {
     private void reset() {
         _isPaused = false;
         _currDir = Direction.None;
-        Settings set = new Settings();
-        _game = new Game(set.getCols(), set.getRows(), 1);
+        _game = new Game(Settings.getCols(), Settings.getRows(), 1);
         _frame = _game.makeTurn(new Direction[]{_currDir});
 //        _loop = new OldGameLoop(_game, _context);
         Painter.paint(_frame, _context);

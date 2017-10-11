@@ -17,16 +17,17 @@ class Painter {
             paintScore(frame, gc);
             _prevFrame = frame;
             //TODO: draw dead Snake
-        }
+        }else {
 
-        if (_prevFrame == null){
-            throw new IllegalArgumentException("Previous frame was null");
-        }
+            if (_prevFrame == null) {
+                throw new IllegalArgumentException("Previous frame was null");
+            }
 
-        paintFrame(_prevFrame, gc);
-        paintScore(frame, gc);
-        paintResetMessage(gc);
-        _prevFrame = null;
+            paintFrame(_prevFrame, gc);
+            paintScore(_prevFrame, gc);
+            paintResetMessage(gc);
+            _prevFrame = null;
+        }
     }
 
     private static void paintFrame(GameFrame frame, GraphicsContext gc){

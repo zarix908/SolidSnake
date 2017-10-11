@@ -74,13 +74,13 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
     }
 
     @Override
-    public Direction getDirection() {
-        return _skeleton.getDirection();
+    public Direction getCurrentDirection() {
+        return _skeleton.getCurrentDirection();
     }
 
     @Override
-    public void setDirection(Direction newDirection) {
-        _skeleton.setDirection(newDirection);
+    public void setCurrentDirection(Direction newDirection) {
+        _skeleton.setCurrentDirection(newDirection);
     }
 
     @Override
@@ -109,11 +109,21 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
     }
 
     @Override
+    public SnakeBodyPartSkeleton getSkeleton() {
+        return _skeleton;
+    }
+
+    @Override
+    public Direction getPreviousDirection() {
+        return _skeleton.getPreviousDirection();
+    }
+
+    @Override
     public String toString() {
         return String.format("%s at (%d, %d) with %s",
                 CREATURE_TYPE.toString(),
                 _skeleton.getLocation().getX(),
                 _skeleton.getLocation().getY(),
-                _skeleton.getDirection().toString());
+                _skeleton.getCurrentDirection().toString());
     }
 }

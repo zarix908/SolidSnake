@@ -31,7 +31,7 @@ public class GameFrame {
                     CreatureToTextureConverter.converters
                             .get(creature.getCreatureType())
                             .apply(isHead),
-                    creature.getDirection());
+                    creature.getCurrentDirection());
             textures.put(location, texture);
         }
         return textures;
