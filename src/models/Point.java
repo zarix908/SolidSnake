@@ -44,7 +44,7 @@ public class Point {
         int randomX = ThreadLocalRandom.current().
                 nextInt(x1 + borderX, x2 - borderX + 1);
         int randomY = ThreadLocalRandom.current().
-                nextInt(y1 + borderY, y1 - borderY + 1);
+                nextInt(y1 + borderY, y2 - borderY + 1);
         return new Point(randomX, randomY);
     }
 }

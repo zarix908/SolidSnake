@@ -8,25 +8,31 @@ import javafx.scene.paint.Color;
 // Note: shitty implementation
 public final class Settings {
 
-    private static int _size;
-    private static int _cols;
-    private static int _rows;
-    private static int _height;
-    private static int _width;
+    private static int _size = 10;
+    private static int _cols = 30;
+    private static int _rows = 30;
+    private static int _height = 300;
+    private static int _width = 300;
 
-    private static Map<TextureType, Color> _colorDict = new HashMap<TextureType, Color>();
+    private static final Map<TextureType, Color> _colorDict = new HashMap<TextureType, Color>(){{
+        put(TextureType.SimpleSnakeBodyPart, Color.LIGHTBLUE);
+        put(TextureType.SimpleSnakeHead, Color.BLUE);
+        put(TextureType.TailDiscardSnakeBodyPart, Color.AQUAMARINE);
+        put(TextureType.Apple, Color.FORESTGREEN);
+        put(TextureType.Mushroom, Color.ORANGERED);
+        put(TextureType.Wall, Color.BLACK);
+    } };
 
-    private Settings(){
-        _size = 10;
-        _cols = 30;
-        _rows = 30;
-        updateResolution();
-
-        //TODO: colors (textures) for dead Snake (at least head).
-        //Can't be done with current implementation
-        _colorDict.put(TextureType.SimpleSnakeBodyPart, Color.LIGHTBLUE);
-        _colorDict.put(TextureType.SimpleSnakeHead, Color.BLUE);
-    }
+//    Settings(){
+//        _size = 10;
+//        _cols = 30;
+//        _rows = 30;
+//        updateResolution();
+//
+//        //TODO: colors (textures) for dead Snake (at least head).
+//        //Can't be done with current implementation
+//
+//    }
 
     // Note: we can get this info from GameFrame class --> are these getters unnecessary?
     public static int getSize() {

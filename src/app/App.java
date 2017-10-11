@@ -6,13 +6,15 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import models.Direction;
 import models.Game;
 
 public class App extends Application {
-    private GameLoop _loop;
     private Game _game;
     private GameFrame _frame;
     private GraphicsContext _context;
+    private boolean _isPaused;
+    private Direction _currDir;
 
     public static void main(String[] args) {
         launch(args);
@@ -22,31 +24,64 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         StackPane root = new StackPane();
 
-        //TODO: const resolution? (in that case const rows/cols)
         Canvas canvas = new Canvas(Settings.getWidth(), Settings.getHeight());
+        canvas.setFocusTraversable(true);
+        root.getChildren().add(canvas);
+
         _context = canvas.getGraphicsContext2D();
 
-        canvas.setFocusTraversable(true);
-        //TODO: controller
-
-        reset();
-        root.getChildren().add(canvas);
         Scene scene = new Scene(root);
-
+        primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.setTitle("Snake Reborn");
         primaryStage.setOnCloseRequest(e -> System.exit(0));
-        primaryStage.setScene(scene);
-        primaryStage.show();
 
-        new Thread(_loop).start();
+        canvas.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case UP:
+                    _currDir = Direction.Up;
+                    break;
+                case DOWN:
+                    _currDir = Direction.Down;
+                    break;
+                case LEFT:
+                    _currDir = Direction.Left;
+                    break;
+                case RIGHT:
+                    _currDir = Direction.Right;
+                    break;
+                case ENTER:
+                    if (_isPaused) {
+                        reset();
+                    }
+                    break;
+            }
+        });
+
+        reset();
+
+        AnimationTimerExt gameLoop = new AnimationTimerExt(400){
+
+            @Override
+            public void handle() {
+                if (!_isPaused) {
+                    _frame = _game.makeTurn(new Direction[]{_currDir});
+                    Painter.paint(_frame, _context);
+                    if (_frame == null) {
+                        _isPaused = true;
+                    }
+                }
+            }
+        };
+        primaryStage.show();
+        gameLoop.start();
     }
 
     private void reset() {
-        _game = new Game(Settings.getCols(), Settings.getRows());
-        _loop = new GameLoop(_game, _context);
-
-        //TODO: initiate the game (get first GameFrame)
+        _isPaused = false;
+        _currDir = Direction.None;
+        _game = new Game(Settings.getCols(), Settings.getRows(), 1);
+        _frame = _game.makeTurn(new Direction[]{_currDir});
         Painter.paint(_frame, _context);
     }
 }

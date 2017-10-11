@@ -29,12 +29,14 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
     public void interactWith(Creature otherCreature) {
         if (otherCreature instanceof Apple){
             _skeleton.getSnake().incrementScore(10);
+            _skeleton.getSnake().setLastBoost(CreatureType.Apple);
             SnakeBodyPart tail = getSnake().getTail();
             _skeleton.attachNewBodyPart(new SimpleSnakeBodyPart(
                     false,
                     Direction.None,
                     tail.getLocation(),
-                    _skeleton.getSnake()));
+                    _skeleton.getSnake())
+            );
         }
         else if (otherCreature instanceof Mushroom){
             _skeleton.getSnake().incrementScore(20);
@@ -42,7 +44,8 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
             _skeleton.attachNewBodyPart(new TailDiscardBodyPart(
                     Direction.None,
                     tail.getLocation(),
-                    _skeleton.getSnake()));
+                    _skeleton.getSnake())
+            );
         }
         else if (otherCreature instanceof SimpleSnakeBodyPart) {
             _skeleton.setIsDead();
@@ -74,8 +77,13 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
     }
 
     @Override
-    public Direction getDirection() {
-        return _skeleton.getDirection();
+    public Direction getCurrentDirection() {
+        return _skeleton.getCurrentDirection();
+    }
+
+    @Override
+    public void setCurrentDirection(Direction newDirection) {
+        _skeleton.setCurrentDirection(newDirection);
     }
 
     @Override
@@ -109,11 +117,21 @@ class SimpleSnakeBodyPart implements Creature, SnakeBodyPart {
     }
 
     @Override
+    public SnakeBodyPartSkeleton getSkeleton() {
+        return _skeleton;
+    }
+
+    @Override
+    public Direction getPreviousDirection() {
+        return _skeleton.getPreviousDirection();
+    }
+
+    @Override
     public String toString() {
         return String.format("%s at (%d, %d) with %s",
                 CREATURE_TYPE.toString(),
                 _skeleton.getLocation().getX(),
                 _skeleton.getLocation().getY(),
-                _skeleton.getDirection().toString());
+                _skeleton.getCurrentDirection().toString());
     }
 }

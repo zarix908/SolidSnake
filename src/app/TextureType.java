@@ -5,5 +5,6 @@ public enum TextureType {
     SimpleSnakeHead,
     TailDiscardSnakeBodyPart,
     Apple,
-    Mushroom
+    Mushroom,
+    Wall
 }
