@@ -2,12 +2,20 @@ package models;
 
 class Mushroom implements Creature {
 
-    Mushroom(Point location){
+    private final int _turnCreated;
+    private final int _turnsAlive;
+
+    Mushroom(Point location, int turnCreated, int turnsAlive){
         _location = location;
+        _turnCreated = turnCreated;
+        _turnsAlive = turnsAlive;
     }
 
     @Override
-    public void makeMove(Creature[][] field) {
+    public void makeMove(Creature[][] field, int currentTurn) {
+        if (_turnCreated + _turnsAlive == currentTurn){
+            _isDead = true;
+        }
     }
 
     private boolean _isDead = false;

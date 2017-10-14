@@ -2,20 +2,21 @@ package models;
 
 import app.GameFrame;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
 public class Game {
     private Creature[][] _field;
     private final Snake[] _snakes;
+    private int _turnNumber = 0;
+    private final int _appleSpawnRate = 20;
+    private final int _appleDeathRate = 30;
+    private final int _mushroomSpawnRate = 50;
+    private final int _mushroomDeathRate = 15;
 
     public Game(int width, int height, int snakeCount){ //TODO: Load level from file? (NOT NEEDED FOR NOW)
         _field = new Creature[width][height];
-        //TODO: generate borders
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if(i == 0 || i == width - 1 || j == 0 || j == height - 1) {
@@ -24,18 +25,25 @@ public class Game {
             }
         }
         _snakes = new Snake[snakeCount];
+        Point[] snakesLocations = generateSafeRandomPoints(snakeCount,0, _field.length - 1,
+                0, _field[0].length - 1, 2, 2);
+        Point[] applesLocations = generateSafeRandomPoints(snakeCount, 0, _field.length - 1,
+                0, _field[0].length - 1, 1, 1);
         for (int i = 0; i < snakeCount; i++) {
-            Point randomPoint = generateSafeRandomPoint(0, _field.length - 1,
-                    0, _field[0].length, 2, 2);
-            _snakes[i] = new Snake(randomPoint, Direction.None);
-            //TODO: Shitty code of food gen
-            Point randomPoint1 = generateSafeRandomPoint(0, _field.length - 1,
-                    0, _field[0].length, 1, 1);
-            _field[randomPoint1.getX()][randomPoint1.getY()] = new Apple(randomPoint1);
+            if (snakesLocations[i] == null) {
+                throw new UnsupportedOperationException("The world is too small for both of us!" +
+                        "(Field too small - could not spawn a snake)");
+            }
+            _snakes[i] = new Snake(snakesLocations[i], Direction.None);
+            if(applesLocations[i] != null){
+                _field[applesLocations[i].getX()][applesLocations[i].getY()] =
+                            new Apple(applesLocations[i], _turnNumber, _appleDeathRate);
+            }
         }
     }
 
     public GameFrame makeTurn(Direction[] playerDirection){
+        _turnNumber++;
         Map<Point, List<Creature>> collisions = makeMoves(playerDirection);
         Map<Point, Creature> survivedCreatures = resolveCollisions(collisions);
         cleanUp();
@@ -59,38 +67,26 @@ public class Game {
         }
 
         double random = ThreadLocalRandom.current().nextDouble(0, 1);
-//        _field[randomPoint.getX()][randomPoint.getY()] = random >= 0.75
-//                ? new Mushroom(randomPoint)
-//                : new Apple(randomPoint);
-
-
-        // New food generation (may need refactoring, eg. separate method)
-        // lastBoost eaten is set during SimpleSnakeBodyPart.interactWith()
-        // it is needed for generating the same boost when previous was eaten
-        // Mushroom generates every 50 points
-        for (Snake snake : _snakes) {
-            CreatureType lastBoost = snake.getLastBoost();
-            if (lastBoost != null) {
-                switch (lastBoost) {
-                    case Apple:
-                        Point randomPoint = generateSafeRandomPoint(0, _field.length - 1,
-                            0, _field[0].length, 1, 1);
-                        _field[randomPoint.getX()][randomPoint.getY()] = new Apple(randomPoint);
-                        break;
-                    default:
-                        //TODO: Max, you forgot the String.format(...)
-                        throw new IllegalStateException("WAT? (%s) is not a boost or shouldn't be generated when the same boost was eaten");
+        if(_turnNumber % _appleSpawnRate == 0) {
+            Point[] apples = generateSafeRandomPoints(_snakes.length,
+                    0, _field.length - 1,
+                    0, _field[0].length - 1,
+                    1, 1);
+            for (Point appleLocation : apples) {
+                if(appleLocation != null){
+                    _field[appleLocation.getX()][appleLocation.getY()] = new Apple(appleLocation, _turnNumber, _appleDeathRate);
                 }
-                snake.resetLastBoost();
             }
-
-            // Generate mushroom:
-            //TODO: won't generate mushroom if score increased from 190 to 210 (but it should)
-            //TODO: load scoreGap (it's 50 now) somewhere from settings
-            if (snake.getScore()%50 == 0 && snake.getScore() != 0){
-                Point randomPoint = generateSafeRandomPoint(0, _field.length - 1,
-                        0, _field[0].length, 1, 1);
-                _field[randomPoint.getX()][randomPoint.getY()] = new Mushroom(randomPoint);
+        }
+        if(_turnNumber % _mushroomSpawnRate == 0) {
+            Point[] mushrooms = generateSafeRandomPoints(_snakes.length
+                    , 0, _field.length - 1,
+                    0, _field[0].length - 1,
+                    1, 1);
+            for (Point mushroomLocation : mushrooms) {
+                if(mushroomLocation != null){
+                    _field[mushroomLocation.getX()][mushroomLocation.getY()] = new Mushroom(mushroomLocation, _turnNumber, _mushroomDeathRate);
+                }
             }
         }
     }
@@ -104,7 +100,6 @@ public class Game {
             }
         }
     }
-
 
     private Map<Point, Creature> resolveCollisions(Map<Point, List<Creature>> collisions){
         Map<Point, Creature> resolved = new HashMap<>();
@@ -147,7 +142,7 @@ public class Game {
                     SnakeBodyPart asBodyPart = creature instanceof SnakeBodyPart ? ((SnakeBodyPart) creature) : null;
                     if (asBodyPart != null)
                         continue;
-                    creature.makeMove(_field);
+                    creature.makeMove(_field, _turnNumber);
                     Point location = creature.getLocation();
                     collisions.computeIfAbsent(location, k -> new ArrayList<>());
                     collisions.get(location).add(creature);
@@ -161,7 +156,7 @@ public class Game {
             snake.setCurrentDirection(playerDirection[i]);
             SnakeBodyPart snakeBodyPart = snake.getHead();
             while (true){
-                snakeBodyPart.makeMove(_field);
+                snakeBodyPart.makeMove(_field, _turnNumber);
                 Point location = snakeBodyPart.getLocation();
                 collisions.computeIfAbsent(location, k -> new ArrayList<>());
                 collisions.get(location).add(snakeBodyPart);
@@ -174,17 +169,36 @@ public class Game {
         return collisions;
     }
 
-    private Point generateSafeRandomPoint(int x1, int x2, int y1, int y2, int borderX, int borderY){
-        //TODO: WARNING: VERY BIG CHANCE OF GETTING INTO INFINITE LOOP
-        Point randomPoint;
+    private Set<Point> generatePointForEveryCell(int x1, int x2, int y1, int y2, int borderX, int borderY){
+        Set<Point> points = new HashSet<>();
+        for (int x = x1 + borderX; x < x2 - borderX + 1; x++) {
+            for (int y = y1 + borderY; y < y2 - borderY + 1; y++) {
+                points.add(new Point(x, y));
+            }
+        }
+        return points;
+    }
+
+    private Point[] generateSafeRandomPoints(int amount, int x1, int x2, int y1, int y2, int borderX, int borderY){
+        Set<Point> points = generatePointForEveryCell(x1, x2, y1, y2, borderX, borderY);
+        Point[] randomPoints = new Point[amount];
+        int pointNumber = 0;
         while (true) {
-            randomPoint = Point.generateRandomInBounds(x1, x2,
+            if (points.size() == 0){
+                break;
+            }
+            Point randomPoint = Point.generateRandomInBounds(x1, x2,
                     y1, y2,
                     borderX, borderY);
             if (_field[randomPoint.getX()][randomPoint.getY()] == null) {
+                randomPoints[pointNumber] = randomPoint;
+                pointNumber++;
+            }
+            if (pointNumber == amount){
                 break;
             }
+            points.remove(randomPoint);
         }
-        return randomPoint;
+        return randomPoints;
     }
 }

@@ -14,7 +14,7 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
     }
 
     @Override
-    public void makeMove(Creature[][] field) {
+    public void makeMove(Creature[][] field, int currentTurn) {
         if(_precedingBodyPart != null && _precedingBodyPart.isDead()){
             _isDead = true;
             return;
@@ -158,14 +158,13 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
             _nextBodyPart.attachNewBodyPart(bodyPart);
         } else {
             _nextBodyPart = bodyPart;
-            bodyPart.getSkeleton().attachToPrecedingBodyPart(this.getSkeleton());
-//            SnakeBodyPartSkeleton asSkeleton = (SnakeBodyPartSkeleton)bodyPart;
-//            asSkeleton.attachToPrecedingBodyPart(this);
+            bodyPart.attachToPrecedingBodyPart(this);
         }
     }
 
-    private void attachToPrecedingBodyPart(SnakeBodyPartSkeleton bodyPart){
-        if(_isHead){
+    @Override
+    public void attachToPrecedingBodyPart(SnakeBodyPart bodyPart){
+        if(_isHead || bodyPart.getNextBodyPart() == null){
             throw new UnsupportedOperationException();
         }
         _precedingBodyPart = bodyPart;

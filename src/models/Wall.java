@@ -9,7 +9,7 @@ class Wall implements Creature {
     }
 
     @Override
-    public void makeMove(Creature[][] field) {
+    public void makeMove(Creature[][] field, int currentTurn) {
     }
 
     @Override
