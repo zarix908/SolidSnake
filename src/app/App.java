@@ -120,13 +120,13 @@ public class App extends Application {
         );
 
         ImageView snakeLogo = new ImageView(
-                new Image(
-                        "file:res/images/snakeLogoHD.png",
+                new Image(getClass()
+                            .getClassLoader()
+                            .getResourceAsStream("Images/snakeLogoHD.png"),
                         600,
                         0,
                         true,
-                        true
-                )
+                        true)
         );
         FadeTransition logoFade = new FadeTransition(Duration.millis(2000), snakeLogo);
         logoFade.setFromValue(0);
