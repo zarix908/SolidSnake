@@ -10,10 +10,11 @@ public class Game {
     private Creature[][] _field;
     private final Snake[] _snakes;
     private int _turnNumber = 0;
-    private final int _appleSpawnRate = 20;
-    private final int _appleDeathRate = 30;
-    private final int _mushroomSpawnRate = 50;
-    private final int _mushroomDeathRate = 15;
+    private int _appleSpawnRate = 20;
+    private int _appleDeathRate = 30;
+    private int _mushroomSpawnRate = 50;
+    private int _mushroomDeathRate = 15;
+    private boolean _foodSpawnActivated = true;
 
     public Game(int width, int height, int snakeCount){ //TODO: Load level from file? (NOT NEEDED FOR NOW)
         _field = new Creature[width][height];
@@ -42,6 +43,16 @@ public class Game {
         }
     }
 
+    public Game(GameSettings settings){
+        _field = settings.getInitialField();
+        _foodSpawnActivated = settings.isFoodSpawnEnabled();
+        _snakes = settings.getSnakes();
+        _appleSpawnRate = settings.getAppleSpawnRate();
+        _appleDeathRate = settings.getAppleDeathRate();
+        _mushroomSpawnRate = settings.getMushroomSpawnRate();
+        _mushroomDeathRate = settings.getMushroomDeathRate();
+    }
+
     public GameFrame makeTurn(Direction[] playerDirection){
         _turnNumber++;
         Map<Point, List<Creature>> collisions = makeMoves(playerDirection);
@@ -66,8 +77,7 @@ public class Game {
             _field[location.getX()][location.getY()] = survivedCreatures.get(location);
         }
 
-        double random = ThreadLocalRandom.current().nextDouble(0, 1);
-        if(_turnNumber % _appleSpawnRate == 0) {
+        if(_turnNumber % _appleSpawnRate == 0 && _foodSpawnActivated) {
             Point[] apples = generateSafeRandomPoints(_snakes.length,
                     0, _field.length - 1,
                     0, _field[0].length - 1,
@@ -78,7 +88,7 @@ public class Game {
                 }
             }
         }
-        if(_turnNumber % _mushroomSpawnRate == 0) {
+        if(_turnNumber % _mushroomSpawnRate == 0 && _foodSpawnActivated) {
             Point[] mushrooms = generateSafeRandomPoints(_snakes.length
                     , 0, _field.length - 1,
                     0, _field[0].length - 1,
