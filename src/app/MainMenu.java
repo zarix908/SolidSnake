@@ -95,7 +95,8 @@ class MainMenu extends Menu {
         playSolo.setOnMouseClicked(event -> {
 //            GameLoop gl = new GameLoop(1);
 //            gl.run();
-            App._theStage.setScene(App._gamePlayScene);
+            App.setSnakeCount(1);
+            App.playSnake();
         });
         playDuo.setOnMouseClicked(event -> {
             _infoText.setText("Not featured yet");

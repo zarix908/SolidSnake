@@ -19,15 +19,18 @@ import models.Direction;
 import models.Game;
 
 public class App extends Application {
-    private Game _game;
-    private GameFrame _frame;
-    private GraphicsContext _context;
-    private boolean _isPaused;
-    private Direction _currDir;
+    //TODO: how to get rid of static?
 
-     static Stage _theStage;
-     static Scene _mainMenuScene;
-     static Scene _gamePlayScene;
+    private static Game _game;
+    private static GameFrame _frame;
+    private static GraphicsContext _context;
+    private static boolean _isPaused;
+    private static Direction _currDir;
+    private static int _snakeCount = 1;
+    private static Stage _theStage;
+    private static Scene _mainMenuScene;
+    private static Scene _gamePlayScene;
+    private static AnimationTimer _gameLoop;
 
     private static int _width = 800;
     private static int _height = 600;
@@ -49,6 +52,12 @@ public class App extends Application {
 
         primaryStage.setScene(_mainMenuScene);
         primaryStage.show();
+    }
+
+    static void playSnake(){
+        reset(_snakeCount);
+        _theStage.setScene(_gamePlayScene);
+        _gameLoop.start();
     }
 
     private Parent createGamePlay(){
@@ -75,15 +84,15 @@ public class App extends Application {
                     break;
                 case ENTER:
                     if (_isPaused) {
-                        reset();
+                        reset(_snakeCount);
                     }
                     break;
             }
         });
 
-        reset();
+//        reset(1);
 
-        AnimationTimer gameLoop = new AnimationTimer(){
+        _gameLoop = new AnimationTimer(){
 
             private long _prevTime = 0;
 
@@ -103,7 +112,7 @@ public class App extends Application {
             }
         };
 
-        gameLoop.start();
+//        gameLoop.start();
         return root;
     }
 
@@ -120,9 +129,7 @@ public class App extends Application {
         );
 
         ImageView snakeLogo = new ImageView(
-                new Image(getClass()
-                            .getClassLoader()
-                            .getResourceAsStream("Images/snakeLogoHD.png"),
+                new Image("images/snakeLogoHD.png",
                         600,
                         0,
                         true,
@@ -150,12 +157,16 @@ public class App extends Application {
         return root;
     }
 
-    private void reset() {
+    private static void reset(int snakeCount) {
         _isPaused = false;
         _currDir = Direction.None;
-        _game = new Game(Settings.getCols(), Settings.getRows(), 1);
+        _game = new Game(Settings.getCols(), Settings.getRows(), snakeCount);
         _frame = _game.makeTurn(new Direction[]{_currDir});
 //        Painter.paint(_frame, _context);
+    }
+
+    static void setSnakeCount(int count){
+        _snakeCount = count;
     }
 
     static Stage getStage(){
