@@ -26,7 +26,6 @@ class Painter {
             paintFrame(_prevFrame, gc);
             paintScore(_prevFrame, gc);
             paintResetMessage(gc);
-            _prevFrame = null;
         }
     }
 
