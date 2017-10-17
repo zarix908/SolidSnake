@@ -10,6 +10,7 @@ public interface SnakeBodyPart extends Creature {
     SnakeBodyPart getNextBodyPart();
     SnakeBodyPart getPrecedingBodyPart();
     void attachNewBodyPart(SnakeBodyPart bodyPart);
+    void attachToPrecedingBodyPart(SnakeBodyPart bodyPart);
     void deattachNextBodyPart();
     SnakeBodyPartSkeleton getSkeleton();
     Direction getPreviousDirection();

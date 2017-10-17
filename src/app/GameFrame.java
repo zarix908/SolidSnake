@@ -1,8 +1,8 @@
 package app;
 
+import models.CreatureType;
 import models.Direction;
 import models.Creature;
-import models.SnakeBodyPart;
 import models.Point;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +15,18 @@ public class GameFrame {
                      int[] scores){
         _width = width;
         _height = height;
+        _types = extractTypes(creatures);
         _textureInfoMap = convertICreatureToTextureInfo(creatures);
         _scores = scores;
+    }
+
+    private Map<Point, CreatureType> extractTypes(Map<Point, Creature> creatures){
+        Map<Point, CreatureType> typeMap = new HashMap<>();
+        for (Point location : creatures.keySet()) {
+            Creature creature = creatures.get(location);
+            typeMap.put(location, creature.getCreatureType());
+        }
+        return typeMap;
     }
 
     private Map<Point, TextureInfo> convertICreatureToTextureInfo(Map<Point, Creature> creatures){
@@ -64,7 +74,7 @@ public class GameFrame {
 
     private final Map<Point, TextureInfo> _textureInfoMap;
 
-    Map<Point, TextureInfo> getTexturesInfo(){
+    public Map<Point, TextureInfo> getTexturesInfo(){
         return _textureInfoMap;
     }
 
@@ -74,4 +84,9 @@ public class GameFrame {
         return _scores;
     }
 
+    private final Map<Point, CreatureType> _types;
+
+    public Map<Point, CreatureType> getTypes() {
+        return _types;
+    }
 }

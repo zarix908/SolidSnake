@@ -2,12 +2,20 @@ package models;
 
 class Apple implements Creature {
 
-    Apple(Point location){
+    Apple(Point location, int turnCreated, int turnsAlive){
         _location = location;
+        _turnCreated = turnCreated;
+        _turnsAlive = turnsAlive;
     }
 
+    private final int _turnCreated;
+    private final int _turnsAlive;
+
     @Override
-    public void makeMove(Creature[][] field) {
+    public void makeMove(Creature[][] field, int currentTurn) {
+        if(_turnCreated + _turnsAlive == currentTurn){
+            _isDead = true;
+        }
     }
 
     private boolean _isDead = false;

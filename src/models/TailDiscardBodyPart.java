@@ -11,8 +11,8 @@ class TailDiscardBodyPart implements SnakeBodyPart {
     }
 
     @Override
-    public void makeMove(Creature[][] field) {
-        _skeleton.makeMove(field);
+    public void makeMove(Creature[][] field, int currentTurn) {
+        _skeleton.makeMove(field, currentTurn);
     }
 
     @Override
@@ -75,6 +75,11 @@ class TailDiscardBodyPart implements SnakeBodyPart {
     @Override
     public void attachNewBodyPart(SnakeBodyPart bodyPart) {
         _skeleton.attachNewBodyPart(bodyPart);
+    }
+
+    @Override
+    public void attachToPrecedingBodyPart(SnakeBodyPart bodyPart) {
+        _skeleton.attachToPrecedingBodyPart(bodyPart);
     }
 
     @Override

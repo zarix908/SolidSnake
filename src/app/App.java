@@ -11,7 +11,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -162,9 +165,7 @@ public class App extends Application {
         );
 
         ImageView snakeLogo = new ImageView(
-                new Image(getClass()
-                            .getClassLoader()
-                            .getResourceAsStream("Images/snakeLogoHD.png"),
+                new Image("images/snakeLogoHD.png",
                         600,
                         0,
                         true,
