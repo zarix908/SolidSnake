@@ -6,7 +6,7 @@ class Snake {
     private int _score;
     private CreatureType _lastBoost;
 
-    Snake(Point location, Direction startingDirection) {
+    public Snake(Point location, Direction startingDirection) {
         this.head = new SnakeHead(startingDirection, location, this);
         _score = 0;
         _lastBoost = null;

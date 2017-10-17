@@ -2,8 +2,12 @@ package models;
 
 import app.GameFrame;
 
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 public class Game {
@@ -44,13 +48,58 @@ public class Game {
     }
 
     public Game(GameSettings settings){
-        _field = settings.getInitialField();
         _foodSpawnActivated = settings.isFoodSpawnEnabled();
-        _snakes = settings.getSnakes();
+        //TODO: 2 different checkings
+        if (_appleSpawnRate < 0
+                    || _appleDeathRate < 1
+                    || _mushroomSpawnRate < 0
+                    || _mushroomDeathRate < 1){
+            throw new IllegalArgumentException("My name is Doctor. Doctor who?" +
+                    " (One of food death/spawn rates is illegal");
+        }
+        _snakes = new Snake[settings.getSnakesAmount()];
         _appleSpawnRate = settings.getAppleSpawnRate();
         _appleDeathRate = settings.getAppleDeathRate();
         _mushroomSpawnRate = settings.getMushroomSpawnRate();
         _mushroomDeathRate = settings.getMushroomDeathRate();
+        CreatureType[][] initialField = settings.getInitialField();
+        _field = new Creature[initialField.length][initialField[0].length];
+        if (initialField == null){
+            throw new IllegalArgumentException("You w0t m8? It's a bloody void! (Field was null)");
+        }
+        int snakeNumber = 0;
+        for (int i = 0; i < initialField.length; i++) {
+            for (int j = 0; j < initialField[0].length; j++) {
+                switch (initialField[i][j]){
+                    case Wall:
+                        _field[i][j] = new Wall(new Point(i, j));
+                        break;
+                    case Apple:
+                        _field[i][j] = new Apple(new Point(i, j), 0, _appleDeathRate);
+                        break;
+                    case Mushroom:
+                        _field[i][j] = new Mushroom(new Point(i, j),
+                                0, _mushroomDeathRate);
+                        break;
+                    case None:
+                        break;
+                    case SnakeHead:
+                        Snake snake = new Snake(new Point(i, j), Direction.None);
+                        _field[i][j] = snake.getHead();
+                        _snakes[snakeNumber] = snake;
+                        snakeNumber++;
+                        break;
+                    default:
+                        throw new IllegalArgumentException(String.format("Access denied!" +
+                                " (%s) is not allowed here",
+                                initialField[i][j].toString()));
+                }
+            }
+        }
+        if (snakeNumber != settings.getSnakesAmount()){
+            throw new IllegalArgumentException("Snakes! It has to be snakes!" +
+                    " (Snake amount is not equal than found on field");
+        }
     }
 
     public GameFrame makeTurn(Direction[] playerDirection){
@@ -74,10 +123,16 @@ public class Game {
     private void makeNewField(Map<Point, Creature> survivedCreatures) {
         _field = new Creature[_field.length][_field[0].length];
         for (Point location : survivedCreatures.keySet()) {
-            _field[location.getX()][location.getY()] = survivedCreatures.get(location);
+            try {
+                _field[location.getX()][location.getY()] = survivedCreatures.get(location);
+            }
+            catch (IndexOutOfBoundsException a){
+                throw new IndexOutOfBoundsException("I told you, build the bloody walls first!" +
+                        "");
+            }
         }
 
-        if(_turnNumber % _appleSpawnRate == 0 && _foodSpawnActivated) {
+        if(_foodSpawnActivated && _turnNumber % _appleSpawnRate == 0) {
             Point[] apples = generateSafeRandomPoints(_snakes.length,
                     0, _field.length - 1,
                     0, _field[0].length - 1,
@@ -88,7 +143,7 @@ public class Game {
                 }
             }
         }
-        if(_turnNumber % _mushroomSpawnRate == 0 && _foodSpawnActivated) {
+        if(_foodSpawnActivated && _turnNumber % _mushroomSpawnRate == 0) {
             Point[] mushrooms = generateSafeRandomPoints(_snakes.length
                     , 0, _field.length - 1,
                     0, _field[0].length - 1,
