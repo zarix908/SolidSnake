@@ -6,6 +6,6 @@ public interface GameSettings {
     int getMushroomSpawnRate();
     int getMushroomDeathRate();
     boolean isFoodSpawnEnabled();
-    Creature[][] getInitialField();
-    Snake[] getSnakes();
+    CreatureType[][] getInitialField();
+    int getSnakesAmount();
 }
