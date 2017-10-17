@@ -129,9 +129,7 @@ public class App extends Application {
         );
 
         ImageView snakeLogo = new ImageView(
-                new Image(getClass()
-                            .getClassLoader()
-                            .getResourceAsStream("Images/snakeLogoHD.png"),
+                new Image("images/snakeLogoHD.png",
                         600,
                         0,
                         true,
