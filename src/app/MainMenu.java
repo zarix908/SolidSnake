@@ -6,8 +6,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.util.Map;
+
 class MainMenu extends Menu {
 
+    private Map<String, MenuButton> _buttons;
     private VBox _menuWithInfo;
     private StackPane _startPane;
     private MainMenuInfoText _infoText;
@@ -92,12 +95,7 @@ class MainMenu extends Menu {
         });
 
 
-        playSolo.setOnMouseClicked(event -> {
-//            GameLoop gl = new GameLoop(1);
-//            gl.run();
-            App.setSnakeCount(1);
-            App.playSnake();
-        });
+        playSolo.setOnMouseClicked(event -> {});
         playDuo.setOnMouseClicked(event -> {
             _infoText.setText("Not featured yet");
         });
@@ -115,11 +113,20 @@ class MainMenu extends Menu {
         _startPane.getChildren().add(menuMain);
         _menuWithInfo.getChildren().addAll(_startPane, _infoText);
         getChildren().add(_menuWithInfo);
+
+        //TODO: Java9 ONLY!!!!!
+        _buttons = Map.of("playSolo", playSolo, "playDuo", playDuo);
     }
 
-//    VBox getMenu(){
-//        return _menuWithInfo;
-//    }
+    @Override
+    void reload() {
+        getChildren().clear();
+        getChildren().add(_menuWithInfo);
+    }
+
+    Map<String, MenuButton> getButtonsMap(){
+        return _buttons;
+    }
 
     private void fadeFromMenuToMenu(MenuBox from, MenuBox to){
         FadeTransition frFrom = new FadeTransition(Duration.millis(200), from);
@@ -133,9 +140,10 @@ class MainMenu extends Menu {
         frFrom.play();
         frFrom.setOnFinished(event -> {
             _startPane.getChildren().remove(from);
+            to.setOpacity(0);
+            _startPane.getChildren().add(to);
+            ftTo.play();
         });
-        _startPane.getChildren().add(to);
-        ftTo.play();
     }
 
     private void initMenu(MenuBox menu){
