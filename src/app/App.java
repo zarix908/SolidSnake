@@ -21,18 +21,19 @@ import javafx.util.Duration;
 import models.Direction;
 import models.Game;
 
-public class App extends Application {
-    //TODO: how to get rid of static?
+import java.util.Map;
 
+public class App extends Application {
+
+    //TODO: how to get rid of static?
     private static Game _game;
     private static GameFrame _frame;
     private static GraphicsContext _context;
-    private static boolean _isPaused;
+    private static boolean _isGameOver;
+    private static boolean _isPaused = false;
     private static Direction _currDir;
     private static int _snakeCount = 1;
     private static Stage _theStage;
-    private static Scene _mainMenuScene;
-    private static Scene _gamePlayScene;
     private static AnimationTimer _gameLoop;
 
     private static int _width = 800;
@@ -50,21 +51,47 @@ public class App extends Application {
         primaryStage.setOnCloseRequest(e -> System.exit(0));
 
         _theStage = primaryStage;
-        _mainMenuScene = new Scene(createMainMenu());
-        _gamePlayScene = new Scene(createGamePlay());
-
-        primaryStage.setScene(_mainMenuScene);
-        primaryStage.show();
+        _theStage.setScene(new Scene(createMainMenu(), Color.BLACK));
+        _theStage.show();
     }
 
-    static void playSnake(){
+     private void playSnake(int snakeCount){
+        _snakeCount = snakeCount;
         reset(_snakeCount);
-        _theStage.setScene(_gamePlayScene);
+        _theStage.setScene(new Scene(createGamePlay(), Color.BLACK));
         _gameLoop.start();
     }
 
     private Parent createGamePlay(){
         StackPane root = new StackPane();
+        root.setPrefSize(_width, _height);
+
+        PauseMenu pauseMenu = new PauseMenu();
+        Map<String, MenuButton> bm = pauseMenu.getButtonsMap();
+        bm.get("pauseResume").setOnMouseClicked(event -> {
+            _isPaused = false;
+            root.getChildren().remove(pauseMenu);
+            pauseMenu.reload();
+        });
+        bm.get("pauseRestart").setOnMouseClicked(event -> {
+            _isPaused = false;
+//            _gameLoop.stop();
+            root.getChildren().remove(pauseMenu);
+            pauseMenu.reload();
+            reset(_snakeCount);
+        });
+        bm.get("quitYes").setOnMouseClicked(event -> {
+            _isPaused = false;
+            _gameLoop.stop();
+            FadeTransition fade = new FadeTransition(Duration.millis(300), root);
+            fade.setFromValue(1);
+            fade.setToValue(0);
+            fade.setOnFinished(e -> {
+                _theStage.setScene(new Scene(createMainMenu(), Color.BLACK));
+            });
+            fade.play();
+        });
+
         Canvas canvas = new Canvas(_width, _height);
         canvas.setFocusTraversable(true);
         root.getChildren().add(canvas);
@@ -86,14 +113,21 @@ public class App extends Application {
                     _currDir = Direction.Right;
                     break;
                 case ENTER:
-                    if (_isPaused) {
+                    if (_isGameOver) {
                         reset(_snakeCount);
                     }
                     break;
+                case ESCAPE:
+                    if (_isPaused) {
+                        _isPaused = false;
+                        root.getChildren().remove(pauseMenu);
+                        pauseMenu.reload();
+                    } else {
+                        _isPaused = true;
+                        root.getChildren().add(pauseMenu);
+                    }
             }
         });
-
-//        reset(1);
 
         _gameLoop = new AnimationTimer(){
 
@@ -101,21 +135,20 @@ public class App extends Application {
 
             @Override
             public void handle(long now) {
-                if ((now - _prevTime) >= 100 * 1000000) {
-                    _prevTime = now;
-                    _frame = _game.makeTurn(new Direction[]{_currDir});
-                }
-
-                if (!_isPaused) {
-                    Painter.paint(_frame, _context);
-                    if (_frame == null) {
-                        _isPaused = true;
+                if (!_isGameOver && !_isPaused) {
+                    if ((now - _prevTime) >= 100 * 1000000) {
+                        _prevTime = now;
+                        _frame = _game.makeTurn(new Direction[]{_currDir});
+                        if (_frame == null) {
+                            _isGameOver = true;
+                        }
                     }
                 }
+                Painter.paint(_frame, _context);
+
             }
         };
 
-//        gameLoop.start();
         return root;
     }
 
@@ -142,17 +175,26 @@ public class App extends Application {
         logoFade.setFromValue(0);
         logoFade.setToValue(1);
 
+        snakeLogo.setOpacity(0);
         root.getChildren().add(snakeLogo);
         StackPane.setAlignment(snakeLogo, Pos.TOP_CENTER);
 
         MainMenu mainMenu = new MainMenu();
-//        Pane mainMenu = mainMenuCreator.getMenu();
+        Map<String, MenuButton> mb = mainMenu.getButtonsMap();
+        mb.get("playSolo").setOnMouseClicked(event -> {
+            FadeTransition fade = new FadeTransition(Duration.millis(300), root);
+            fade.setFromValue(1);
+            fade.setToValue(0);
+            fade.setOnFinished(e -> playSnake(1));
+            fade.play();
+        });
 
         FadeTransition startFade = new FadeTransition(Duration.millis(2000), mainMenu);
         startFade.setFromValue(0);
         startFade.setToValue(1);
         logoFade.setOnFinished(event -> {
             startFade.play();
+            mainMenu.setOpacity(0);
             root.getChildren().add(mainMenu);
         });
         logoFade.play();
@@ -161,7 +203,7 @@ public class App extends Application {
     }
 
     private static void reset(int snakeCount) {
-        _isPaused = false;
+        _isGameOver = false;
         _currDir = Direction.None;
         _game = new Game(Settings.getCols(), Settings.getRows(), snakeCount);
         _frame = _game.makeTurn(new Direction[]{_currDir});
