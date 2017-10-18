@@ -80,7 +80,7 @@ public class GameFrame {
 
     private final int[] _scores;
 
-    int[] getScores() {
+    public int[] getScores() {
         return _scores;
     }
 

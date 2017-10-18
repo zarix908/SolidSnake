@@ -44,7 +44,7 @@ class Painter {
 
     private static void paintResetMessage(GraphicsContext gc) {
         gc.setFill(Color.AQUAMARINE);
-        gc.fillText("Hit RETURN to reset.", 10, Settings.getHeight() - 10);
+        gc.fillText("Hit ENTER to reset.", 10, Settings.getHeight() - 10);
     }
 
     private static void paintScore(GameFrame frame, GraphicsContext gc){
