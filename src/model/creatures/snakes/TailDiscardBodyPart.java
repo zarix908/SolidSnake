@@ -1,14 +1,20 @@
-package models;
+package model.creatures.snakes;
 
-class SimpleSnakeBodyPart implements SnakeBodyPart {
+import model.creatures.CreatureType;
+import model.creatures.Creature;
+import model.utils.Direction;
+import model.utils.Point;
+
+class TailDiscardBodyPart implements SnakeBodyPart {
+
+    private static final CreatureType CREATURE_TYPE = CreatureType.TailDiscardBodyPart;
 
     private final SnakeBodyPartSkeleton _skeleton;
-    private static final CreatureType CREATURE_TYPE = CreatureType.SimpleSnakeBodyPart;
 
-    SimpleSnakeBodyPart(boolean isHead, Direction direction, Point location, Snake snake) {
-        _skeleton = new SnakeBodyPartSkeleton(isHead, direction, location, snake);
+    TailDiscardBodyPart(Direction direction, Point location, Snake snake) {
+        _skeleton = new SnakeBodyPartSkeleton(false, direction, location, snake);
     }
-    
+
     @Override
     public void makeMove(Creature[][] field, int currentTurn) {
         _skeleton.makeMove(field, currentTurn);
@@ -20,22 +26,9 @@ class SimpleSnakeBodyPart implements SnakeBodyPart {
     }
 
     @Override
-    public boolean isHead() {
-        return _skeleton.isHead();
-    }
-
-
-    @Override
     public void interactWith(Creature otherCreature) {
-        if (otherCreature instanceof SnakeBodyPart) {
+        if(otherCreature instanceof SnakeBodyPart){
             _skeleton.setIsDead();
-        }
-        else {
-            throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
-                        " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
-                        "(This (%s) doesn't know hot to interact with (%s))",
-                    this.toString(),
-                    otherCreature.toString()));
         }
     }
 
@@ -45,13 +38,13 @@ class SimpleSnakeBodyPart implements SnakeBodyPart {
     }
 
     @Override
-    public Point getLocation() {
-        return _skeleton.getLocation();
+    public boolean isHead() {
+        return _skeleton.isHead();
     }
 
     @Override
-    public CreatureType getCreatureType() {
-        return CREATURE_TYPE;
+    public Point getLocation() {
+        return _skeleton.getLocation();
     }
 
     @Override
@@ -60,10 +53,14 @@ class SimpleSnakeBodyPart implements SnakeBodyPart {
     }
 
     @Override
+    public CreatureType getCreatureType() {
+        return CREATURE_TYPE;
+    }
+
+    @Override
     public void setCurrentDirection(Direction newDirection) {
         _skeleton.setCurrentDirection(newDirection);
     }
-
 
     @Override
     public Snake getSnake() {
@@ -107,7 +104,7 @@ class SimpleSnakeBodyPart implements SnakeBodyPart {
 
     @Override
     public String toString() {
-        return String.format("%s at (%d, %d) with %s",
+        return String.format("%s at (%d, %d) and with %s",
                 CREATURE_TYPE.toString(),
                 _skeleton.getLocation().getX(),
                 _skeleton.getLocation().getY(),

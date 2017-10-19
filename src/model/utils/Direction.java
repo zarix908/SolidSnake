@@ -1,4 +1,4 @@
-package models;
+package model.utils;
 
 public enum Direction {
     None,

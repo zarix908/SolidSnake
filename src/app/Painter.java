@@ -2,7 +2,8 @@ package app;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import models.Point;
+import model.game.GameFrame;
+import model.utils.Point;
 
 class Painter {
     private static int size = Settings.getSize();
@@ -43,7 +44,7 @@ class Painter {
 
     private static void paintResetMessage(GraphicsContext gc) {
         gc.setFill(Color.AQUAMARINE);
-        gc.fillText("Hit RETURN to reset.", 10, Settings.getHeight() - 10);
+        gc.fillText("Hit ENTER to reset.", 10, Settings.getHeight() - 10);
     }
 
     private static void paintScore(GameFrame frame, GraphicsContext gc){

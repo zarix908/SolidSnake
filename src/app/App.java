@@ -18,8 +18,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import models.Direction;
-import models.Game;
+import model.utils.Direction;
+import model.game.Game;
+import model.game.GameFrame;
 
 import java.util.Map;
 
@@ -100,16 +101,16 @@ public class App extends Application {
 
         canvas.setOnKeyPressed(e -> {
             switch (e.getCode()) {
-                case UP:
+                case W:
                     _currDir = Direction.Up;
                     break;
-                case DOWN:
+                case S:
                     _currDir = Direction.Down;
                     break;
-                case LEFT:
+                case A:
                     _currDir = Direction.Left;
                     break;
-                case RIGHT:
+                case D:
                     _currDir = Direction.Right;
                     break;
                 case ENTER:

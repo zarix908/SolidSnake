@@ -1,4 +1,6 @@
-package models;
+package model.game;
+
+import model.creatures.CreatureType;
 
 public interface GameSettings {
     int getAppleSpawnRate();

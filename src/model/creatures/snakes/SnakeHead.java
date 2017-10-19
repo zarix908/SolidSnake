@@ -1,52 +1,56 @@
-package models;
+package model.creatures.snakes;
+
+import model.creatures.*;
+import model.utils.Direction;
+import model.utils.Point;
 
 public class SnakeHead implements SnakeBodyPart {
     private static final CreatureType CREATURE_TYPE = CreatureType.SnakeHead;
-    private final SnakeBodyPartSkeleton _skeleton;
+    private final SnakeBodyPartSkeleton skeleton;
 
-    SnakeHead(Direction direction, Point location, Snake snake){
-        _skeleton = new SnakeBodyPartSkeleton(true, direction, location, snake);
+    public SnakeHead(Direction direction, Point location, Snake snake){
+        skeleton = new SnakeBodyPartSkeleton(true, direction, location, snake);
     }
 
     @Override
     public void makeMove(Creature[][] field, int currentTurn) {
-        _skeleton.makeMove(field, currentTurn);
+        skeleton.makeMove(field, currentTurn);
     }
 
     @Override
     public boolean isDead() {
-        return _skeleton.isDead();
+        return skeleton.isDead();
     }
 
     @Override
     public void interactWith(Creature otherCreature) {
         if (otherCreature instanceof Apple){
-            _skeleton.getSnake().incrementScore(10);
-            _skeleton.getSnake().setLastBoost(CreatureType.Apple);
+            skeleton.getSnake().incrementScore(10);
+            //skeleton.getSnake().setLastBoost(CreatureType.Apple);
             SnakeBodyPart tail = getSnake().getTail();
-            _skeleton.attachNewBodyPart(new SimpleSnakeBodyPart(
+            skeleton.attachNewBodyPart(new SimpleSnakeBodyPart(
                     false,
                     Direction.None,
                     tail.getLocation(),
-                    _skeleton.getSnake())
+                    skeleton.getSnake())
             );
         }
         else if (otherCreature instanceof Mushroom){
-            _skeleton.getSnake().incrementScore(20);
+            skeleton.getSnake().incrementScore(20);
             SnakeBodyPart tail = getSnake().getTail();
-            _skeleton.attachNewBodyPart(new TailDiscardBodyPart(
+            skeleton.attachNewBodyPart(new TailDiscardBodyPart(
                     Direction.None,
                     tail.getLocation(),
-                    _skeleton.getSnake())
+                    skeleton.getSnake())
             );
         }
         else if (otherCreature instanceof SimpleSnakeBodyPart) {
-            _skeleton.setIsDead();
+            skeleton.setIsDead();
         }
         else if (otherCreature instanceof  TailDiscardBodyPart){
         }
         else if (otherCreature instanceof Wall){
-            _skeleton.setIsDead();
+            skeleton.setIsDead();
         }
         else {
             throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
@@ -59,86 +63,71 @@ public class SnakeHead implements SnakeBodyPart {
 
     @Override
     public void cleanUp() {
-        _skeleton.cleanUp();
+        skeleton.cleanUp();
     }
-
-
 
     @Override
     public boolean isHead() {
-        return _skeleton.isHead();
+        return skeleton.isHead();
     }
-
-
 
     @Override
     public Point getLocation() {
-        return _skeleton.getLocation();
+        return skeleton.getLocation();
     }
-
-
 
     @Override
     public Direction getCurrentDirection() {
-        return _skeleton.getCurrentDirection();
+        return skeleton.getCurrentDirection();
     }
 
     @Override
     public void setCurrentDirection(Direction newDirection) {
-        _skeleton.setCurrentDirection(newDirection);
+        skeleton.setCurrentDirection(newDirection);
     }
-
-
-
 
     @Override
     public Direction getPreviousDirection() {
-        return _skeleton.getPreviousDirection();
+        return skeleton.getPreviousDirection();
     }
-
-
 
     @Override
     public CreatureType getCreatureType() {
         return CREATURE_TYPE;
     }
 
-
-
     @Override
     public Snake getSnake() {
-        return _skeleton.getSnake();
+        return skeleton.getSnake();
     }
-
-
 
     @Override
     public SnakeBodyPart getNextBodyPart() {
-        return _skeleton.getNextBodyPart();
+        return skeleton.getNextBodyPart();
     }
 
     @Override
     public SnakeBodyPart getPrecedingBodyPart() {
-        return _skeleton.getPrecedingBodyPart();
+        return skeleton.getPrecedingBodyPart();
     }
 
     @Override
     public void attachNewBodyPart(SnakeBodyPart bodyPart) {
-        _skeleton.attachNewBodyPart(bodyPart);
+        skeleton.attachNewBodyPart(bodyPart);
     }
 
     @Override
     public void attachToPrecedingBodyPart(SnakeBodyPart bodyPart) {
-        _skeleton.attachToPrecedingBodyPart(bodyPart);
+        skeleton.attachToPrecedingBodyPart(bodyPart);
     }
 
     @Override
     public void deattachNextBodyPart() {
-        _skeleton.deattachNextBodyPart();
+        skeleton.deattachNextBodyPart();
     }
 
     @Override
     public SnakeBodyPartSkeleton getSkeleton() {
-        return _skeleton;
+        return skeleton;
     }
 }

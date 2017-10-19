@@ -1,4 +1,7 @@
-package models;
+package model;
+
+import model.creatures.CreatureType;
+import model.game.GameSettings;
 
 public class GameSettingsMock implements GameSettings {
 

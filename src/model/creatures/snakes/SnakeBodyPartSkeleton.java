@@ -1,54 +1,59 @@
-package models;
+package model.creatures.snakes;
+
+import model.creatures.Creature;
+import model.creatures.CreatureType;
+import model.utils.Direction;
+import model.utils.Point;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class SnakeBodyPartSkeleton implements SnakeBodyPart {
-    SnakeBodyPartSkeleton(boolean isHead, Direction direction, Point location, Snake snake) {
-        _isDead = false;
-        _isHead = isHead;
-        _currentDirection = direction;
-        _previousDirection = Direction.None;
-        _location = location;
-        _snake = snake;
+public class SnakeBodyPartSkeleton implements SnakeBodyPart {
+    public SnakeBodyPartSkeleton(boolean isHead, Direction direction, Point location, Snake snake) {
+        isDead = false;
+        this.isHead = isHead;
+        currentDirection = direction;
+        previousDirection = Direction.None;
+        this.location = location;
+        this.snake = snake;
     }
 
     @Override
     public void makeMove(Creature[][] field, int currentTurn) {
-        if(_precedingBodyPart != null && _precedingBodyPart.isDead()){
-            _isDead = true;
+        if(precedingBodyPart != null && precedingBodyPart.isDead()){
+            isDead = true;
             return;
         }
         //TODO: relocate this into usable from all places structure
         //Maybe location = next.location would be better
-        switch (_currentDirection){
+        switch (currentDirection){
             case Up:
-                _location = new Point(_location.getX(), _location.getY() - 1);
+                location = new Point(location.getX(), location.getY() - 1);
                 break;
             case Down:
-                _location = new Point(_location.getX(), _location.getY() + 1);
+                location = new Point(location.getX(), location.getY() + 1);
                 break;
             case Left:
-                _location = new Point(_location.getX() - 1, _location.getY());
+                location = new Point(location.getX() - 1, location.getY());
                 break;
             case Right:
-                _location = new Point(_location.getX() + 1, _location.getY());
+                location = new Point(location.getX() + 1, location.getY());
                 break;
             case None:
                 break;
             default:
                 throw new UnsupportedOperationException("Snake must go somewhere!");
         }
-        if(!_isHead){
-            _previousDirection = _currentDirection;
-            _currentDirection = _precedingBodyPart.getPreviousDirection();
+        if(!isHead){
+            previousDirection = currentDirection;
+            currentDirection = precedingBodyPart.getPreviousDirection();
         }
     }
 
-    private boolean _isDead;
+    private boolean isDead;
     @Override
     public boolean isDead(){
-        return _isDead;
+        return isDead;
     }
 
     @Override
@@ -58,59 +63,59 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
 
     @Override
     public void cleanUp() {
-        if(!_isDead){
+        if(!isDead){
             throw new UnsupportedOperationException("You can't dump the body before killing it!");
         }
         deattachNextBodyPart();
-        if (_precedingBodyPart != null) {
-            _precedingBodyPart.deattachNextBodyPart();
+        if (precedingBodyPart != null) {
+            precedingBodyPart.deattachNextBodyPart();
         }
     }
 
     void setIsDead(){
-        _isDead = true;
+        isDead = true;
     }
 
 
-    private boolean _isHead;
+    private boolean isHead;
 
     @Override
     public boolean isHead(){
-        return _isHead;
+        return isHead;
     }
 
 
-    private Point _location;
+    private Point location;
 
     @Override
     public Point getLocation(){
-        return _location;
+        return location;
     }
 
     public void setLocation(Point location){
-        _location = location;
+        this.location = location;
     }
 
-    private Direction _previousDirection;
+    private Direction previousDirection;
 
     @Override
     public Direction getPreviousDirection() {
-        return _previousDirection;
+        return previousDirection;
     }
 
-    private Direction _currentDirection;
+    private Direction currentDirection;
 
     @Override
     public Direction getCurrentDirection(){
-        return _currentDirection;
+        return currentDirection;
     }
 
     public void setCurrentDirection(Direction currentDirection) {
-        if(!_isHead)
+        if(!isHead)
             return;
-        if(currentDirection != ILLEGAL_TURN.get(_currentDirection) && currentDirection != Direction.None){
-            _previousDirection = currentDirection;
-            _currentDirection = currentDirection;
+        if(currentDirection != ILLEGAL_TURN.get(this.currentDirection) && currentDirection != Direction.None){
+            previousDirection = currentDirection;
+            this.currentDirection = currentDirection;
         }
     }
 
@@ -129,55 +134,55 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
     }
 
 
-    private Snake _snake;
+    private Snake snake;
 
     @Override
     public Snake getSnake(){
-        return _snake;
+        return snake;
     }
 
 
-    private SnakeBodyPart _nextBodyPart = null;
+    private SnakeBodyPart nextBodyPart = null;
 
     @Override
     public SnakeBodyPart getNextBodyPart(){
-        return _nextBodyPart;
+        return nextBodyPart;
     }
 
-    private SnakeBodyPart _precedingBodyPart = null;
+    private SnakeBodyPart precedingBodyPart = null;
 
     @Override
     public SnakeBodyPart getPrecedingBodyPart(){
-        return _precedingBodyPart;
+        return precedingBodyPart;
     }
 
 
     @Override
     public void attachNewBodyPart(SnakeBodyPart bodyPart){
-        if (_nextBodyPart != null) {
-            _nextBodyPart.attachNewBodyPart(bodyPart);
+        if (nextBodyPart != null) {
+            nextBodyPart.attachNewBodyPart(bodyPart);
         } else {
-            _nextBodyPart = bodyPart;
+            nextBodyPart = bodyPart;
             bodyPart.attachToPrecedingBodyPart(this);
         }
     }
 
     @Override
     public void attachToPrecedingBodyPart(SnakeBodyPart bodyPart){
-        if(_isHead || bodyPart.getNextBodyPart() == null){
+        if(isHead || bodyPart.getNextBodyPart() == null){
             throw new UnsupportedOperationException();
         }
-        _precedingBodyPart = bodyPart;
+        precedingBodyPart = bodyPart;
     }
 
     @Override
     public void deattachNextBodyPart() {
-        if (_nextBodyPart == null) {
+        if (nextBodyPart == null) {
             return;
         }
-        SnakeBodyPartSkeleton asSkeleton = _nextBodyPart.getSkeleton();
+        SnakeBodyPartSkeleton asSkeleton = nextBodyPart.getSkeleton();
         asSkeleton.deattachFromPrecedingBodyPart();
-        _nextBodyPart = null;
+        nextBodyPart = null;
     }
 
     @Override
@@ -186,8 +191,8 @@ class SnakeBodyPartSkeleton implements SnakeBodyPart {
     }
 
     private void deattachFromPrecedingBodyPart() {
-        _isDead = true;
-        _precedingBodyPart = null;
+        isDead = true;
+        precedingBodyPart = null;
     }
 
 }

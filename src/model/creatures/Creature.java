@@ -1,4 +1,7 @@
-package models;
+package model.creatures;
+
+import model.utils.Direction;
+import model.utils.Point;
 
 public interface Creature {
     void makeMove(Creature[][] field, int currentTurn); //TODO: any other args?
