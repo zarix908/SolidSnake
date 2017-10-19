@@ -1,4 +1,8 @@
-package models;
+package model.creatures.snakes;
+
+import model.creatures.Creature;
+import model.utils.Direction;
+import model.utils.Point;
 
 public interface SnakeBodyPart extends Creature {
     boolean isDead();

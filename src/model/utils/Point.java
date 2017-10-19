@@ -1,39 +1,39 @@
-package models;
+package model.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Point {
+    private int x;
+    private int y;
 
     public Point(int x, int y){
-        _x = x;
-        _y = y;
+        this.x = x;
+        this.y = y;
     }
 
-    private int _x;
 
     public int getX(){
-        return _x;
+        return x;
     }
 
-    private int _y;
 
     public int getY(){
-        return _y;
+        return y;
     }
 
     @Override
     public boolean equals(Object obj) {
         Point otherPoint = obj instanceof Point ? ((Point) obj) : null;
-        return otherPoint != null && _x == otherPoint._x && _y == otherPoint._y;
+        return otherPoint != null && x == otherPoint.x && y == otherPoint.y;
     }
 
     @Override
     public int hashCode() {
-        return _x * 6291469 + _y;
+        return x * 6291469 + y;
     }
 
     public boolean isInBounds(int width, int height){
-        return _x >= 0 && _y >= 0 && _x < width && _y < height;
+        return x >= 0 && y >= 0 && x < width && y < height;
     }
 
     public static Point generateRandomInBounds(int x1, int x2,

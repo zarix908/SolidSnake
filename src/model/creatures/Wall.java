@@ -1,11 +1,14 @@
-package models;
+package model.creatures;
 
-class Wall implements Creature {
+import model.utils.Direction;
+import model.utils.Point;
 
-    private final Point _location;
+public class Wall implements Creature {
 
-    Wall(Point location){
-        _location = location;
+    private final Point location;
+
+    public Wall(Point location){
+        this.location = location;
     }
 
     @Override
@@ -27,7 +30,7 @@ class Wall implements Creature {
 
     @Override
     public Point getLocation() {
-        return _location;
+        return location;
     }
 
     @Override

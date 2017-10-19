@@ -1,20 +1,24 @@
-package models;
+package model.creatures.snakes;
 
-class Snake {
+import model.utils.Direction;
+import model.utils.Point;
+
+public class Snake {
 
     private SnakeBodyPart head;
-    private int _score;
-    private CreatureType _lastBoost;
+    private int score;
+    //private CreatureType lastBoost;
 
     public Snake(Point location, Direction startingDirection) {
         this.head = new SnakeHead(startingDirection, location, this);
-        _score = 0;
-        _lastBoost = null;
+        score = 0;
+        //lastBoost = null;
     }
-    SnakeBodyPart getHead() {
+    public SnakeBodyPart getHead() {
         return head;
     }
-    SnakeBodyPart getTail(){
+
+    public SnakeBodyPart getTail(){
         SnakeBodyPart bodyPart = head;
         while (true){
             SnakeBodyPart temporaryBodyPart = bodyPart.getNextBodyPart();
@@ -24,37 +28,41 @@ class Snake {
         }
         return bodyPart;
     }
-    boolean isDead(){
+    public boolean isDead(){
         return head.isDead();
     }
 
     public Direction getCurrentDirection() {
         return head.getCurrentDirection();
     }
-    void setCurrentDirection(Direction newDirection) {
+
+    public void setCurrentDirection(Direction newDirection) {
         head.setCurrentDirection(newDirection);
     }
 
-    int getScore() {
-        return _score;
+    public int getScore() {
+        return score;
     }
-    void incrementScore(int value) {
+
+    protected void incrementScore(int value) {
         if (value < 0) {
             throw new UnsupportedOperationException("How are you gonna win if you" +
                     " are adding negative amount points to score?!");
         }
-        _score += value;
+        score += value;
     }
 
-    CreatureType getLastBoost() {
-        return _lastBoost;
-    }
-    void setLastBoost(CreatureType boost){
-        _lastBoost = boost;
-    }
-    void resetLastBoost(){
-        _lastBoost = null;
-    }
+//    CreatureType getLastBoost() {
+//        return lastBoost;
+//    }
+//
+//    void setLastBoost(CreatureType boost){
+//        lastBoost = boost;
+//    }
+//
+//    void resetLastBoost(){
+//        lastBoost = null;
+//    }
 
 
 }

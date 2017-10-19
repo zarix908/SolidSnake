@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
 
-//TODO: It's a placeholder for settings configuration, something should be implemented in "models" in order to get everything working
+//TODO: It's a placeholder for settings configuration, something should be implemented in "model" in order to get everything working
 // Note: shitty implementation
 public final class Settings {
 

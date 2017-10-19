@@ -1,4 +1,4 @@
-package models;
+package model.creatures;
 
 public enum CreatureType {
     SimpleSnakeBodyPart,

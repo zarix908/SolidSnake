@@ -1,6 +1,10 @@
-package models;
+package model.game;
 
-import app.GameFrame;
+import model.creatures.*;
+import model.creatures.snakes.Snake;
+import model.creatures.snakes.SnakeBodyPart;
+import model.utils.Direction;
+import model.utils.Point;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,59 +15,59 @@ import java.util.Set;
 
 
 public class Game {
-    private Creature[][] _field;
-    private final Snake[] _snakes;
-    private int _turnNumber = 0;
-    private int _appleSpawnRate = 20;
-    private int _appleDeathRate = 30;
-    private int _mushroomSpawnRate = 50;
-    private int _mushroomDeathRate = 15;
-    private boolean _foodSpawnActivated = true;
+    private Creature[][] field;
+    private final Snake[] snakes;
+    private int turnNumber = 0;
+    private int appleSpawnRate = 20;
+    private int appleDeathRate = 30;
+    private int mushroomSpawnRate = 50;
+    private int mushroomDeathRate = 20;
+    private boolean foodSpawnActivated = true;
 
     public Game(int width, int height, int snakeCount){ //TODO: Load level from file? (NOT NEEDED FOR NOW)
-        _field = new Creature[width][height];
+        field = new Creature[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if(i == 0 || i == width - 1 || j == 0 || j == height - 1) {
-                    _field[i][j] = new Wall(new Point(i, j));
+                    field[i][j] = new Wall(new Point(i, j));
                 }
             }
         }
-        _snakes = new Snake[snakeCount];
-        Point[] snakesLocations = generateSafeRandomPoints(snakeCount,0, _field.length - 1,
-                0, _field[0].length - 1, 2, 2);
-        Point[] applesLocations = generateSafeRandomPoints(snakeCount, 0, _field.length - 1,
-                0, _field[0].length - 1, 1, 1);
+        snakes = new Snake[snakeCount];
+        Point[] snakesLocations = generateSafeRandomPoints(snakeCount,0, field.length - 1,
+                0, field[0].length - 1, 2, 2);
+        Point[] applesLocations = generateSafeRandomPoints(snakeCount, 0, field.length - 1,
+                0, field[0].length - 1, 1, 1);
         for (int i = 0; i < snakeCount; i++) {
             if (snakesLocations[i] == null) {
                 throw new UnsupportedOperationException("The world is too small for both of us!" +
                         "(Field too small - could not spawn a snake)");
             }
-            _snakes[i] = new Snake(snakesLocations[i], Direction.None);
+            snakes[i] = new Snake(snakesLocations[i], Direction.None);
             if(applesLocations[i] != null){
-                _field[applesLocations[i].getX()][applesLocations[i].getY()] =
-                            new Apple(applesLocations[i], _turnNumber, _appleDeathRate);
+                field[applesLocations[i].getX()][applesLocations[i].getY()] =
+                            new Apple(applesLocations[i], turnNumber, appleDeathRate);
             }
         }
     }
 
     public Game(GameSettings settings){
-        _foodSpawnActivated = settings.isFoodSpawnEnabled();
+        foodSpawnActivated = settings.isFoodSpawnEnabled();
         //TODO: 2 different checkings
-        if (_appleSpawnRate < 0
-                    || _appleDeathRate < 1
-                    || _mushroomSpawnRate < 0
-                    || _mushroomDeathRate < 1){
+        if (appleSpawnRate < 0
+                    || appleDeathRate < 1
+                    || mushroomSpawnRate < 0
+                    || mushroomDeathRate < 1){
             throw new IllegalArgumentException("My name is Doctor. Doctor who?" +
                     " (One of food death/spawn rates is illegal");
         }
-        _snakes = new Snake[settings.getSnakesAmount()];
-        _appleSpawnRate = settings.getAppleSpawnRate();
-        _appleDeathRate = settings.getAppleDeathRate();
-        _mushroomSpawnRate = settings.getMushroomSpawnRate();
-        _mushroomDeathRate = settings.getMushroomDeathRate();
+        snakes = new Snake[settings.getSnakesAmount()];
+        appleSpawnRate = settings.getAppleSpawnRate();
+        appleDeathRate = settings.getAppleDeathRate();
+        mushroomSpawnRate = settings.getMushroomSpawnRate();
+        mushroomDeathRate = settings.getMushroomDeathRate();
         CreatureType[][] initialField = settings.getInitialField();
-        _field = new Creature[initialField.length][initialField[0].length];
+        field = new Creature[initialField.length][initialField[0].length];
         if (initialField == null){
             throw new IllegalArgumentException("You w0t m8? It's a bloody void! (Field was null)");
         }
@@ -72,21 +76,21 @@ public class Game {
             for (int j = 0; j < initialField[0].length; j++) {
                 switch (initialField[i][j]){
                     case Wall:
-                        _field[i][j] = new Wall(new Point(i, j));
+                        field[i][j] = new Wall(new Point(i, j));
                         break;
                     case Apple:
-                        _field[i][j] = new Apple(new Point(i, j), 0, _appleDeathRate);
+                        field[i][j] = new Apple(new Point(i, j), 0, appleDeathRate);
                         break;
                     case Mushroom:
-                        _field[i][j] = new Mushroom(new Point(i, j),
-                                0, _mushroomDeathRate);
+                        field[i][j] = new Mushroom(new Point(i, j),
+                                0, mushroomDeathRate);
                         break;
                     case None:
                         break;
                     case SnakeHead:
                         Snake snake = new Snake(new Point(i, j), Direction.None);
-                        _field[i][j] = snake.getHead();
-                        _snakes[snakeNumber] = snake;
+                        field[i][j] = snake.getHead();
+                        snakes[snakeNumber] = snake;
                         snakeNumber++;
                         break;
                     default:
@@ -97,34 +101,34 @@ public class Game {
             }
         }
         if (snakeNumber != settings.getSnakesAmount()){
-            throw new IllegalArgumentException("Snakes! It has to be snakes!" +
+            throw new IllegalArgumentException("snakes! It has to be snakes!" +
                     " (Snake amount is not equal than found on field");
         }
     }
 
     public GameFrame makeTurn(Direction[] playerDirection){
-        _turnNumber++;
+        turnNumber++;
         Map<Point, List<Creature>> collisions = makeMoves(playerDirection);
         Map<Point, Creature> survivedCreatures = resolveCollisions(collisions);
         cleanUp();
         makeNewField(survivedCreatures);
-        int[] scores = new int[_snakes.length];
+        int[] scores = new int[snakes.length];
         boolean isThereAnySnakeAlive = true;
-        for (int i = 0; i < _snakes.length; i++) {
-            scores[i] = _snakes[i].getScore();
-            isThereAnySnakeAlive = isThereAnySnakeAlive && !_snakes[i].isDead();
+        for (int i = 0; i < snakes.length; i++) {
+            scores[i] = snakes[i].getScore();
+            isThereAnySnakeAlive = isThereAnySnakeAlive && !snakes[i].isDead();
         }
         if(!isThereAnySnakeAlive) {
             return null;
         }
-        return new GameFrame(_field.length, _field[0].length, survivedCreatures, scores);
+        return new GameFrame(field.length, field[0].length, survivedCreatures, scores);
     }
 
     private void makeNewField(Map<Point, Creature> survivedCreatures) {
-        _field = new Creature[_field.length][_field[0].length];
+        field = new Creature[field.length][field[0].length];
         for (Point location : survivedCreatures.keySet()) {
             try {
-                _field[location.getX()][location.getY()] = survivedCreatures.get(location);
+                field[location.getX()][location.getY()] = survivedCreatures.get(location);
             }
             catch (IndexOutOfBoundsException a){
                 throw new IndexOutOfBoundsException("I told you, build the bloody walls first!" +
@@ -132,32 +136,32 @@ public class Game {
             }
         }
 
-        if(_foodSpawnActivated && _turnNumber % _appleSpawnRate == 0) {
-            Point[] apples = generateSafeRandomPoints(_snakes.length,
-                    0, _field.length - 1,
-                    0, _field[0].length - 1,
+        if(foodSpawnActivated && turnNumber % appleSpawnRate == 0) {
+            Point[] apples = generateSafeRandomPoints(snakes.length,
+                    0, field.length - 1,
+                    0, field[0].length - 1,
                     1, 1);
             for (Point appleLocation : apples) {
                 if(appleLocation != null){
-                    _field[appleLocation.getX()][appleLocation.getY()] = new Apple(appleLocation, _turnNumber, _appleDeathRate);
+                    field[appleLocation.getX()][appleLocation.getY()] = new Apple(appleLocation, turnNumber, appleDeathRate);
                 }
             }
         }
-        if(_foodSpawnActivated && _turnNumber % _mushroomSpawnRate == 0) {
-            Point[] mushrooms = generateSafeRandomPoints(_snakes.length
-                    , 0, _field.length - 1,
-                    0, _field[0].length - 1,
+        if(foodSpawnActivated && turnNumber % mushroomSpawnRate == 0) {
+            Point[] mushrooms = generateSafeRandomPoints(snakes.length
+                    , 0, field.length - 1,
+                    0, field[0].length - 1,
                     1, 1);
             for (Point mushroomLocation : mushrooms) {
                 if(mushroomLocation != null){
-                    _field[mushroomLocation.getX()][mushroomLocation.getY()] = new Mushroom(mushroomLocation, _turnNumber, _mushroomDeathRate);
+                    field[mushroomLocation.getX()][mushroomLocation.getY()] = new Mushroom(mushroomLocation, turnNumber, mushroomDeathRate);
                 }
             }
         }
     }
 
     private void cleanUp() {
-        for (Creature[] row : _field) {
+        for (Creature[] row : field) {
             for (Creature creature : row) {
                 if (creature != null && creature.isDead()) {
                     creature.cleanUp();
@@ -201,27 +205,27 @@ public class Game {
     private Map<Point, List<Creature>> makeMoves(Direction[] playerDirection){
         Map<Point, List<Creature>> collisions =
                 new HashMap<>();
-        for (Creature[] row : _field){
+        for (Creature[] row : field){
             for (Creature creature : row){
                 if (creature != null) {
                     SnakeBodyPart asBodyPart = creature instanceof SnakeBodyPart ? ((SnakeBodyPart) creature) : null;
                     if (asBodyPart != null)
                         continue;
-                    creature.makeMove(_field, _turnNumber);
+                    creature.makeMove(field, turnNumber);
                     Point location = creature.getLocation();
                     collisions.computeIfAbsent(location, k -> new ArrayList<>());
                     collisions.get(location).add(creature);
                 }
             }
         }
-        for (int i = 0; i < _snakes.length; i++) {
-            Snake snake = _snakes[i];
+        for (int i = 0; i < snakes.length; i++) {
+            Snake snake = snakes[i];
             if (snake.isDead())
                 continue;
             snake.setCurrentDirection(playerDirection[i]);
             SnakeBodyPart snakeBodyPart = snake.getHead();
             while (true){
-                snakeBodyPart.makeMove(_field, _turnNumber);
+                snakeBodyPart.makeMove(field, turnNumber);
                 Point location = snakeBodyPart.getLocation();
                 collisions.computeIfAbsent(location, k -> new ArrayList<>());
                 collisions.get(location).add(snakeBodyPart);
@@ -255,7 +259,7 @@ public class Game {
             Point randomPoint = Point.generateRandomInBounds(x1, x2,
                     y1, y2,
                     borderX, borderY);
-            if (_field[randomPoint.getX()][randomPoint.getY()] == null) {
+            if (field[randomPoint.getX()][randomPoint.getY()] == null) {
                 randomPoints[pointNumber] = randomPoint;
                 pointNumber++;
             }

@@ -1,19 +1,26 @@
-package models;
+package model;
 
-import app.GameFrame;
+import model.creatures.CreatureType;
+import model.game.Game;
+import model.game.GameFrame;
+import model.game.GameSettings;
+import model.utils.Direction;
+import model.utils.Point;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
+
+import static model.creatures.CreatureType.*;
 
 public class TestsMain {
 
     private GameSettings generateSimpleMock(){
         CreatureType[][] field = {
-                {CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall},
-                {CreatureType.Wall, CreatureType.Apple, CreatureType.None, CreatureType.None, CreatureType.Apple, CreatureType.Wall},
-                {CreatureType.Wall, CreatureType.None, CreatureType.SnakeHead, CreatureType.None, CreatureType.Apple, CreatureType.Wall},
-                {CreatureType.Wall, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.Wall},
-                {CreatureType.Wall, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.Wall},
+                {Wall, Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall},
+                {CreatureType.Wall, CreatureType.Apple, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.Wall},
+                {CreatureType.Wall, CreatureType.Apple, CreatureType.SnakeHead, CreatureType.None, CreatureType.None, CreatureType.Wall},
+                {CreatureType.Wall, CreatureType.Apple, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.Wall},
+                {CreatureType.Wall, CreatureType.Apple, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.Wall},
                 {CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall}
         };
         return new GameSettingsMock(field,
@@ -76,6 +83,34 @@ public class TestsMain {
         Direction[] directions = {Direction.Up};
         GameFrame frame = game.makeTurn(directions);
         frame = game.makeTurn(directions);
+        Assert.assertEquals(null, frame);
+    }
+
+    @Test
+    public void testCollisionSelf(){
+        Game game = new Game(_settingsMock);
+//        Direction[] directions = {Direction.Up};
+//        Direction[] directions2 = {Direction.Left};
+//        Direction[] directions3 = {Direction.Down};
+//        Direction[] directions4 = {Direction.Down};
+//        Direction[] directions5 = {Direction.Down};
+//        Direction[] directions6 = {Direction.Right};
+//        Direction[] directions7 = {Direction.Up};
+//        Direction[] directions8 = {Direction.Left};
+        Direction[] firstDir = {Direction.Up};
+        GameFrame frame = game.makeTurn(firstDir);
+        Direction[][] directions = {
+                {Direction.Left},
+                {Direction.Down},
+                {Direction.Down},
+                {Direction.Down},
+                {Direction.Right},
+                {Direction.Up},
+                {Direction.Left}
+        };
+        for (Direction[] direction : directions) {
+            frame = game.makeTurn(direction);
+        }
         Assert.assertEquals(null, frame);
     }
 }

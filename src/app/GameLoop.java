@@ -2,8 +2,9 @@ package app;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-import models.Direction;
-import models.Game;
+import model.utils.Direction;
+import model.game.Game;
+import model.game.GameFrame;
 
 class GameLoop {
 

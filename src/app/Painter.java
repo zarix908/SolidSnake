@@ -2,7 +2,8 @@ package app;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import models.Point;
+import model.game.GameFrame;
+import model.utils.Point;
 
 class Painter {
     private static int size = Settings.getSize();

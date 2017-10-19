@@ -1,23 +1,33 @@
-package app;
+package model.game;
 
-import models.CreatureType;
-import models.Direction;
-import models.Creature;
-import models.Point;
+//TODO: move creature -> texture conversion to another place
+import app.CreatureToTextureConverter;
+import app.TextureType;
+import model.creatures.Creature;
+import model.creatures.CreatureType;
+import model.utils.Direction;
+import model.utils.Point;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class GameFrame {
 
+    private final int height;
+    private final int width;
+    private final Map<Point, TextureInfo> textureInfoMap;
+    private final Map<Point, CreatureType> types;
+    private final int[] scores;
+
     public GameFrame(int width,
                      int height,
                      Map<Point, Creature> creatures,
                      int[] scores){
-        _width = width;
-        _height = height;
-        _types = extractTypes(creatures);
-        _textureInfoMap = convertICreatureToTextureInfo(creatures);
-        _scores = scores;
+        this.width = width;
+        this.height = height;
+        types = extractTypes(creatures);
+        textureInfoMap = convertICreatureToTextureInfo(creatures);
+        this.scores = scores;
     }
 
     private Map<Point, CreatureType> extractTypes(Map<Point, Creature> creatures){
@@ -44,49 +54,41 @@ public class GameFrame {
 
 
 
-    class TextureInfo{
-        private TextureType _type;
-        private Direction _direction;
+    public class TextureInfo{
+        private TextureType type;
+        private Direction direction;
 
-        TextureInfo(TextureType type,
+        public TextureInfo(TextureType type,
                     Direction direction){
-            _type = type;
-            _direction = direction;
+            this.type = type;
+            this.direction = direction;
         }
 
-        TextureType getType() {
-            return _type;
+        public TextureType getType() {
+            return type;
         }
-        Direction getDirection() {
-            return _direction;
+        public Direction getDirection() {
+            return direction;
         }
     }
 
-    private final int _width;
     public int getWidth() {
-        return _width;
+        return width;
     }
 
-    private final int _height;
     public int getHeight() {
-        return _height;
+        return height;
     }
-
-    private final Map<Point, TextureInfo> _textureInfoMap;
 
     public Map<Point, TextureInfo> getTexturesInfo(){
-        return _textureInfoMap;
+        return textureInfoMap;
     }
-
-    private final int[] _scores;
 
     public int[] getScores() {
-        return _scores;
+        return scores;
     }
 
-    private final Map<Point, CreatureType> _types;
-
     public Map<Point, CreatureType> getTypes() {
-        return _types;
+        return types;
     }
 }
