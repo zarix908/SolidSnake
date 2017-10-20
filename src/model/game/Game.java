@@ -1,11 +1,14 @@
 package model.game;
 
-import model.creatures.*;
+import model.creatures.Apple;
+import model.creatures.Creature;
+import model.creatures.CreatureType;
+import model.creatures.Mushroom;
+import model.creatures.Wall;
 import model.creatures.snakes.Snake;
 import model.creatures.snakes.SnakeBodyPart;
 import model.utils.Direction;
 import model.utils.Point;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,7 +27,7 @@ public class Game {
     private int mushroomDeathRate = 20;
     private boolean foodSpawnActivated = true;
 
-    public Game(int width, int height, int snakeCount){ //TODO: Load level from file? (NOT NEEDED FOR NOW)
+    public Game(int width, int height, int snakeCount){
         field = new Creature[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
