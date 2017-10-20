@@ -108,15 +108,20 @@ public class Game {
 
     public GameFrame makeTurn(Direction[] playerDirection){
         turnNumber++;
+        if (playerDirection.length != snakes.length){
+            throw new IllegalArgumentException("Learn how to count sheeps " +
+                    "and only then move on to snakes" +
+                    " (amount of snakes is not equal to amount of given directions)");
+        }
         Map<Point, List<Creature>> collisions = makeMoves(playerDirection);
         Map<Point, Creature> survivedCreatures = resolveCollisions(collisions);
         cleanUp();
         makeNewField(survivedCreatures);
         int[] scores = new int[snakes.length];
-        boolean isThereAnySnakeAlive = true;
+        boolean isThereAnySnakeAlive = false;
         for (int i = 0; i < snakes.length; i++) {
             scores[i] = snakes[i].getScore();
-            isThereAnySnakeAlive = isThereAnySnakeAlive && !snakes[i].isDead();
+            isThereAnySnakeAlive = isThereAnySnakeAlive || !snakes[i].isDead();
         }
         if(!isThereAnySnakeAlive) {
             return null;
