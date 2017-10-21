@@ -56,7 +56,7 @@ public class Game {
 
     public Game(GameSettings settings){
         foodSpawnActivated = settings.isFoodSpawnEnabled();
-        if (foodSpawnActivated){
+        if (!foodSpawnActivated){
             appleSpawnRate = 0;
             mushroomSpawnRate = 0;
         }
