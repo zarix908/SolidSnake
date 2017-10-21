@@ -16,12 +16,12 @@ public class TestsMain {
 
     private GameSettings generateSimpleMock(){
         CreatureType[][] field = {
-                {Wall, Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall},
-                {CreatureType.Wall, CreatureType.Apple, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.Wall},
-                {CreatureType.Wall, CreatureType.Apple, CreatureType.SnakeHead, CreatureType.None, CreatureType.None, CreatureType.Wall},
-                {CreatureType.Wall, CreatureType.Apple, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.Wall},
-                {CreatureType.Wall, CreatureType.Apple, CreatureType.None, CreatureType.None, CreatureType.None, CreatureType.Wall},
-                {CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall, CreatureType.Wall}
+                {Wall,     Wall,     Wall,     Wall,     Wall,     Wall},
+                {Wall,     Apple,    None,     None,     None,     Wall},
+                {Wall,     Apple,    SnakeHead,None,     None,     Wall},
+                {Wall,     Apple,    None,     None,     None,     Wall},
+                {Wall,     Apple,    Apple,    None,     None,     Wall},
+                {Wall,     Wall,     Wall,     Wall,     Wall,     Wall}
         };
         return new GameSettingsMock(field,
                 false,
@@ -61,6 +61,7 @@ public class TestsMain {
 
     @Test
     public void testEatsAppleGrowsAndGetsPoints(){
+        //TODO: Redo this test
         Game game = new Game(_settingsMock);
         Direction[] directions = {Direction.Up};
         Direction[] directions2 = {Direction.Left};
