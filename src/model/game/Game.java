@@ -56,13 +56,17 @@ public class Game {
 
     public Game(GameSettings settings){
         foodSpawnActivated = settings.isFoodSpawnEnabled();
-        //TODO: 2 different checkings
-        if (appleSpawnRate < 0
-                    || appleDeathRate < 1
-                    || mushroomSpawnRate < 0
-                    || mushroomDeathRate < 1){
+        if (foodSpawnActivated){
+            appleSpawnRate = 0;
+            mushroomSpawnRate = 0;
+        }
+        if (mushroomDeathRate < 0 || appleDeathRate < 0){
+            throw new IllegalArgumentException("How can you die before you were born, Benjamin?" +
+                    "(Negative death rates are illegal)");
+        }
+        if (appleSpawnRate < 0 || mushroomSpawnRate < 0){
             throw new IllegalArgumentException("My name is Doctor. Doctor who?" +
-                    " (One of food death/spawn rates is illegal");
+                    " (Negative spawn rates are illegal)");
         }
         snakes = new Snake[settings.getSnakesAmount()];
         appleSpawnRate = settings.getAppleSpawnRate();
@@ -70,14 +74,14 @@ public class Game {
         mushroomSpawnRate = settings.getMushroomSpawnRate();
         mushroomDeathRate = settings.getMushroomDeathRate();
         CreatureType[][] initialField = settings.getInitialField();
-        field = new Creature[initialField.length][initialField[0].length];
+        field = new Creature[initialField[0].length][initialField.length];
         if (initialField == null){
             throw new IllegalArgumentException("You w0t m8? It's a bloody void! (Field was null)");
         }
         int snakeNumber = 0;
-        for (int i = 0; i < initialField.length; i++) {
-            for (int j = 0; j < initialField[0].length; j++) {
-                switch (initialField[i][j]){
+        for (int j = 0; j < initialField.length; j++) {
+            for (int i = 0; i < initialField[0].length; i++) {
+                switch (initialField[j][i]){
                     case Wall:
                         field[i][j] = new Wall(new Point(i, j));
                         break;
@@ -99,7 +103,7 @@ public class Game {
                     default:
                         throw new IllegalArgumentException(String.format("Access denied!" +
                                 " (%s) is not allowed here",
-                                initialField[i][j].toString()));
+                                initialField[j][i].toString()));
                 }
             }
         }
@@ -144,7 +148,7 @@ public class Game {
             }
         }
 
-        if(foodSpawnActivated && turnNumber % appleSpawnRate == 0) {
+        if(foodSpawnActivated && appleSpawnRate != 0 && turnNumber % appleSpawnRate == 0) {
             Point[] apples = generateSafeRandomPoints(snakes.length,
                     0, field.length - 1,
                     0, field[0].length - 1,
@@ -155,7 +159,7 @@ public class Game {
                 }
             }
         }
-        if(foodSpawnActivated && turnNumber % mushroomSpawnRate == 0) {
+        if(foodSpawnActivated && mushroomSpawnRate != 0 && turnNumber % mushroomSpawnRate == 0) {
             Point[] mushrooms = generateSafeRandomPoints(snakes.length
                     , 0, field.length - 1,
                     0, field[0].length - 1,
