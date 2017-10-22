@@ -81,6 +81,9 @@ public class Game {
         int snakeNumber = 0;
         for (int j = 0; j < initialField.length; j++) {
             for (int i = 0; i < initialField[0].length; i++) {
+                if (initialField[j][i] == null){
+                    continue;
+                }
                 switch (initialField[j][i]){
                     case Wall:
                         field[i][j] = new Wall(new Point(i, j));
@@ -91,8 +94,6 @@ public class Game {
                     case Mushroom:
                         field[i][j] = new Mushroom(new Point(i, j),
                                 0, mushroomDeathRate);
-                        break;
-                    case None:
                         break;
                     case SnakeHead:
                         Snake snake = new Snake(new Point(i, j), Direction.None);

@@ -17,10 +17,10 @@ public class TestOneSnake {
     private GameSettings generateSimpleMock(){
         CreatureType[][] field = {
                 {Wall,     Wall,      Wall,     Wall,     Wall,     Wall},
-                {Wall,     Apple,     None,     None,     None,     Wall},
-                {Wall,     Apple,     SnakeHead,None,     None,     Wall},
-                {Wall,     Apple,     None,     None,     None,     Wall},
-                {Wall,     Apple,     Apple,    None,     None,     Wall},
+                {Wall,     Apple,     null,     null,     null,     Wall},
+                {Wall,     Apple,     SnakeHead,null,     null,     Wall},
+                {Wall,     Apple,     null,     null,     null,     Wall},
+                {Wall,     Apple,     Apple,    null,     null,     Wall},
                 {Wall,     Wall,      Wall,     Wall,     Wall,     Wall}
         };
         return new GameSettingsMock(field,
@@ -34,10 +34,10 @@ public class TestOneSnake {
     private GameSettings generateMockForMushroomTest(){
         CreatureType[][] field = {
                 {Wall,     Wall,      Wall,     Wall,     Wall,     Wall},
-                {Wall,     Mushroom,  None,     None,     None,     Wall},
-                {Wall,     Mushroom,  SnakeHead,None,     None,     Wall},
-                {Wall,     Mushroom,  None,     None,     None,     Wall},
-                {Wall,     Mushroom,  Apple,    None,     None,     Wall},
+                {Wall,     Mushroom,  null,     null,     null,     Wall},
+                {Wall,     Mushroom,  SnakeHead,null,     null,     Wall},
+                {Wall,     Mushroom,  null,     null,     null,     Wall},
+                {Wall,     Mushroom,  Apple,    null,     null,     Wall},
                 {Wall,     Wall,      Wall,     Wall,     Wall,     Wall}
         };
         return new GameSettingsMock(field,
