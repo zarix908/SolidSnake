@@ -23,6 +23,11 @@ public class SnakeHead implements SnakeBodyPart {
     }
 
     @Override
+    public void setIsDead() {
+        skeleton.setIsDead();
+    }
+
+    @Override
     public void interactWith(Creature otherCreature) {
         if (otherCreature instanceof Apple){
             skeleton.getSnake().incrementScore(10);

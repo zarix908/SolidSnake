@@ -23,8 +23,8 @@ public class Game {
     private int turnNumber = 0;
     private int appleSpawnRate = 20;
     private int appleDeathRate = 30;
-    private int mushroomSpawnRate = 50;
-    private int mushroomDeathRate = 20;
+    private int mushroomSpawnRate = 5;
+    private int mushroomDeathRate = 200;
     private boolean foodSpawnActivated = true;
 
     public Game(int width, int height, int snakeCount){
@@ -185,14 +185,14 @@ public class Game {
     private Map<Point, Creature> resolveCollisions(Map<Point, List<Creature>> collisions){
         Map<Point, Creature> resolved = new HashMap<>();
         for (Point location: collisions.keySet()) {
-            List<Creature> collidingCreatures = collisions.get(location);
+            List<Creature> collidingCreatures = dropDead(collisions.get(location));
             int length = collidingCreatures.size();
-            if(length > 1)
-
-            for (int i = 0; i < length - 1; i++) {
-                for (int j = i + 1; j < length; j++) {
-                    collidingCreatures.get(i).interactWith(collidingCreatures.get(j));
-                    collidingCreatures.get(j).interactWith(collidingCreatures.get(i));
+            if(length > 1){
+                for (int i = 0; i < length - 1; i++) {
+                    for (int j = i + 1; j < length; j++) {
+                        collidingCreatures.get(i).interactWith(collidingCreatures.get(j));
+                        collidingCreatures.get(j).interactWith(collidingCreatures.get(i));
+                    }
                 }
             }
             Creature survivedCreature = null;
@@ -211,7 +211,23 @@ public class Game {
             }
             resolved.put(location, survivedCreature);
         }
-        return resolved;
+        Map<Point, Creature> survived = new HashMap<>();
+        for (Point location : resolved.keySet()) {
+            if (!resolved.get(location).isDead()){
+                survived.put(location, resolved.get(location));
+            }
+        }
+        return survived;
+    }
+
+    private List<Creature> dropDead(List<Creature> creatures) {
+        List<Creature> alive = new ArrayList<>();
+        for (Creature creature : creatures) {
+            if (!creature.isDead()){
+                alive.add(creature);
+            }
+        }
+        return alive;
     }
 
     private Map<Point, List<Creature>> makeMoves(Direction[] playerDirection){
