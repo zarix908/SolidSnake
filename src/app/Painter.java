@@ -31,8 +31,8 @@ class Painter {
     }
 
     private static void paintFrame(GameFrame frame, GraphicsContext gc){
-        frame.getTexturesInfo().forEach((p, ti) -> {
-            gc.setFill(Settings.getColorDict().get(ti.getType()));
+        frame.getCreaturesInfo().forEach((p, ci) -> {
+            gc.setFill(Settings.getColorDict().get(CreatureToTextureConverter.converters.get(ci.getType())));
             //considering that Point is (col, row), not pixels
             paintPoint(p, gc);
         });

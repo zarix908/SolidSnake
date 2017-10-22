@@ -26,6 +26,11 @@ public class SimpleSnakeBodyPart implements SnakeBodyPart {
     }
 
     @Override
+    public void setIsDead() {
+        skeleton.setIsDead();
+    }
+
+    @Override
     public boolean isHead() {
         return skeleton.isHead();
     }
