@@ -12,7 +12,7 @@ public class GameFrame {
 
     private final int height;
     private final int width;
-    private final Map<Point, CreatureInfo> textureInfoMap;
+    private final Map<Point, CreatureInfo> typeInfos;
     private final Map<Point, CreatureType> types;
     private final int[] scores;
 
@@ -23,7 +23,7 @@ public class GameFrame {
         this.width = width;
         this.height = height;
         types = extractTypes(creatures);
-        textureInfoMap = convertICreatureToTextureInfo(creatures);
+        typeInfos = convertICreatureToTextureInfo(creatures);
         this.scores = scores;
     }
 
@@ -76,7 +76,7 @@ public class GameFrame {
     }
 
     public Map<Point, CreatureInfo> getCreaturesInfo(){
-        return textureInfoMap;
+        return typeInfos;
     }
 
     public int[] getScores() {

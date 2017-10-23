@@ -4,7 +4,6 @@ import model.creatures.Creature;
 import model.creatures.CreatureType;
 import model.utils.Direction;
 import model.utils.Point;
-
 import java.util.HashMap;
 import java.util.Map;
 

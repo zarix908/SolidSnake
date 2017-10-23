@@ -22,9 +22,9 @@ public class Game {
     private final Snake[] snakes;
     private int turnNumber = 0;
     private int appleSpawnRate = 20;
-    private int appleDeathRate = 30;
-    private int mushroomSpawnRate = 5;
-    private int mushroomDeathRate = 200;
+    private int appleDeathRate = 50;
+    private int mushroomSpawnRate = 40;
+    private int mushroomDeathRate = 30;
     private boolean foodSpawnActivated = true;
 
     public Game(int width, int height, int snakeCount){
@@ -81,6 +81,9 @@ public class Game {
         int snakeNumber = 0;
         for (int j = 0; j < initialField.length; j++) {
             for (int i = 0; i < initialField[0].length; i++) {
+                if (initialField[j][i] == null){
+                    continue;
+                }
                 switch (initialField[j][i]){
                     case Wall:
                         field[i][j] = new Wall(new Point(i, j));
@@ -91,8 +94,6 @@ public class Game {
                     case Mushroom:
                         field[i][j] = new Mushroom(new Point(i, j),
                                 0, mushroomDeathRate);
-                        break;
-                    case None:
                         break;
                     case SnakeHead:
                         Snake snake = new Snake(new Point(i, j), Direction.None);
