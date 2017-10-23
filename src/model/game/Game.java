@@ -22,9 +22,9 @@ public class Game {
     private final Snake[] snakes;
     private int turnNumber = 0;
     private int appleSpawnRate = 20;
-    private int appleDeathRate = 30;
-    private int mushroomSpawnRate = 5;
-    private int mushroomDeathRate = 200;
+    private int appleDeathRate = 50;
+    private int mushroomSpawnRate = 40;
+    private int mushroomDeathRate = 30;
     private boolean foodSpawnActivated = true;
 
     public Game(int width, int height, int snakeCount){

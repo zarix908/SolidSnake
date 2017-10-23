@@ -5,9 +5,11 @@ import model.creatures.Creature;
 import model.utils.Direction;
 import model.utils.Point;
 
+import static model.creatures.CreatureType.*;
+
 class TailDiscardBodyPart implements SnakeBodyPart {
 
-    private static final CreatureType CREATURE_TYPE = CreatureType.TailDiscardBodyPart;
+    private static final CreatureType CREATURE_TYPE = TailDiscardBodyPart;
 
     private final SnakeBodyPartSkeleton skeleton;
 
@@ -32,8 +34,16 @@ class TailDiscardBodyPart implements SnakeBodyPart {
 
     @Override
     public void interactWith(Creature otherCreature) {
-        if(otherCreature instanceof SnakeBodyPart){
+        CreatureType type = otherCreature.getCreatureType();
+        if (type == SnakeHead || type == SimpleSnakeBodyPart || type == TailDiscardBodyPart) {
             skeleton.setIsDead();
+        }
+        else {
+            throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
+                            " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
+                            "(This (%s) doesn't know hot to interact with (%s))",
+                    this.toString(),
+                    otherCreature.toString()));
         }
     }
 
