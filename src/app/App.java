@@ -42,7 +42,8 @@ public class App extends Application {
     private static int snakeCount = 1;
     private static Stage theStage;
     private static AnimationTimer gameLoop;
-
+    private static Settings settings;
+    private static Painter painter;
     private static int width = 800;
     private static int height = 600;
 
@@ -57,6 +58,17 @@ public class App extends Application {
         primaryStage.setFullScreen(false);
         primaryStage.setOnCloseRequest(e -> System.exit(0));
 
+        settings = new Settings(20,
+                new SkinSettings(1, 1 ,1),
+                new GameplaySettings(GameplaySettings.getRandomField(30, 30, snakeCount),
+                        true,
+                        20,
+                        50,
+                        40,
+                        30,
+                        snakeCount)
+                );
+        painter = new Painter(settings);
         theStage = primaryStage;
         theStage.setScene(new Scene(createMainMenu(), Color.BLACK));
         theStage.show();
@@ -168,18 +180,25 @@ public class App extends Application {
                 if (!isGameOver && !isPaused) {
                     if ((now - prevTime) >= 100 * 1000000) {
                         prevTime = now;
-                        frame = game.makeTurn(currDir);
+                        Direction[] directions = new Direction[snakeCount];
+                        System.arraycopy(currDir, 0, directions, 0, snakeCount);
+                        frame = game.makeTurn(directions);
                         if (frame == null) {
                             isGameOver = true;
                         }
                     }
                 }
-                Painter.paint(frame, context);
-
+              painter.paint(frame, context);
             }
         };
 
         return root;
+    }
+
+    private Direction[] extractDirectionsCorrepondingToSnakeCount(){
+        Direction[] result = new Direction[snakeCount];
+        System.arraycopy(currDir, 0, result, 0, snakeCount);
+        return result;
     }
 
     private Parent createMainMenu(){
@@ -248,11 +267,22 @@ public class App extends Application {
 
     private static void reset(int snakeCount) {
         isGameOver = false;
-        currDir = new Direction[snakeCount];
+        currDir = new Direction[3];
         for (int i = 0; i < currDir.length; i++) {
             currDir[i] = Direction.None;
         }
-        game = new Game(Settings.getCols(), Settings.getRows(), snakeCount);
-        frame = game.makeTurn(currDir);
+        settings.setGameplaySettings(new GameplaySettings(GameplaySettings.getRandomField(30, 30, snakeCount),
+                true,
+                20,
+                50,
+                40,
+                30,
+                snakeCount)
+        );
+        game = new Game(settings.getGameplaySettings());
+        Direction[] directions = new Direction[snakeCount];
+        System.arraycopy(currDir, 0, directions, 0, snakeCount);
+        frame = game.makeTurn(directions);
+        //TODO: refresh skins?
     }
 }
