@@ -7,12 +7,10 @@ import model.creatures.CreatureTypeValidator;
 import model.utils.Direction;
 import model.utils.Point;
 
-import static model.creatures.CreatureType.*;
-
 public class SimpleSnakeBodyPart implements SnakeBodyPart {
 
     private final SnakeBodyPartSkeleton skeleton;
-    private static final CreatureType CREATURE_TYPE = SimpleSnakeBodyPart;
+    private static final CreatureType CREATURE_TYPE = CreatureType.SimpleSnakeBodyPart;
 
     public SimpleSnakeBodyPart(Direction direction, Point location, Snake snake) {
         skeleton = new SnakeBodyPartSkeleton(false, direction, location, snake);
@@ -45,13 +43,11 @@ public class SimpleSnakeBodyPart implements SnakeBodyPart {
         if (CreatureTypeValidator.isSnake(type)) {
             skeleton.setIsDead();
         }
-        else {
-            throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
-                        " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
-                        "(This (%s) doesn't know hot to interact with (%s))",
-                    this.toString(),
-                    otherCreature.toString()));
-        }
+        throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
+                    " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
+                    "(This (%s) doesn't know hot to interact with (%s))",
+                this.toString(),
+                otherCreature.toString()));
     }
 
     @Override

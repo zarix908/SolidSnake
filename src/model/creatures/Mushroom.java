@@ -3,8 +3,6 @@ package model.creatures;
 import model.utils.Direction;
 import model.utils.Point;
 
-import static model.creatures.CreatureType.*;
-
 public class Mushroom implements Creature {
 
     private final int turnCreated;
