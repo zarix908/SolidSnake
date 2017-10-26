@@ -1,6 +1,5 @@
 package app;
 
-
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -27,7 +26,6 @@ import app.drawing.Painter;
 import model.utils.Direction;
 import model.game.Game;
 import model.game.GameFrame;
-
 import java.util.Map;
 
 public class App extends Application {
@@ -104,9 +102,7 @@ public class App extends Application {
             FadeTransition fade = new FadeTransition(Duration.millis(300), root);
             fade.setFromValue(1);
             fade.setToValue(0);
-            fade.setOnFinished(e -> {
-                theStage.setScene(new Scene(createMainMenu(), Color.BLACK));
-            });
+            fade.setOnFinished(e -> theStage.setScene(new Scene(createMainMenu(), Color.BLACK)));
             fade.play();
         });
 
