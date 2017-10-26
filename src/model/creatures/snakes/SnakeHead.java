@@ -74,17 +74,20 @@ public class SnakeHead implements SnakeBodyPart {
         if (type == Apple){
             skeleton.getSnake().incrementScore(10);
             newBodyParts.add(SimpleSnakeBodyPart);
+            return;
         }
-        else if (type == Mushroom){
+        if (type == Mushroom){
             skeleton.getSnake().incrementScore(20);
             for (int i = 0; i < tailDiscardsToAppend; i++) {
                 newBodyParts.add(TailDiscardBodyPart);
             }
+            return;
         }
-        else if (type == SimpleSnakeBodyPart) {
+        if (type == SimpleSnakeBodyPart) {
             skeleton.setIsDead();
+            return;
         }
-        else if (type ==  TailDiscardBodyPart){
+        if (type ==  TailDiscardBodyPart){
             newBodyParts.clear();
             SnakeBodyPart asBodyPart = (SnakeBodyPart)otherCreature;
             while (true){
@@ -99,20 +102,21 @@ public class SnakeHead implements SnakeBodyPart {
                     break;
                 }
             }
+            return;
         }
-        else if (type == SnakeHead) {
+        if (type == SnakeHead) {
             skeleton.setIsDead();
+            return;
         }
-        else if (type == Wall){
+        if (type == Wall){
             skeleton.setIsDead();
+            return;
         }
-        else {
-            throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
-                            " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
-                            "(This (%s) doesn't know hot to interact with (%s))",
-                    this.toString(),
-                    otherCreature.toString()));
-        }
+        throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
+                        " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
+                        "(This (%s) doesn't know hot to interact with (%s))",
+                this.toString(),
+                otherCreature.toString()));
     }
 
     @Override

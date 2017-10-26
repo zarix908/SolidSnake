@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static model.creatures.CreatureType.*;
-import static model.creatures.CreatureType.Wall;
 
 public class TestTwoSnakes {
 

@@ -44,11 +44,7 @@ public class PauseMenuButton extends MenuButton {
             bg.setFill(Color.TRANSPARENT);
             text.setFill(Color.BLACK);
         });
-        setOnMousePressed(event -> {
-            text.setFill(Color.WHITE);
-        });
-        setOnMouseReleased(event -> {
-            text.setFill(Color.LIGHTGREY);
-        });
+        setOnMousePressed(event -> text.setFill(Color.WHITE));
+        setOnMouseReleased(event -> text.setFill(Color.LIGHTGREY));
     }
 }

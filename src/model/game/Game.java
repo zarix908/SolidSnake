@@ -11,11 +11,9 @@ import model.utils.Direction;
 import model.utils.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -225,12 +223,11 @@ public class Game {
                 }
             }
         }
-        for (int i = 0; i < snakes.length; i++) {
-            Snake snake = snakes[i];
+        for (Snake snake : snakes) {
             if (snake.isDead())
                 continue;
             SnakeBodyPart snakeBodyPart = snake.getHead();
-            while (true){
+            while (true) {
                 snakeBodyPart.makeMove(field, turnNumber);
                 Point location = snakeBodyPart.getLocation();
                 collisions.computeIfAbsent(location, k -> new ArrayList<>());
@@ -244,15 +241,15 @@ public class Game {
         return collisions;
     }
 
-    private static LinkedList<Point> generatePointForEveryCell(int x1, int x2, int y1, int y2,
+    private static List<Point> generatePointForEveryCell(int x1, int x2, int y1, int y2,
                                                                int borderX, int borderY){
-        Set<Point> points = new HashSet<>();
+        List<Point> points = new LinkedList<>();
         for (int x = x1 + borderX; x < x2 - borderX + 1; x++) {
             for (int y = y1 + borderY; y < y2 - borderY + 1; y++) {
                 points.add(new Point(x, y));
             }
         }
-        return new LinkedList<> (points);
+        return points;
     }
 
     private static Point[] generateSafeRandomPoints(Creature[][] field, int amount,

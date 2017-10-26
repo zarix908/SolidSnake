@@ -3,10 +3,9 @@ package app;
 import model.creatures.CreatureType;
 import model.game.GameSettings;
 import model.utils.Point;
-import java.util.HashSet;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static model.creatures.CreatureType.*;
@@ -112,15 +111,15 @@ public class GameplaySettings implements GameSettings {
         return field;
     }
 
-    private static LinkedList<Point> generatePointForEveryCell(int x1, int x2, int y1, int y2,
+    private static List<Point> generatePointForEveryCell(int x1, int x2, int y1, int y2,
                                                                int borderX, int borderY){
-        Set<Point> points = new HashSet<>();
+        List<Point> points = new LinkedList<>();
         for (int x = x1 + borderX; x < x2 - borderX + 1; x++) {
             for (int y = y1 + borderY; y < y2 - borderY + 1; y++) {
                 points.add(new Point(x, y));
             }
         }
-        return new LinkedList<> (points);
+        return points;
     }
 
     private static Point[] generateSafeRandomPoints(CreatureType[][] field, int amount,

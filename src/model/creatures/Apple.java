@@ -3,8 +3,6 @@ package model.creatures;
 import model.utils.Direction;
 import model.utils.Point;
 
-import static model.creatures.CreatureType.*;
-
 public class Apple implements Creature {
 
     private boolean isDead = false;
