@@ -2,19 +2,26 @@ package app.menus.mainMenu;
 
 import app.menus.menu.MenuBox;
 import app.menus.menu.MenuButton;
+import javafx.geometry.Pos;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Line;
 
-public class MainMenuBox extends MenuBox {
-    public MainMenuBox(MenuButton... items) {
-        getChildren().add(createSeparator());
+import java.util.Map;
 
+public class MainMenuBox extends MenuBox {
+
+    public MainMenuBox(MenuButton... items) {
+        VBox root = new VBox();
+        root.setAlignment(Pos.CENTER);
+        root.getChildren().add(createSeparator());
         for (MenuButton item : items) {
-            getChildren().addAll(item, createSeparator());
+            root.getChildren().addAll(item, createSeparator());
         }
+        getChildren().add(root);
     }
 
     private Line createSeparator() {
@@ -33,5 +40,10 @@ public class MainMenuBox extends MenuBox {
         sep.setEndX(200);
         sep.setStroke(gradient);
         return sep;
+    }
+
+    @Override
+    public Map<String, MenuButton> getButtonsMap() {
+        return null;
     }
 }

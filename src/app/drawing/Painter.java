@@ -1,17 +1,19 @@
 package app.drawing;
 
-import app.GameplaySettings;
 import app.Settings;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 import model.creatures.CreatureType;
 import model.creatures.CreatureTypeValidator;
 import model.game.GameFrame;
 import model.utils.Direction;
 import model.utils.Point;
+
+import static model.utils.Direction.*;
 
 public class Painter {
     private Settings settings;
@@ -51,25 +53,41 @@ public class Painter {
 //                    .get(ci.getPlayerNumber())
 //                    .get(CreatureToTextureConverter.converters.get(ci.getType())));
 
-
             if(CreatureTypeValidator.isSnake(ci.getType())){
-
-                Image image = settings.getSkins().getSpritesForPlayers()
+                Image image = settings
+                        .getSkins()
+                        .getSpritesForPlayers()
                         .get(ci.getPlayerNumber())
                         .get(CreatureToTextureConverter.converters.get(ci.getType()));
-                Image rotatedImage = rotateImage(image, ci);
-                gc.drawImage(rotatedImage,
+//                Image rotatedImage = rotateImage(image, ci);
+//                gc.drawImage(
+//                        rotatedImage,
+//                        p.getX() * settings.getSize(),
+//                        p.getY() * settings.getSize(),
+//                        settings.getSize(),
+//                        settings.getSize()
+//                );
+                double angle = ci.getType() == CreatureType.SnakeHead
+                        ? 0
+                        : getAngleFromDirection(ci.getDirection());
+                drawRotatedImage(
+                        gc, image, angle,
                         p.getX() * settings.getSize(),
                         p.getY() * settings.getSize(),
                         settings.getSize(),
-                        settings.getSize());
+                        settings.getSize()
+                );
             }
             else{
-                gc.drawImage(settings.getSkins().getSpritesForSubjects().get(CreatureToTextureConverter.converters.get(ci.getType())),
+                gc.drawImage(
+                        settings.getSkins()
+                                .getSpritesForSubjects()
+                                .get(CreatureToTextureConverter.converters.get(ci.getType())),
                         p.getX() * settings.getSize(),
                         p.getY() * settings.getSize(),
                         settings.getSize(),
-                        settings.getSize());
+                        settings.getSize()
+                );
             }
         });
     }
@@ -103,8 +121,7 @@ public class Painter {
         ImageView iv = new ImageView(image);
         iv.setRotate(getAngleFromDirection(creatureInfo.getDirection()));
         SnapshotParameters params = new SnapshotParameters();
-        Image rotatedImage = iv.snapshot(params, null);
-        return rotatedImage;
+        return iv.snapshot(params, null);
     }
 
     private double getAngleFromDirection(Direction direction){
@@ -120,5 +137,24 @@ public class Painter {
                 return 270;
         }
         return 0;
+    }
+
+    private void rotate(GraphicsContext gc, double angle, double px, double py) {
+        Rotate r = new Rotate(angle, px, py);
+        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+    }
+
+    private void drawRotatedImage(
+            GraphicsContext gc,
+            Image image,
+            double angle,
+            double x,
+            double y,
+            double width,
+            double height) {
+        gc.save();
+        rotate(gc, angle, x + width / 2, y + height / 2);
+        gc.drawImage(image, x, y, width, height);
+        gc.restore();
     }
 }
