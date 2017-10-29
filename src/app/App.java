@@ -57,7 +57,7 @@ public class App extends Application {
         primaryStage.setOnCloseRequest(e -> System.exit(0));
 
         settings = new Settings(20,
-                new SkinSettings(1, 1 ,1),
+                new SkinSettings(0, 0 ,0),
                 new GameplaySettings(GameplaySettings.getRandomField(30, 30, snakeCount),
                         true,
                         20,
@@ -224,7 +224,13 @@ public class App extends Application {
         root.getChildren().add(snakeLogo);
         StackPane.setAlignment(snakeLogo, Pos.TOP_CENTER);
 
-        Menu mainMenu = new MainMenu();
+        // We need to specify a link to skinSettings
+        //TODO: MainMenu has logic of skin setting/changing, is it bad?
+        // I think the logic should be done in this method, but who cares anyway?
+        //TODO: polymorphism is redundant!? (it makes everything harder)
+        // Why would you even have several implementations of VisSettings
+        // and if so, what would they do?
+        Menu mainMenu = new MainMenu((SkinSettings)settings.getSkins());
         Map<String, MenuButton> mb = mainMenu.getButtonsMap();
         mb.get("playSolo").setOnMouseClicked(event -> {
             FadeTransition fade = new FadeTransition(Duration.millis(200), root);

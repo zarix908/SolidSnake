@@ -1,6 +1,10 @@
 package app.menus.menu;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public abstract class MenuBox extends VBox{
+import java.util.Map;
+
+public abstract class MenuBox extends StackPane{
+    public abstract Map<String, MenuButton> getButtonsMap();
 }
