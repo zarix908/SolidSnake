@@ -42,8 +42,8 @@ public class App extends Application {
     private static AnimationTimer gameLoop;
     private static Settings settings;
     private static Painter painter;
-    private static int width = 800;
-    private static int height = 600;
+    private static int width = 1000;
+    private static int height = 750;
 
     public static void main(String[] args) {
         launch(args);
@@ -56,7 +56,7 @@ public class App extends Application {
         primaryStage.setFullScreen(false);
         primaryStage.setOnCloseRequest(e -> System.exit(0));
 
-        settings = new Settings(20,
+        settings = new Settings(25,
                 new SkinSettings(0, 0 ,0),
                 new GameplaySettings(GameplaySettings.getRandomField(30, 30, snakeCount),
                         true,

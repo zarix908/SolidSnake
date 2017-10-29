@@ -22,7 +22,7 @@ public class PauseMenu extends Menu {
 
     public PauseMenu(){
         //TODO: get width and height from App
-        bg = new Rectangle(800, 600);
+        bg = new Rectangle(1000, 750);
         bg.setFill(Color.GREY);
         bg.setOpacity(0.4);
 
