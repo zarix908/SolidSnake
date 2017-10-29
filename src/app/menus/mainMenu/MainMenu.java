@@ -1,5 +1,7 @@
 package app.menus.mainMenu;
 
+import app.SkinSettings;
+import app.menus.mainMenu.skinMenuBox.SkinMenuBox;
 import app.menus.menu.Menu;
 import app.menus.menu.MenuBox;
 import app.menus.menu.MenuButton;
@@ -17,7 +19,7 @@ public class MainMenu extends Menu {
     private StackPane startPane;
     private MainMenuInfoText infoText;
 
-    public MainMenu(){
+    public MainMenu(SkinSettings skinSettings){
         menuWithInfo = new VBox();
         menuWithInfo.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -42,14 +44,7 @@ public class MainMenu extends Menu {
                 optionsBack
         );
 
-        MenuButton skinsBlue = new MainMenuButton("BLUE SNAKE");
-        MenuButton skinsRed = new MainMenuButton("RED SNAKE");
-        MenuButton skinsBack = new MainMenuButton("BACK");
-        MenuBox menuSkins = new MainMenuBox(
-                skinsBlue,
-                skinsRed,
-                skinsBack
-        );
+        MenuBox menuSkins = new SkinMenuBox(skinSettings);
 
         MenuButton playSolo = new MainMenuButton("SOLO");
         MenuButton playDuo = new MainMenuButton("DUO");
@@ -85,16 +80,19 @@ public class MainMenu extends Menu {
         });
 
 
-        skinsBlue.setOnMouseClicked(event -> infoText.setText("Not featured yet"));
-        skinsRed.setOnMouseClicked(event -> infoText.setText("Not featured yet"));
-        skinsBack.setOnMouseClicked(event -> {
+        //TODO: skinbuttons
+        Map<String, MenuButton> skinButtons = menuSkins.getButtonsMap();
+        skinButtons.get("skinAccept").setOnMouseClicked(event -> {
+
+            fadeFromMenuToMenu(menuSkins, menuOptions);
+            infoText.setText("");
+        });
+        skinButtons.get("skinDecline").setOnMouseClicked(event -> {
             fadeFromMenuToMenu(menuSkins, menuOptions);
             infoText.setText("");
         });
 
 
-        playSolo.setOnMouseClicked(event -> {});
-        playDuo.setOnMouseClicked(event -> infoText.setText("Not featured yet"));
         playBack.setOnMouseClicked(event -> {
             fadeFromMenuToMenu(menuPlay, menuMain);
             infoText.setText("");
@@ -110,7 +108,6 @@ public class MainMenu extends Menu {
         menuWithInfo.getChildren().addAll(startPane, infoText);
         getChildren().add(menuWithInfo);
 
-        //TODO: Java9 ONLY!!!!!
         buttons = Map.of("playSolo", playSolo, "playDuo", playDuo, "playTrio", playTrio);
     }
 
