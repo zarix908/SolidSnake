@@ -69,9 +69,7 @@ public class MainMenu extends Menu {
         mainExit.setOnMouseClicked(event -> System.exit(0));
 
 
-        optionsControls.setOnMouseClicked(event -> {
-            infoText.setText("Not featured yet");
-        });
+        optionsControls.setOnMouseClicked(event -> infoText.setText("Not featured yet"));
         optionsSkins.setOnMouseClicked(event -> {
             fadeFromMenuToMenu(menuOptions, menuSkins);
             infoText.setText("");

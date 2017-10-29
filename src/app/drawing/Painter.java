@@ -44,15 +44,6 @@ public class Painter {
 
     private void paintFrame(GameFrame frame, GraphicsContext gc){
         frame.getCreaturesInfo().forEach((p, ci) -> {
-//            gc.setFill(Settings.getColorDict()
-//                    .get(CreatureToTextureConverter.converters
-//                            .get(ci.getType()))
-//                    .apply(ci.getPlayerNumber()));
-//            gc.drawImage(settings.getSkins()
-//                    .getSpritesForPlayers()
-//                    .get(ci.getPlayerNumber())
-//                    .get(CreatureToTextureConverter.converters.get(ci.getType())));
-
             if(CreatureTypeValidator.isSnake(ci.getType())){
                 Image image = settings
                         .getSkins()
@@ -92,13 +83,6 @@ public class Painter {
         });
     }
 
-    private void paintPoint(Point point, GraphicsContext gc) {
-        gc.fillRect(point.getX() * settings.getSize(),
-                point.getY() * settings.getSize(),
-                settings.getSize(),
-                settings.getSize());
-    }
-
     private void paintResetMessage(GraphicsContext gc) {
         gc.setFill(Color.AQUAMARINE);
         gc.fillText("Hit ENTER to reset.", 10, settings.getHeight() - 10);
@@ -121,6 +105,7 @@ public class Painter {
         ImageView iv = new ImageView(image);
         iv.setRotate(getAngleFromDirection(creatureInfo.getDirection()));
         SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
         return iv.snapshot(params, null);
     }
 

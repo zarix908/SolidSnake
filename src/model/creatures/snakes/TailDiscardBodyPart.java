@@ -37,14 +37,13 @@ class TailDiscardBodyPart implements SnakeBodyPart {
         CreatureType type = otherCreature.getCreatureType();
         if (type == SnakeHead || type == SimpleSnakeBodyPart || type == TailDiscardBodyPart) {
             skeleton.setIsDead();
+            return;
         }
-        else {
-            throw new IllegalArgumentException(String.format("DA FAK MADAFAKA?!" +
-                            " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
-                            "(This (%s) doesn't know hot to interact with (%s))",
-                    this.toString(),
-                    otherCreature.toString()));
-        }
+        throw new IllegalArgumentException(String.format("DA FAK MADAFAKA?!" +
+                        " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
+                        "(This (%s) doesn't know hot to interact with (%s))",
+                this.toString(),
+                otherCreature.toString()));
     }
 
     @Override
