@@ -51,14 +51,13 @@ public class SkinSettings implements VisualSettings {
         changePlayerSkins();
     }
 
+    //TODO: maybe do an array??? (good for GameScreenUI)
     public int getPlayer1Skin(){
         return player1Skin;
     }
-
     public int getPlayer2Skin(){
         return player2Skin;
     }
-
     public int getPlayer3Skin(){
         return player3Skin;
     }

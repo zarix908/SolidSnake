@@ -1,5 +1,6 @@
 package app;
 
+import app.drawing.GameScreen;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -7,7 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,7 +22,6 @@ import app.menus.menu.Menu;
 import app.menus.menu.MenuButton;
 import app.menus.mainMenu.MainMenu;
 import app.menus.pauseMenu.PauseMenu;
-import app.drawing.Painter;
 import model.utils.Direction;
 import model.game.Game;
 import model.game.GameFrame;
@@ -30,18 +29,16 @@ import java.util.Map;
 
 public class App extends Application {
 
-    //TODO: how to get rid of static?
     private static Game game;
     private static GameFrame frame;
-    private static GraphicsContext context;
     private static boolean isGameOver;
     private static boolean isPaused = false;
     private static Direction[] currDir;
     private static int snakeCount = 1;
+    private static final int cellSize = 30;
     private static Stage theStage;
     private static AnimationTimer gameLoop;
     private static Settings settings;
-    private static Painter painter;
     private static int width = 800;
     private static int height = 600;
 
@@ -56,17 +53,22 @@ public class App extends Application {
         primaryStage.setFullScreen(false);
         primaryStage.setOnCloseRequest(e -> System.exit(0));
 
-        settings = new Settings(20,
+        settings = new Settings(
+                cellSize,
                 new SkinSettings(0, 0 ,0),
-                new GameplaySettings(GameplaySettings.getRandomField(30, 30, snakeCount),
+                new GameplaySettings(
+                        GameplaySettings.getRandomField(
+                                width/cellSize,
+                                (height - 80)/cellSize,
+                                snakeCount),
                         true,
                         20,
                         50,
                         40,
                         30,
-                        snakeCount)
-                );
-        painter = new Painter(settings);
+                        snakeCount
+                )
+        );
         theStage = primaryStage;
         theStage.setScene(new Scene(createMainMenu(), Color.BLACK));
         theStage.show();
@@ -75,7 +77,9 @@ public class App extends Application {
      private void playSnake(int snakeCount){
         App.snakeCount = snakeCount;
         reset(App.snakeCount);
-        theStage.setScene(new Scene(createGamePlay(), Color.BLACK));
+        Parent gamePlay = createGamePlay();
+        theStage.setScene(new Scene(gamePlay, Color.BLACK));
+        gamePlay.requestFocus();
         gameLoop.start();
     }
 
@@ -106,13 +110,10 @@ public class App extends Application {
             fade.play();
         });
 
-        Canvas canvas = new Canvas(width, height);
-        canvas.setFocusTraversable(true);
-        root.getChildren().add(canvas);
+        GameScreen gameScreen = new GameScreen(settings);
+        root.getChildren().add(gameScreen);
 
-        context = canvas.getGraphicsContext2D();
-
-        canvas.setOnKeyPressed(e -> {
+        root.setOnKeyPressed(e -> {
             switch (e.getCode()) {
                 case W:
                     currDir[0] = Direction.Up;
@@ -184,7 +185,7 @@ public class App extends Application {
                         }
                     }
                 }
-              painter.paint(frame, context);
+                gameScreen.update(frame);
             }
         };
 
@@ -273,18 +274,23 @@ public class App extends Application {
         for (int i = 0; i < currDir.length; i++) {
             currDir[i] = Direction.None;
         }
-        settings.setGameplaySettings(new GameplaySettings(GameplaySettings.getRandomField(30, 30, snakeCount),
-                true,
-                20,
-                50,
-                40,
-                30,
-                snakeCount)
+        settings.setGameplaySettings(
+                new GameplaySettings(
+                        GameplaySettings.getRandomField(
+                                width/cellSize,
+                                (height - 80)/cellSize,
+                                snakeCount),
+                        true,
+                        20,
+                        50,
+                        40,
+                        30,
+                        snakeCount
+                )
         );
         game = new Game(settings.getGameplaySettings());
         Direction[] directions = new Direction[snakeCount];
         System.arraycopy(currDir, 0, directions, 0, snakeCount);
         frame = game.makeTurn(directions);
-        //TODO: refresh skins?
     }
 }

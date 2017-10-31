@@ -24,7 +24,7 @@ public class PauseMenu extends Menu {
         //TODO: get width and height from App
         bg = new Rectangle(800, 600);
         bg.setFill(Color.GREY);
-        bg.setOpacity(0.4);
+        bg.setOpacity(0.9);
 
         MenuButton pauseResume = new PauseMenuButton("RESUME", 22);
         MenuButton pauseRestart = new PauseMenuButton("RESTART", 22);
