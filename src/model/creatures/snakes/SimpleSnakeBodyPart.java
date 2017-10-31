@@ -42,6 +42,7 @@ public class SimpleSnakeBodyPart implements SnakeBodyPart {
         CreatureType type = otherCreature.getCreatureType();
         if (CreatureTypeValidator.isSnake(type)) {
             skeleton.setIsDead();
+            return;
         }
         throw new UnsupportedOperationException(String.format("DA FAK MADAFAKA?!" +
                     " I DON'T KNOW HOW TO SPEAK TO WHAMEN!" +
