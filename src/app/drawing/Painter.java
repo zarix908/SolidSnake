@@ -11,7 +11,6 @@ import model.creatures.CreatureType;
 import model.creatures.CreatureTypeValidator;
 import model.game.GameFrame;
 import model.utils.Direction;
-import model.utils.Point;
 
 import static model.utils.Direction.*;
 
