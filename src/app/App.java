@@ -8,7 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -35,7 +34,12 @@ public class App extends Application {
     private static boolean isPaused = false;
     private static Direction[] currDir;
     private static int snakeCount = 1;
-    private static final int cellSize = 30;
+
+    // This values are initital and are being used to set default settings
+    // (but might be used as properties later, I dunno)
+    private static int cellSize = 30;
+    private static int speed = 150;
+
     private static Stage theStage;
     private static AnimationTimer gameLoop;
     private static Settings settings;
@@ -55,6 +59,7 @@ public class App extends Application {
 
         settings = new Settings(
                 cellSize,
+                speed,
                 new SkinSettings(0, 0 ,0),
                 new GameplaySettings(
                         GameplaySettings.getRandomField(
@@ -86,6 +91,9 @@ public class App extends Application {
     private Parent createGamePlay(){
         StackPane root = new StackPane();
         root.setPrefSize(width, height);
+        root.setBackground(new Background(
+                new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)
+        ));
 
         Menu pauseMenu = new PauseMenu();
         Map<String, MenuButton> bm = pauseMenu.getButtonsMap();
@@ -175,7 +183,7 @@ public class App extends Application {
             @Override
             public void handle(long now) {
                 if (!isGameOver && !isPaused) {
-                    if ((now - prevTime) >= 100 * 1000000) {
+                    if ((now - prevTime) >= settings.getSpeed() * 1000000) {
                         prevTime = now;
                         Direction[] directions = new Direction[snakeCount];
                         System.arraycopy(currDir, 0, directions, 0, snakeCount);
@@ -231,7 +239,7 @@ public class App extends Application {
         //TODO: polymorphism is redundant!? (it makes everything harder)
         // Why would you even have several implementations of VisSettings
         // and if so, what would they do?
-        Menu mainMenu = new MainMenu((SkinSettings)settings.getSkins());
+        Menu mainMenu = new MainMenu(settings);
         Map<String, MenuButton> mb = mainMenu.getButtonsMap();
         mb.get("playSolo").setOnMouseClicked(event -> {
             FadeTransition fade = new FadeTransition(Duration.millis(200), root);
@@ -277,8 +285,8 @@ public class App extends Application {
         settings.setGameplaySettings(
                 new GameplaySettings(
                         GameplaySettings.getRandomField(
-                                width/cellSize,
-                                (height - 80)/cellSize,
+                                width/settings.getSize(),
+                                (height - 80)/settings.getSize(),
                                 snakeCount),
                         true,
                         20,

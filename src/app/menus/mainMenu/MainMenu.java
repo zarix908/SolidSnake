@@ -1,11 +1,14 @@
 package app.menus.mainMenu;
 
+import app.Settings;
 import app.SkinSettings;
 import app.menus.mainMenu.skinMenuBox.SkinMenuBox;
 import app.menus.menu.Menu;
 import app.menus.menu.MenuBox;
 import app.menus.menu.MenuButton;
 import javafx.animation.FadeTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -19,7 +22,7 @@ public class MainMenu extends Menu {
     private StackPane startPane;
     private MainMenuInfoText infoText;
 
-    public MainMenu(SkinSettings skinSettings){
+    public MainMenu(Settings settings){
         menuWithInfo = new VBox();
         menuWithInfo.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -35,16 +38,18 @@ public class MainMenu extends Menu {
                 mainExit
         );
 
-        MenuButton optionsControls = new MainMenuButton("CONTROLS");
+        MainMenuSlider optionsSpeed = new MainMenuSlider(1, 20, 21 - settings.getSpeed()/50, "GAME SPEED");
+        MainMenuSlider optionsSize = new MainMenuSlider(10, 60, settings.getSize(), "SIZE OF GAME OBJECTS");
         MenuButton optionsSkins = new MainMenuButton("SKINS");
         MenuButton optionsBack = new MainMenuButton("BACK");
         MenuBox menuOptions = new MainMenuBox(
-                optionsControls,
+                optionsSpeed,
+                optionsSize,
                 optionsSkins,
                 optionsBack
         );
 
-        MenuBox menuSkins = new SkinMenuBox(skinSettings);
+        MenuBox menuSkins = new SkinMenuBox((SkinSettings)settings.getSkins());
 
         MenuButton playSolo = new MainMenuButton("SOLO");
         MenuButton playDuo = new MainMenuButton("DUO");
@@ -69,7 +74,25 @@ public class MainMenu extends Menu {
         mainExit.setOnMouseClicked(event -> System.exit(0));
 
 
-        optionsControls.setOnMouseClicked(event -> infoText.setText("Not featured yet"));
+        optionsSpeed.getSlider().setBlockIncrement(1);
+        optionsSpeed.getSlider().setMajorTickUnit(1);
+        optionsSpeed.getSlider().setMinorTickCount(0);
+        optionsSpeed.getSlider().setShowTickLabels(true);
+//        optionsSpeed.getSlider().setShowTickMarks(true);
+        optionsSpeed.getSlider().setSnapToTicks(true);
+        optionsSpeed.getSlider().valueProperty().addListener((observable, oldValue, newValue) -> {
+            settings.setSpeed(newValue.intValue()*50);
+            settings.setSpeed((21 - newValue.intValue())*50);
+        });
+        optionsSize.getSlider().setBlockIncrement(5);
+        optionsSize.getSlider().setMajorTickUnit(10);
+        optionsSize.getSlider().setMinorTickCount(4);
+        optionsSize.getSlider().setShowTickLabels(true);
+        optionsSize.getSlider().setShowTickMarks(true);
+        optionsSize.getSlider().setSnapToTicks(true);
+        optionsSize.getSlider().valueProperty().addListener((observable, oldValue, newValue) -> {
+            settings.setSize(newValue.intValue());
+        });
         optionsSkins.setOnMouseClicked(event -> {
             fadeFromMenuToMenu(menuOptions, menuSkins);
             infoText.setText("");

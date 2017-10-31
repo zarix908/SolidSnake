@@ -11,11 +11,13 @@ import java.util.function.Function;
 public class Settings {
 
     private int size;
+    private int speed;
     private VisualSettings skins; //= new SkinSettings(1, 1, 1);
     private GameSettings gameplaySettings;
 
-    public Settings(int size, VisualSettings skinSettings, GameSettings gameplaySettings){
+    public Settings(int size, int speed, VisualSettings skinSettings, GameSettings gameplaySettings){
         this.size = size;
+        this.speed = speed;
         this.skins = skinSettings;
         this.gameplaySettings = gameplaySettings;
     }
@@ -40,10 +42,19 @@ public class Settings {
         TextureType.Wall, (snake) -> Color.BLACK
     );
 
-    // Note: we can get this info from GameFrame class --> are these getters unnecessary?
     public int getSize() {
         return size;
     }
+    public void setSize(int size) {
+        this.size = size;
+    }
+    public int getSpeed() {
+        return speed;
+    }
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
     public int getCols() {
         return gameplaySettings.getWidth();
     }
@@ -56,10 +67,6 @@ public class Settings {
     }
     public int getWidth() {
         return getRows() * size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
     }
 
     public static Map<TextureType, Function<Integer, Color>> getColorDict(){
