@@ -8,7 +8,7 @@ public class Mushroom implements Creature {
     private final int turnCreated;
     private final int turnsAlive;
     private boolean isDead = false;
-    private Point location;
+    private final Point location;
 
     public Mushroom(Point location, int turnCreated, int turnsAlive){
         this.location = location;

@@ -1,5 +1,8 @@
 package app.drawing;
 
+import static model.utils.Direction.None;
+import static model.utils.Direction.Up;
+
 import app.Settings;
 import app.drawing.GameScreenUI.PlayersBar;
 import javafx.geometry.Pos;
@@ -19,10 +22,6 @@ import model.creatures.CreatureType;
 import model.creatures.CreatureTypeValidator;
 import model.game.GameFrame;
 import model.utils.Direction;
-import java.util.Arrays;
-
-import static model.utils.Direction.None;
-import static model.utils.Direction.Up;
 
 @SuppressWarnings("Duplicates")
 public class GameScreen extends StackPane {

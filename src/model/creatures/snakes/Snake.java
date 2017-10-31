@@ -5,7 +5,7 @@ import model.utils.Point;
 
 public class Snake {
 
-    private SnakeBodyPart head;
+    private final SnakeBodyPart head;
     private int score;
 
     public Snake(Point location, Direction startingDirection) {

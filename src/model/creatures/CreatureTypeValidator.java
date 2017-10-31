@@ -1,7 +1,5 @@
 package model.creatures;
 
-import model.creatures.CreatureType;
-
 import static model.creatures.CreatureType.*;
 
 public final class CreatureTypeValidator {

@@ -7,8 +7,6 @@ import app.menus.menu.Menu;
 import app.menus.menu.MenuBox;
 import app.menus.menu.MenuButton;
 import javafx.animation.FadeTransition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -90,9 +88,8 @@ public class MainMenu extends Menu {
         optionsSize.getSlider().setShowTickLabels(true);
         optionsSize.getSlider().setShowTickMarks(true);
         optionsSize.getSlider().setSnapToTicks(true);
-        optionsSize.getSlider().valueProperty().addListener((observable, oldValue, newValue) -> {
-            settings.setSize(newValue.intValue());
-        });
+        optionsSize.getSlider().valueProperty().addListener((observable, oldValue, newValue) ->
+            settings.setSize(newValue.intValue()));
         optionsSkins.setOnMouseClicked(event -> {
             fadeFromMenuToMenu(menuOptions, menuSkins);
             infoText.setText("");

@@ -1,7 +1,6 @@
 package app.menus.menu;
 
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 import java.util.Map;
 

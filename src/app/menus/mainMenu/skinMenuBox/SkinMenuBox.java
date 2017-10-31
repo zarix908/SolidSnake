@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import java.util.Map;
 
 public class SkinMenuBox extends MenuBox {
@@ -80,9 +79,8 @@ public class SkinMenuBox extends MenuBox {
                     previewBox3.setImage(getImage(player3Skin, 3));
                 });
 
-        skinAccept.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            skinSettings.setSkins(player1Skin, player2Skin, player3Skin);
-        });
+        skinAccept.addEventHandler(MouseEvent.MOUSE_CLICKED, event ->
+            skinSettings.setSkins(player1Skin, player2Skin, player3Skin));
         skinDecline.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             player1Skin = skinSettings.getPlayer1Skin();
             player2Skin = skinSettings.getPlayer2Skin();

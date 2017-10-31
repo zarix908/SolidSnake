@@ -200,12 +200,6 @@ public class App extends Application {
         return root;
     }
 
-    private Direction[] extractDirectionsCorrepondingToSnakeCount(){
-        Direction[] result = new Direction[snakeCount];
-        System.arraycopy(currDir, 0, result, 0, snakeCount);
-        return result;
-    }
-
     private Parent createMainMenu(){
         StackPane root = new StackPane();
         root.setPrefSize(width, height);

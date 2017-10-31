@@ -35,17 +35,15 @@ public class Apple implements Creature {
             isDead = true;
             return;
         }
-        else{
-            throw new IllegalArgumentException("This apple doesn't know how to behave in these " +
+        throw new IllegalArgumentException("This apple doesn't know how to behave in these " +
                     "circumstances WutFace");
-        }
     }
 
     @Override
     public void cleanUp() {
     }
 
-    private Point location;
+    private final Point location;
     @Override
     public Point getLocation() {
         return location;

@@ -2,8 +2,6 @@ package model.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static model.utils.Direction.*;
-
 public class Point {
     private int x;
     private int y;

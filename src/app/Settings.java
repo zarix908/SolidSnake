@@ -1,13 +1,7 @@
 package app;
 
-import app.drawing.TextureType;
-import javafx.scene.paint.Color;
 import model.game.GameSettings;
-import java.util.Map;
-import java.util.function.Function;
 
-//TODO: It's a placeholder for settings configuration, something should be implemented in "model" in order to get everything working
-// Note: shitty implementation
 public class Settings {
 
     private int size;
@@ -21,26 +15,6 @@ public class Settings {
         this.skins = skinSettings;
         this.gameplaySettings = gameplaySettings;
     }
-
-    private static final Map<TextureType, Function<Integer, Color>> colorDict = Map.of(
-        TextureType.SimpleSnakeBodyPart, (snake) -> Color.LIGHTBLUE,
-        TextureType.SnakeHead, (snake) -> {
-            switch (snake){
-                case 0:
-                    return Color.BLUE;
-                case 1:
-                    return Color.RED;
-                case 2:
-                    return Color.WHITE;
-                default:
-                    throw new IllegalArgumentException("");
-            }
-        },
-        TextureType.TailDiscardSnakeBodyPart, (snake) -> Color.AQUAMARINE,
-        TextureType.Apple, (snake) -> Color.FORESTGREEN,
-        TextureType.Mushroom, (snake) -> Color.YELLOWGREEN,
-        TextureType.Wall, (snake) -> Color.BLACK
-    );
 
     public int getSize() {
         return size;
@@ -67,10 +41,6 @@ public class Settings {
     }
     public int getWidth() {
         return getRows() * size;
-    }
-
-    public static Map<TextureType, Function<Integer, Color>> getColorDict(){
-        return colorDict;
     }
 
     public GameSettings getGameplaySettings() {

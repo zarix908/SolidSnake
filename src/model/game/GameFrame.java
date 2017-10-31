@@ -74,9 +74,9 @@ public class GameFrame {
 
 
     public class CreatureInfo {
-        private CreatureType type;
-        private Direction direction;
-        private Integer playerNumber;
+        private final CreatureType type;
+        private final Direction direction;
+        private final Integer playerNumber;
 
         public CreatureInfo(CreatureType type,
                             Direction direction, Integer playerNumber){

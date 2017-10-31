@@ -61,7 +61,7 @@ public class SnakeBodyPartSkeleton implements SnakeBodyPart {
     }
 
 
-    private boolean isHead;
+    private final boolean isHead;
 
     @Override
     public boolean isHead(){
@@ -118,7 +118,7 @@ public class SnakeBodyPartSkeleton implements SnakeBodyPart {
     }
 
 
-    private Snake snake;
+    private final Snake snake;
 
     @Override
     public Snake getSnake(){

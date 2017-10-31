@@ -44,9 +44,7 @@ public class MainMenuSlider extends MenuButton {
         getChildren().addAll(root);
 
         setOnMouseEntered(event -> text.setFill(Color.WHITE));
-        setOnMouseExited(event -> {
-            text.setFill(Color.DARKGREY);
-        });
+        setOnMouseExited(event -> text.setFill(Color.DARKGREY));
     }
 
     public Slider getSlider() {
