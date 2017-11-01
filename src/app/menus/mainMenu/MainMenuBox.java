@@ -1,7 +1,7 @@
 package app.menus.mainMenu;
 
 import app.menus.menu.MenuBox;
-import app.menus.menu.MenuButton;
+import app.menus.menu.MenuObject;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -14,11 +14,11 @@ import java.util.Map;
 
 public class MainMenuBox extends MenuBox {
 
-    public MainMenuBox(MenuButton... items) {
+    public MainMenuBox(MenuObject... items) {
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
         root.getChildren().add(createSeparator());
-        for (MenuButton item : items) {
+        for (MenuObject item : items) {
             root.getChildren().addAll(item, createSeparator());
         }
         getChildren().add(root);
@@ -43,7 +43,7 @@ public class MainMenuBox extends MenuBox {
     }
 
     @Override
-    public Map<String, MenuButton> getButtonsMap() {
+    public Map<String, MenuObject> getButtonsMap() {
         return null;
     }
 }

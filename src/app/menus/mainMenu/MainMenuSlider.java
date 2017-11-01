@@ -1,6 +1,6 @@
 package app.menus.mainMenu;
 
-import app.menus.menu.MenuButton;
+import app.menus.menu.MenuObject;
 import javafx.geometry.Pos;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
@@ -13,7 +13,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public class MainMenuSlider extends MenuButton {
+public class MainMenuSlider extends MenuObject {
 
     private Slider slider;
 
@@ -21,17 +21,6 @@ public class MainMenuSlider extends MenuButton {
         slider = new Slider(min, max, value);
 
         VBox root = new VBox();
-
-        LinearGradient gradient = new LinearGradient(
-                0, 0,
-                1, 0,
-                true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0, Color.TRANSPARENT),
-                new Stop(0.4, Color.GREY),
-                new Stop(0.6, Color.GREY),
-                new Stop(1, Color.TRANSPARENT)
-        );
 
         Text text = new Text(name);
         text.setFill(Color.DARKGREY);

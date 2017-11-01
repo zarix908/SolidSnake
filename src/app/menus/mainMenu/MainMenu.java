@@ -5,7 +5,7 @@ import app.SkinSettings;
 import app.menus.mainMenu.skinMenuBox.SkinMenuBox;
 import app.menus.menu.Menu;
 import app.menus.menu.MenuBox;
-import app.menus.menu.MenuButton;
+import app.menus.menu.MenuObject;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class MainMenu extends Menu {
 
-    private Map<String, MenuButton> buttons;
+    private Map<String, MenuObject> buttons;
     private VBox menuWithInfo;
     private StackPane startPane;
     private MainMenuInfoText infoText;
@@ -27,9 +27,9 @@ public class MainMenu extends Menu {
         startPane = new StackPane();
         infoText = new MainMenuInfoText("");
 
-        MenuButton mainPlay = new MainMenuButton("PLAY");
-        MenuButton mainOptions = new MainMenuButton("OPTIONS");
-        MenuButton mainExit = new MainMenuButton("EXIT");
+        MenuObject mainPlay = new MainMenuButton("PLAY");
+        MenuObject mainOptions = new MainMenuButton("OPTIONS");
+        MenuObject mainExit = new MainMenuButton("EXIT");
         MenuBox menuMain = new MainMenuBox(
                 mainPlay,
                 mainOptions,
@@ -38,8 +38,8 @@ public class MainMenu extends Menu {
 
         MainMenuSlider optionsSpeed = new MainMenuSlider(1, 20, 21 - settings.getSpeed()/50, "GAME SPEED");
         MainMenuSlider optionsSize = new MainMenuSlider(10, 60, settings.getSize(), "SIZE OF GAME OBJECTS");
-        MenuButton optionsSkins = new MainMenuButton("SKINS");
-        MenuButton optionsBack = new MainMenuButton("BACK");
+        MenuObject optionsSkins = new MainMenuButton("SKINS");
+        MenuObject optionsBack = new MainMenuButton("BACK");
         MenuBox menuOptions = new MainMenuBox(
                 optionsSpeed,
                 optionsSize,
@@ -49,10 +49,10 @@ public class MainMenu extends Menu {
 
         MenuBox menuSkins = new SkinMenuBox((SkinSettings)settings.getSkins());
 
-        MenuButton playSolo = new MainMenuButton("SOLO");
-        MenuButton playDuo = new MainMenuButton("DUO");
-        MenuButton playTrio = new MainMenuButton("TRIO");
-        MenuButton playBack = new MainMenuButton("BACK");
+        MenuObject playSolo = new MainMenuButton("SOLO");
+        MenuObject playDuo = new MainMenuButton("DUO");
+        MenuObject playTrio = new MainMenuButton("TRIO");
+        MenuObject playBack = new MainMenuButton("BACK");
         MenuBox menuPlay = new MainMenuBox(
                 playSolo,
                 playDuo,
@@ -76,7 +76,6 @@ public class MainMenu extends Menu {
         optionsSpeed.getSlider().setMajorTickUnit(1);
         optionsSpeed.getSlider().setMinorTickCount(0);
         optionsSpeed.getSlider().setShowTickLabels(true);
-//        optionsSpeed.getSlider().setShowTickMarks(true);
         optionsSpeed.getSlider().setSnapToTicks(true);
         optionsSpeed.getSlider().valueProperty().addListener((observable, oldValue, newValue) -> {
             settings.setSpeed(newValue.intValue()*50);
@@ -100,8 +99,7 @@ public class MainMenu extends Menu {
         });
 
 
-        //TODO: skinbuttons
-        Map<String, MenuButton> skinButtons = menuSkins.getButtonsMap();
+        Map<String, MenuObject> skinButtons = menuSkins.getButtonsMap();
         skinButtons.get("skinAccept").setOnMouseClicked(event -> {
 
             fadeFromMenuToMenu(menuSkins, menuOptions);
@@ -138,7 +136,7 @@ public class MainMenu extends Menu {
     }
 
     @Override
-    public Map<String, MenuButton> getButtonsMap(){
+    public Map<String, MenuObject> getButtonsMap(){
         return buttons;
     }
 

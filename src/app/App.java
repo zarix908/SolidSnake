@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import app.menus.menu.Menu;
-import app.menus.menu.MenuButton;
+import app.menus.menu.MenuObject;
 import app.menus.mainMenu.MainMenu;
 import app.menus.pauseMenu.PauseMenu;
 import model.utils.Direction;
@@ -64,7 +64,7 @@ public class App extends Application {
                 new GameplaySettings(
                         GameplaySettings.getRandomField(
                                 width/cellSize,
-                                (height - 80)/cellSize,
+                                (height - 150)/cellSize,
                                 snakeCount),
                         true,
                         20,
@@ -96,7 +96,7 @@ public class App extends Application {
         ));
 
         Menu pauseMenu = new PauseMenu();
-        Map<String, MenuButton> bm = pauseMenu.getButtonsMap();
+        Map<String, MenuObject> bm = pauseMenu.getButtonsMap();
         bm.get("pauseResume").setOnMouseClicked(event -> {
             isPaused = false;
             root.getChildren().remove(pauseMenu);
@@ -234,7 +234,7 @@ public class App extends Application {
         // Why would you even have several implementations of VisSettings
         // and if so, what would they do?
         Menu mainMenu = new MainMenu(settings);
-        Map<String, MenuButton> mb = mainMenu.getButtonsMap();
+        Map<String, MenuObject> mb = mainMenu.getButtonsMap();
         mb.get("playSolo").setOnMouseClicked(event -> {
             FadeTransition fade = new FadeTransition(Duration.millis(200), root);
             fade.setFromValue(1);
@@ -280,7 +280,7 @@ public class App extends Application {
                 new GameplaySettings(
                         GameplaySettings.getRandomField(
                                 width/settings.getSize(),
-                                (height - 80)/settings.getSize(),
+                                (height - 120)/settings.getSize(),
                                 snakeCount),
                         true,
                         20,

@@ -3,10 +3,10 @@ package app.menus.mainMenu.skinMenuBox;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import app.menus.menu.MenuButton;
+import app.menus.menu.MenuObject;
 import model.utils.Direction;
 
-public class SkinMenuBoxArrowButton extends MenuButton {
+public class SkinMenuBoxArrowButton extends MenuObject {
 
     public SkinMenuBoxArrowButton(Direction direction){
         ImageView arrowIV = rotateImage(

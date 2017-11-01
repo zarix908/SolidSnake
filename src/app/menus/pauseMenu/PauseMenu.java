@@ -2,7 +2,7 @@ package app.menus.pauseMenu;
 
 import app.menus.menu.Menu;
 import app.menus.menu.MenuBox;
-import app.menus.menu.MenuButton;
+import app.menus.menu.MenuObject;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class PauseMenu extends Menu {
 
-    private Map<String, MenuButton> buttons;
+    private Map<String, MenuObject> buttons;
     private Rectangle bg;
     private MenuBox menuPause;
 
@@ -26,9 +26,9 @@ public class PauseMenu extends Menu {
         bg.setFill(Color.GREY);
         bg.setOpacity(0.9);
 
-        MenuButton pauseResume = new PauseMenuButton("RESUME", 22);
-        MenuButton pauseRestart = new PauseMenuButton("RESTART", 22);
-        MenuButton pauseQuit = new PauseMenuButton("QUIT", 22);
+        MenuObject pauseResume = new PauseMenuButton("RESUME", 22);
+        MenuObject pauseRestart = new PauseMenuButton("RESTART", 22);
+        MenuObject pauseQuit = new PauseMenuButton("QUIT", 22);
         menuPause = new PauseMenuBox(
                 pauseResume,
                 pauseRestart,
@@ -44,8 +44,8 @@ public class PauseMenu extends Menu {
 
         HBox quitConfirm = new HBox();
         quitConfirm.setAlignment(Pos.CENTER);
-        MenuButton quitYes = new PauseMenuButton("YES", 22);
-        MenuButton quitNo = new PauseMenuButton("NO", 22);
+        MenuObject quitYes = new PauseMenuButton("YES", 22);
+        MenuObject quitNo = new PauseMenuButton("NO", 22);
         quitConfirm.getChildren().addAll(quitYes, quitNo);
 
         VBox menuQuit = new VBox();
@@ -81,7 +81,7 @@ public class PauseMenu extends Menu {
     }
 
     @Override
-    public Map<String, MenuButton> getButtonsMap(){
+    public Map<String, MenuObject> getButtonsMap(){
         return buttons;
     }
 }

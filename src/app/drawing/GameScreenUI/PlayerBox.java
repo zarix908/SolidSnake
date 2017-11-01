@@ -41,6 +41,10 @@ public class PlayerBox extends StackPane {
         score.setText(String.valueOf(scores[player]));
     }
 
+    public void setImage(int skinID, int player){
+        playerImage.setImage(getImage(skinID, player));
+    }
+
     private Image getImage(int skinID, int player) {
         return new Image(
                 String.format("images/Skin%d/Head%d.png", skinID, player),

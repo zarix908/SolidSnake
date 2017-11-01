@@ -3,7 +3,7 @@ package app.menus.mainMenu.skinMenuBox;
 import app.SkinSettings;
 import app.menus.mainMenu.MainMenuButton;
 import app.menus.menu.MenuBox;
-import app.menus.menu.MenuButton;
+import app.menus.menu.MenuObject;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -17,7 +17,7 @@ public class SkinMenuBox extends MenuBox {
     private int player2Skin;
     private int player3Skin;
     private int skinVariations;
-    private Map<String, MenuButton> buttons;
+    private Map<String, MenuObject> buttons;
 
     public SkinMenuBox(SkinSettings skinSettings) {
         player1Skin = skinSettings.getPlayer1Skin();
@@ -41,12 +41,12 @@ public class SkinMenuBox extends MenuBox {
         SkinMenuBoxPreviewBox previewBox3 = new SkinMenuBoxPreviewBox(
                 getImage(skinSettings.getPlayer3Skin(), 3)
         );
-        MenuButton skinAccept = new MainMenuButton("ACCEPT");
-        MenuButton skinDecline = new MainMenuButton("DECLINE");
+        MenuObject skinAccept = new MainMenuButton("ACCEPT");
+        MenuObject skinDecline = new MainMenuButton("DECLINE");
 
-        Map<String, MenuButton> previewButtons1 = previewBox1.getButtonsMap();
-        Map<String, MenuButton> previewButtons2 = previewBox2.getButtonsMap();
-        Map<String, MenuButton> previewButtons3 = previewBox3.getButtonsMap();
+        Map<String, MenuObject> previewButtons1 = previewBox1.getButtonsMap();
+        Map<String, MenuObject> previewButtons2 = previewBox2.getButtonsMap();
+        Map<String, MenuObject> previewButtons3 = previewBox3.getButtonsMap();
 
         previewButtons1.get("buttonPrev")
                 .setOnMouseClicked(event -> {
@@ -100,7 +100,7 @@ public class SkinMenuBox extends MenuBox {
         getChildren().add(root);
     }
 
-    public Map<String, MenuButton> getButtonsMap() {
+    public Map<String, MenuObject> getButtonsMap() {
         return buttons;
     }
 
