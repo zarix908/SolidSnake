@@ -21,16 +21,16 @@ public class PlayersBar extends StackPane {
         playerBox = new HBox(10);
         playerBox.setAlignment(Pos.CENTER);
 
-        SpeedSlider speedSlider = new SpeedSlider(1, 20, 21 - settings.getSpeed()/50, "GAME SPEED");
-        speedSlider.getSlider().setBlockIncrement(1);
-        speedSlider.getSlider().setMajorTickUnit(1);
-        speedSlider.getSlider().setMinorTickCount(0);
-        speedSlider.getSlider().setShowTickLabels(true);
-        speedSlider.getSlider().setSnapToTicks(true);
-        speedSlider.getSlider().valueProperty().addListener((observable, oldValue, newValue) -> {
-            settings.setSpeed(newValue.intValue()*50);
-            settings.setSpeed((21 - newValue.intValue())*50);
-        });
+//        SpeedSlider speedSlider = new SpeedSlider(1, 20, 21 - settings.getSpeed()/50, "GAME SPEED");
+//        speedSlider.getSlider().setBlockIncrement(1);
+//        speedSlider.getSlider().setMajorTickUnit(1);
+//        speedSlider.getSlider().setMinorTickCount(0);
+//        speedSlider.getSlider().setShowTickLabels(true);
+//        speedSlider.getSlider().setSnapToTicks(true);
+//        speedSlider.getSlider().valueProperty().addListener((observable, oldValue, newValue) -> {
+//            settings.setSpeed(newValue.intValue()*50);
+//            settings.setSpeed((21 - newValue.intValue())*50);
+//        });
 
         //TODO: change to array in skinSettings
         if (playersCount > 0){
@@ -76,7 +76,7 @@ public class PlayersBar extends StackPane {
             playerBox.getChildren().add(box3);
         }
 
-        root.getChildren().addAll(playerBox, speedSlider);
+        root.getChildren().addAll(playerBox);
         getChildren().add(root);
     }
 

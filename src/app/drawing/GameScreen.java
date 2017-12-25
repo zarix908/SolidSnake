@@ -27,8 +27,9 @@ import model.utils.Direction;
 public class GameScreen extends StackPane {
 
     private Settings settings;
-    private final int canvasWidth;
-    private final int canvasHeight;
+    private Canvas canvas;
+    private int canvasWidth;
+    private int canvasHeight;
     private GraphicsContext gc;
     private PlayersBar playersBar;
     private StackPane gameOverScreen;
@@ -39,9 +40,10 @@ public class GameScreen extends StackPane {
     public GameScreen(Settings settings) {
         this.settings = settings;
 
-        canvasWidth = settings.getWidth();
-        canvasHeight = settings.getHeight();
-        Canvas canvas = new Canvas(this.canvasWidth, this.canvasHeight);
+//        canvasWidth = settings.getWidth();
+//        canvasHeight = settings.getHeight();
+//        canvas = new Canvas(this.canvasWidth, this.canvasHeight);
+        canvas = new Canvas();
         gc = canvas.getGraphicsContext2D();
 
         StackPane canvasPane = new StackPane();
@@ -66,6 +68,34 @@ public class GameScreen extends StackPane {
         canvasPane.getChildren().addAll(canvas);
         root.getChildren().addAll(canvasPane, playersBar);
         getChildren().add(root);
+    }
+
+//    public GameScreen(Settings settings, GameFrame frame) {
+//        this.settings = settings;
+//
+//        canvasWidth = frame.getWidth()* settings.getSize();
+//        canvasHeight = frame.getHeight() * settings.getSize();
+//        canvas = new Canvas(this.canvasWidth, this.canvasHeight);
+//        canvas = new Canvas();
+//        gc = canvas.getGraphicsContext2D();
+//
+//        StackPane canvasPane = new StackPane();
+//        canvasPane.setAlignment(Pos.CENTER);
+//
+//        VBox root = new VBox();
+//        playersBar = new PlayersBar(settings);
+//        playersBar.setAlignment(Pos.BOTTOM_CENTER);
+//
+//        canvasPane.getChildren().addAll(canvas);
+//        root.getChildren().addAll(canvasPane, playersBar);
+//        getChildren().add(root);
+//    }
+
+    public void updateSize(GameFrame frame) {
+        canvasWidth = frame.getWidth()* settings.getSize();
+        canvasHeight = frame.getHeight() * settings.getSize();
+        canvas.setWidth(this.canvasWidth);
+        canvas.setHeight(this.canvasHeight);
     }
 
     public void update(GameFrame frame) {
@@ -106,14 +136,6 @@ public class GameScreen extends StackPane {
                         .getSpritesForPlayers()
                         .get(ci.getPlayerNumber())
                         .get(CreatureToTextureConverter.converters.get(ci.getType()));
-//                Image rotatedImage = rotateImage(image, ci);
-//                gc.drawImage(
-//                        rotatedImage,
-//                        p.getX() * settings.getSize(),
-//                        p.getY() * settings.getSize(),
-//                        settings.getSize(),
-//                        settings.getSize()
-//                );
                 double angle = ci.getType() == CreatureType.SnakeHead
                         ? 0
                         : getAngleFromDirection(ci.getDirection());
@@ -137,20 +159,6 @@ public class GameScreen extends StackPane {
                 );
             }
         });
-    }
-
-    // Don't like this implementation coz of mixing different APIs
-    private Image rotateImage(Image image, GameFrame.CreatureInfo creatureInfo){
-        if (creatureInfo.getType() == CreatureType.SnakeHead
-                || creatureInfo.getDirection() == Up
-                || creatureInfo.getDirection() == None)
-            return image;
-
-        ImageView iv = new ImageView(image);
-        iv.setRotate(getAngleFromDirection(creatureInfo.getDirection()));
-        SnapshotParameters params = new SnapshotParameters();
-        params.setFill(Color.TRANSPARENT);
-        return iv.snapshot(params, null);
     }
 
     private double getAngleFromDirection(Direction direction){

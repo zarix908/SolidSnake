@@ -42,6 +42,7 @@ public class App extends Application {
 
     private static Stage theStage;
     private static AnimationTimer gameLoop;
+    private static AnimationTimer onlineLoop;
     private static Settings settings;
     private static int width = 800;
     private static int height = 600;
@@ -63,8 +64,10 @@ public class App extends Application {
                 new SkinSettings(0, 0 ,0),
                 new GameplaySettings(
                         GameplaySettings.getRandomField(
-                                width/cellSize,
-                                (height - 150)/cellSize,
+//                                width/cellSize,
+//                                (height - 150)/cellSize,
+                                30,
+                                20,
                                 snakeCount),
                         true,
                         20,
@@ -79,16 +82,16 @@ public class App extends Application {
         theStage.show();
     }
 
-     private void playSnake(int snakeCount){
+     private void playSnakeLocal(int snakeCount){
         App.snakeCount = snakeCount;
-        reset(App.snakeCount);
-        Parent gamePlay = createGamePlay();
+        resetLocal(App.snakeCount);
+        Parent gamePlay = createGamePlayLocal();
         theStage.setScene(new Scene(gamePlay, Color.BLACK));
         gamePlay.requestFocus();
         gameLoop.start();
     }
 
-    private Parent createGamePlay(){
+    private Parent createGamePlayLocal(){
         StackPane root = new StackPane();
         root.setPrefSize(width, height);
         root.setBackground(new Background(
@@ -106,11 +109,12 @@ public class App extends Application {
             isPaused = false;
             root.getChildren().remove(pauseMenu);
             pauseMenu.reload();
-            reset(snakeCount);
+            resetLocal(snakeCount);
         });
         bm.get("quitYes").setOnMouseClicked(event -> {
             isPaused = false;
             gameLoop.stop();
+            frame = null;
             FadeTransition fade = new FadeTransition(Duration.millis(300), root);
             fade.setFromValue(1);
             fade.setToValue(0);
@@ -119,6 +123,7 @@ public class App extends Application {
         });
 
         GameScreen gameScreen = new GameScreen(settings);
+        gameScreen.updateSize(frame);
         root.getChildren().add(gameScreen);
 
         root.setOnKeyPressed(e -> {
@@ -161,7 +166,7 @@ public class App extends Application {
                     break;
                 case ENTER:
                     if (isGameOver) {
-                        reset(snakeCount);
+                        resetLocal(snakeCount);
                     }
                     break;
                 case ESCAPE:
@@ -200,6 +205,106 @@ public class App extends Application {
         return root;
     }
 
+    private void playSnakeOnline(){
+        resetOnline();
+        Parent gamePlay = createGamePlayOnline();
+        theStage.setScene(new Scene(gamePlay, Color.BLACK));
+        gamePlay.requestFocus();
+        onlineLoop.start();
+    }
+
+    private void resetOnline(){
+        isGameOver = false;
+        client = new Client();
+        client.send(Direction.None);
+//        should not be NONE
+        frame = client.getCurrentState();
+    }
+
+    private Parent createGamePlayOnline(){
+        StackPane root = new StackPane();
+        root.setPrefSize(width, height);
+        root.setBackground(new Background(
+            new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)
+        ));
+
+        Menu pauseMenu = new PauseMenu();
+        Map<String, MenuObject> bm = pauseMenu.getButtonsMap();
+        bm.get("pauseResume").setOnMouseClicked(event -> {
+            isPaused = false;
+            root.getChildren().remove(pauseMenu);
+            pauseMenu.reload();
+        });
+        bm.get("quitYes").setOnMouseClicked(event -> {
+            isPaused = false;
+            onlineLoop.stop();
+            client.close();
+            FadeTransition fade = new FadeTransition(Duration.millis(300), root);
+            fade.setFromValue(1);
+            fade.setToValue(0);
+            fade.setOnFinished(e -> theStage.setScene(new Scene(createMainMenu(), Color.BLACK)));
+            fade.play();
+        });
+
+        GameScreen gameScreen = new GameScreen(settings);
+        gameScreen.updateSize(frame);
+        root.getChildren().add(gameScreen);
+
+        root.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case W:
+                    client.send(Direction.Up);
+                    break;
+                case S:
+                    client.send(Direction.Down);
+                    break;
+                case A:
+                    client.send(Direction.Left);
+                    break;
+                case D:
+                    client.send(Direction.Right);
+                    break;
+                case ENTER:
+                    if (isGameOver) {
+                        FadeTransition fade = new FadeTransition(Duration.millis(300), root);
+                        fade.setFromValue(1);
+                        fade.setToValue(0);
+                        fade.setOnFinished(event ->
+                            theStage.setScene(new Scene(createMainMenu(), Color.BLACK)));
+                        fade.play();
+                    }
+                    break;
+                case ESCAPE:
+                    if (isPaused) {
+                        isPaused = false;
+                        root.getChildren().remove(pauseMenu);
+                        pauseMenu.reload();
+                    } else {
+                        isPaused = true;
+                        root.getChildren().add(pauseMenu);
+                    }
+            }
+        });
+
+        onlineLoop = new AnimationTimer(){
+            private long prevTime = 0;
+            @Override
+            public void handle(long now) {
+                if (!isGameOver && !isPaused) {
+                    if ((now - prevTime) >= 150 * 1000000) {
+                        prevTime = now;
+                        frame = client.getCurrentState();
+                        if (frame == null) {
+                            isGameOver = true;
+                        }
+                    }
+                }
+                gameScreen.update(frame);
+            }
+        };
+        return root;
+    }
+
     private Parent createMainMenu(){
         StackPane root = new StackPane();
         root.setPrefSize(width, height);
@@ -227,34 +332,19 @@ public class App extends Application {
         root.getChildren().add(snakeLogo);
         StackPane.setAlignment(snakeLogo, Pos.TOP_CENTER);
 
-        // We need to specify a link to skinSettings
-        //TODO: MainMenu has logic of skin setting/changing, is it bad?
-        // I think the logic should be done in this method, but who cares anyway?
-        //TODO: polymorphism is redundant!? (it makes everything harder)
-        // Why would you even have several implementations of VisSettings
-        // and if so, what would they do?
         Menu mainMenu = new MainMenu(settings);
         Map<String, MenuObject> mb = mainMenu.getButtonsMap();
+        mb.get("playOnline").setOnMouseClicked(event -> {
+            playSnakeOnline();
+        });
         mb.get("playSolo").setOnMouseClicked(event -> {
-            FadeTransition fade = new FadeTransition(Duration.millis(200), root);
-            fade.setFromValue(1);
-            fade.setToValue(0);
-            fade.setOnFinished(e -> playSnake(1));
-            fade.play();
+            playSnakeLocal(1);
         });
         mb.get("playDuo").setOnMouseClicked(event -> {
-            FadeTransition fade = new FadeTransition(Duration.millis(200), root);
-            fade.setFromValue(1);
-            fade.setToValue(0);
-            fade.setOnFinished(e -> playSnake(2));
-            fade.play();
+            playSnakeLocal(2);
         });
         mb.get("playTrio").setOnMouseClicked(event -> {
-            FadeTransition fade = new FadeTransition(Duration.millis(200), root);
-            fade.setFromValue(1);
-            fade.setToValue(0);
-            fade.setOnFinished(e -> playSnake(3));
-            fade.play();
+            playSnakeLocal(3);
         });
 
         FadeTransition startFade = new FadeTransition(Duration.millis(1000), mainMenu);
@@ -270,7 +360,7 @@ public class App extends Application {
         return root;
     }
 
-    private static void reset(int snakeCount) {
+    private static void resetLocal(int snakeCount) {
         isGameOver = false;
         currDir = new Direction[3];
         for (int i = 0; i < currDir.length; i++) {
@@ -281,6 +371,7 @@ public class App extends Application {
                         GameplaySettings.getRandomField(
                                 width/settings.getSize(),
                                 (height - 120)/settings.getSize(),
+//                                30, 20,
                                 snakeCount),
                         true,
                         20,

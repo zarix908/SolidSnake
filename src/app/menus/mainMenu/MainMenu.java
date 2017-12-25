@@ -36,12 +36,12 @@ public class MainMenu extends Menu {
                 mainExit
         );
 
-        MainMenuSlider optionsSpeed = new MainMenuSlider(1, 20, 21 - settings.getSpeed()/50, "GAME SPEED");
+//        MainMenuSlider optionsSpeed = new MainMenuSlider(1, 20, 21 - settings.getSpeed()/50, "GAME SPEED");
         MainMenuSlider optionsSize = new MainMenuSlider(10, 60, settings.getSize(), "SIZE OF GAME OBJECTS");
         MenuObject optionsSkins = new MainMenuButton("SKINS");
         MenuObject optionsBack = new MainMenuButton("BACK");
         MenuBox menuOptions = new MainMenuBox(
-                optionsSpeed,
+//                optionsSpeed,
                 optionsSize,
                 optionsSkins,
                 optionsBack
@@ -49,11 +49,13 @@ public class MainMenu extends Menu {
 
         MenuBox menuSkins = new SkinMenuBox((SkinSettings)settings.getSkins());
 
+        MenuObject playOnline = new MainMenuButton("ONLINE");
         MenuObject playSolo = new MainMenuButton("SOLO");
         MenuObject playDuo = new MainMenuButton("DUO");
         MenuObject playTrio = new MainMenuButton("TRIO");
         MenuObject playBack = new MainMenuButton("BACK");
         MenuBox menuPlay = new MainMenuBox(
+                playOnline,
                 playSolo,
                 playDuo,
                 playTrio,
@@ -72,15 +74,15 @@ public class MainMenu extends Menu {
         mainExit.setOnMouseClicked(event -> System.exit(0));
 
 
-        optionsSpeed.getSlider().setBlockIncrement(1);
-        optionsSpeed.getSlider().setMajorTickUnit(1);
-        optionsSpeed.getSlider().setMinorTickCount(0);
-        optionsSpeed.getSlider().setShowTickLabels(true);
-        optionsSpeed.getSlider().setSnapToTicks(true);
-        optionsSpeed.getSlider().valueProperty().addListener((observable, oldValue, newValue) -> {
-            settings.setSpeed(newValue.intValue()*50);
-            settings.setSpeed((21 - newValue.intValue())*50);
-        });
+//        optionsSpeed.getSlider().setBlockIncrement(1);
+//        optionsSpeed.getSlider().setMajorTickUnit(1);
+//        optionsSpeed.getSlider().setMinorTickCount(0);
+//        optionsSpeed.getSlider().setShowTickLabels(true);
+//        optionsSpeed.getSlider().setSnapToTicks(true);
+//        optionsSpeed.getSlider().valueProperty().addListener((observable, oldValue, newValue) -> {
+//            settings.setSpeed(newValue.intValue()*50);
+//            settings.setSpeed((21 - newValue.intValue())*50);
+//        });
         optionsSize.getSlider().setBlockIncrement(5);
         optionsSize.getSlider().setMajorTickUnit(10);
         optionsSize.getSlider().setMinorTickCount(4);
@@ -126,7 +128,11 @@ public class MainMenu extends Menu {
         menuWithInfo.getChildren().addAll(startPane, infoText);
         getChildren().add(menuWithInfo);
 
-        buttons = Map.of("playSolo", playSolo, "playDuo", playDuo, "playTrio", playTrio);
+        buttons = Map.of(
+            "playOnline", playOnline,
+            "playSolo", playSolo,
+            "playDuo", playDuo,
+            "playTrio", playTrio);
     }
 
     @Override
